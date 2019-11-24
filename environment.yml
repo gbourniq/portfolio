@@ -1,0 +1,15 @@
+name: portfolio-env
+channels:
+  - default
+  - conda-forge
+dependencies:
+  - python=3.6.7               # PSF
+  - pip                       # MIT
+  - requests                  # Apache 2.0
+  - black
+  - pip:
+      - pytest==4.0       # MIT
+      - pytest-cov        # MIT
+      - django==2.2.4
+      - Pillow
+      - django-tinymce4-lite

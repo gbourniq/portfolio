@@ -1,0 +1,21 @@
+{% extends "main/index.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <h3>Contact me</h3>
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="form-actions">
+          <button class="btn waves-effect waves-light" style="background-color:gray; color:white" type="submit" name="action">
+            Send<i class="material-icons right">send</i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <br><br><br><br><br><br><br><br>
+
+{% endblock %} 

@@ -1,0 +1,45 @@
+{% extends 'main/index.html' %}
+
+{% block content %}
+
+<nav>
+    <div class="nav-wrapper">
+        <div class="col s12">
+            &nbsp&nbsp&nbsp&nbsp&nbsp<a href="/" class="breadcrumb">Home</a>
+            <a href="/{{cat_slug}}" class="breadcrumb">{{cat_name}}</a>
+            <a href="#!" class="breadcrumb">{{subcat_name}}</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container"> 
+    <div class="row">
+        <div class="col s12, m8, l8">
+            <h3>{{article.article_name}}</h3>
+            <p style="font-size:70%">Published {{article.date_published}}</p>
+            <img src="{{ article.image.url }}" height=270></img>
+            {{article.content|safe}}
+        </div>
+        <div class="col s12 m4 l4">
+            <ul class="collapsible popout">
+                {% for article in sidebar %}
+                    {% if forloop.counter0 == this_tutorial_idx %}
+                        <li class="active">
+                            <div class="collapsible-header">{{article.article_name}}<br>(currently viewing)</div>
+                        </li>
+                    {% else %}
+                        <li>
+                            <div class="collapsible-header">{{article.article_name}}</div>
+                            <div class="collapsible-body">
+                                <p><a href="/{{cat_slug}}/{{subcat_slug}}/{{article.article_slug}}"><button class="btn waves-effect waves-light right-align" style="background-color:yellow; color:black">Go</button></a></p>
+                            </div>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

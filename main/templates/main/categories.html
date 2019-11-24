@@ -1,0 +1,41 @@
+{% extends 'main/index.html' %}
+
+{% block content %}
+
+    {% load static %}
+
+    {% include "main/includes/firstbanner.html" %}
+
+    <br>    
+    <div class="container"> 
+        <div class="row">
+            {% for cat in categories %}
+                <div class="col s12 m6 l4">
+                  <a href="{{cat.category_slug}}", style="color:#000">
+                    <div class="card medium">
+                        <div class="card hoverable">
+                            <div class="card-image">
+                                <img src="{{ cat.image.url }}" height=300>
+                                <span class="card-title">{{cat.category_name}}</span>
+                            </div>
+                            <div class="card-content">
+                                <p>{{cat.summary}}<br><br><br></p>
+                            </div>
+                            <div class="card-action">
+                                <a href="{{cat.category_slug}}">View</a>
+                            </div>
+                        </div>
+                    </div>
+                  </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <br><br><br>
+
+    {% include "main/includes/iconsection.html" %}
+	{% include "main/includes/secondbanner.html" %}
+	{% include "main/includes/textbloc.html" %}
+	{% include "main/includes/thirdbanner.html" %}
+
+{% endblock %}
