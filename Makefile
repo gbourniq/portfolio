@@ -1,5 +1,5 @@
-# ANSIBLE_DIR=cluster-deployment
-# MASTER_INSTANCE_IP=ec2-15-188-177-177.eu-west-3.compute.amazonaws.com
+ANSIBLE_DIR=cluster-deployment
+MASTER_INSTANCE_IP=ec2-15-188-177-177.eu-west-3.compute.amazonaws.com
 
 SHELL := /bin/bash
 
