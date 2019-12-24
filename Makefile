@@ -16,13 +16,6 @@ run:
 	@ python manage.py runserver
 	${SUCCESS} "Server started successfully"
 
-makemigratations:
-	${INFO} "Running python manage.py makemigrations"
-	@ python manage.py makemigrations
-
-migrate:
-	${INFO} "Running python manage.py migrate"
-	@ python manage.py makemigrations
 
 # cluster-configure:
 # 	${INFO} "Cluster configuration instructions"
