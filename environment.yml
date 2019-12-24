@@ -9,8 +9,9 @@ dependencies:
   - black
   - pip:
       - pytest==4.0
-      - pre-commit
-      - pytest-cov
+      - pre-commit==1.20.0
+      - pytest-cov==2.8.1
       - django==2.2.4
-      - Pillow
-      - django-tinymce4-lite
+      - Pillow==6.2.1
+      - django-tinymce4-lite==1.7.5
+      - psycopg2==2.5.2

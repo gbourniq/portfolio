@@ -16,11 +16,11 @@ run:
 	@ python manage.py runserver
 	${SUCCESS} "Server started successfully"
 
-run:
+makemigratations:
 	${INFO} "Running python manage.py makemigrations"
 	@ python manage.py makemigrations
 
-run:
+migrate:
 	${INFO} "Running python manage.py migrate"
 	@ python manage.py makemigrations
 

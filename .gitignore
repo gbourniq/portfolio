@@ -1,4 +1,6 @@
 *.pyc
+main/__pycache__
+myportfolio/__pycache__
 .DS_Store
 main/migrations/*
 images/
