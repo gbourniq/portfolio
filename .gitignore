@@ -7,3 +7,4 @@ images/
 .pre-commit-config.yaml
 pyproject.toml
 .flake8
+.pytest_cache
