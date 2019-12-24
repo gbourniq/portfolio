@@ -20,13 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "azxey(r8ieohsd1qc93j*%@+1+@-c&kwbgugz2ojvb@sj=!4*c"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-NOT_ALLOWED_HOSTS_TO_DELETEEEE = []
 
 TINYMCE_DEFAULT_CONFIG = {
     "height": 360,

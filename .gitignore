@@ -8,3 +8,4 @@ images/
 pyproject.toml
 .flake8
 .pytest_cache
+.env
