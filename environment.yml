@@ -9,6 +9,7 @@ dependencies:
   - black
   - pip:
       - pytest==4.0
+      - pre-commit
       - pytest-cov
       - django==2.2.4
       - Pillow

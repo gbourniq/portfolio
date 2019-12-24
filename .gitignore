@@ -1,3 +1,7 @@
 *.pyc
 .DS_Store
 main/migrations/*
+images/
+.pre-commit-config.yaml
+pyproject.toml
+.flake8
