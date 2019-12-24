@@ -7,7 +7,6 @@ from .forms import ContactForm
 import datetime
 
 
-
 # Create your views here.
 def homepage(request):
     categories = Category.objects.all
@@ -49,7 +48,9 @@ def category(request, cat_slug):
             "main/subcategories.html",
             {
                 "first_articles_urls": subcategories_urls,
-                "cat_name": Category.objects.filter(category_slug=cat_slug).first(),
+                "cat_name": Category.objects.filter(
+                    category_slug=cat_slug
+                ).first(),
             },
         )
 
@@ -71,7 +72,9 @@ def subcategory(request, cat_slug, subcat_slug):
 
         article(request, cat_slug, subcat_slug, first_article_slug)
 
-    return HttpResponse(f"{cat_slug}/{subcat_slug} does not correspond to anything!!")
+    return HttpResponse(
+        f"{cat_slug}/{subcat_slug} does not correspond to anything!!"
+    )
 
 
 def article(request, cat_slug, subcat_slug, article_slug):
@@ -135,7 +138,10 @@ def emailView(request):
             message = form.cleaned_data["message"]
             try:
                 send_mail(
-                    subject, message, from_email, ["guillaumebournique@gmail.com"]
+                    subject,
+                    message,
+                    from_email,
+                    ["guillaumebournique@gmail.com"],
                 )
             except BadHeaderError:
                 return HttpResponse("Invalid header found.")

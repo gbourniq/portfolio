@@ -20,18 +20,28 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('', main.views.homepage, name='homepage'),
-    path('email/', main.views.emailView, name='email'),
-    path('success/', main.views.successView, name='success'),
-    path('admin/', admin.site.urls),
-    path('tinymce/', include('tinymce.urls')),
-    path('<str:cat_slug>/', main.views.category, name='category'),
-    path('<str:cat_slug>/<str:subcat_slug>/', main.views.subcategory, name='subcategory'),
-    path('<str:cat_slug>/<str:subcat_slug>/<str:article_slug>/', main.views.article, name='article'),
+    path("", main.views.homepage, name="homepage"),
+    path("email/", main.views.emailView, name="email"),
+    path("success/", main.views.successView, name="success"),
+    path("admin/", admin.site.urls),
+    path("tinymce/", include("tinymce.urls")),
+    path("<str:cat_slug>/", main.views.category, name="category"),
+    path(
+        "<str:cat_slug>/<str:subcat_slug>/",
+        main.views.subcategory,
+        name="subcategory",
+    ),
+    path(
+        "<str:cat_slug>/<str:subcat_slug>/<str:article_slug>/",
+        main.views.article,
+        name="article",
+    ),
 ]
 
-urlpatterns = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + urlpatterns
-urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + urlpatterns
-
-
-
+urlpatterns = (
+    static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    + urlpatterns
+)
+urlpatterns = (
+    static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + urlpatterns
+)

@@ -31,7 +31,10 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 class CategoryAdmin(admin.ModelAdmin):
     fieldsets = [
-        ("Category details", {"fields": ["category_name", "summary", "image", "category_slug"]})
+        (
+            "Category details",
+            {"fields": ["category_name", "summary", "image", "category_slug"]},
+        )
     ]
 
 

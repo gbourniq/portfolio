@@ -39,10 +39,15 @@ class Article(models.Model):
     summary = models.CharField(max_length=200)
     content = models.TextField()
     image = models.ImageField(upload_to=UPLOADS_FOLDER_PATH)
-    date_published = models.DateTimeField("date published", default=timezone.now)
+    date_published = models.DateTimeField(
+        "date published", default=timezone.now
+    )
     article_slug = models.CharField(max_length=200, default=1)
     subcategory_name = models.ForeignKey(
-        SubCategory, default=1, verbose_name="SubCategory", on_delete="SET_DEFAULT"
+        SubCategory,
+        default=1,
+        verbose_name="SubCategory",
+        on_delete="SET_DEFAULT",
     )
 
     class Meta:
