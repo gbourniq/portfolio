@@ -1,7 +1,12 @@
 ### To-Do's
 - write steps to build images
 - write down steps to run it with docker-compose
--
+- Portfolio - un-gitingore folders, and re-structure them one by one to work with app
+    - docker folder
+    - test githooks?
+    - set up tests
+    - travis steps
+    - k8s
 
 
 
