@@ -20,10 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+# SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = "azxey(r8ieohsd1qc93j*%@+1+@-c&kwbgugz2ojvb@sj=!4*c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -155,3 +156,25 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+# Configuration which writes all logging from the django logger to a local file
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s %(levelname)s %(name)s %(message)s"
+        },
+    },
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "info.log",
+            "formatter": "standard",
+        },
+    },
+    "loggers": {
+        "": {"handlers": ["file"], "level": "INFO", "propagate": True,},
+    },
+}

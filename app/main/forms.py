@@ -16,7 +16,3 @@ class ContactForm(forms.Form):
         required=True,
         max_length=2048,
     )
-
-
-# ß<textarea name="message" cols="40" rows="200" style="margin: 0px; height: 228px; width: 1008px;" maxlength="2048" required="" id="id_message"></textarea>
-#

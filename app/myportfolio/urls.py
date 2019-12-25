@@ -14,27 +14,32 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 import main.views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path("", main.views.homepage, name="homepage"),
-    path("email/", main.views.emailView, name="email"),
-    path("success/", main.views.successView, name="success"),
+    re_path(r"^email/$", main.views.viewEmailForm, name="viewEmailForm"),
+    re_path(r"^success/$", main.views.viewSuccessPage, name="viewSuccessPage"),
     path("admin/", admin.site.urls),
-    path("tinymce/", include("tinymce.urls")),
-    path("<str:cat_slug>/", main.views.category, name="category"),
-    path(
-        "<str:cat_slug>/<str:subcat_slug>/",
-        main.views.subcategory,
-        name="subcategory",
+    re_path(r"^tinymce/$", include("tinymce.urls")),
+    re_path(
+        r"^(?P<cat_slug>[\w\-]+)/$",
+        main.views.viewSubCategories,
+        name="viewSubCategories",
     ),
-    path(
-        "<str:cat_slug>/<str:subcat_slug>/<str:article_slug>/",
-        main.views.article,
-        name="article",
+    re_path(
+        r"^(?P<cat_slug>[\w\-]+)/(?P<subcat_slug>[\w\-]+)/$",
+        main.views.viewArticles,
+        name="viewArticles",
+    ),
+    re_path(
+        r"^(?P<cat_slug>[\w\-]+)/(?P<subcat_slug>[\w\-]+)/(?P<article_slug>[\w\-]+)/$",
+        main.views.viewArticle,
+        name="viewArticle",
     ),
 ]
 

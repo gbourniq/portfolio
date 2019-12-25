@@ -6,7 +6,7 @@
         <div class="nav-wrapper">
             <div class="col s12">
                 &nbsp&nbsp&nbsp&nbsp&nbsp<a href="/" class="breadcrumb">Home</a>
-                <a href="#!" class="breadcrumb">{{cat_name}}</a>
+                <a href="#!" class="breadcrumb">{{category_name}}</a>
             </div>
         </div>
     </nav>
@@ -15,7 +15,7 @@
     <br>    
     <div class="container"> 
         <div class="row">
-            {% for subcategory, first_article_url in first_articles_urls.items %}
+            {% for subcategory, first_article_url in subcategories_urls.items %}
                 <div class="col s12 m6 l4">
                   <a href="{{first_article_url}}", style="color:#000">
                     <div class="card medium">

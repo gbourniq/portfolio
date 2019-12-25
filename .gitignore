@@ -1,11 +1,10 @@
 # TEMP
 README*.md
-app/tests
 docker
-/app/conftest.py
 /githooks
 /k8s
 /travis_steps
+/app/tests/templates/*
 
 # Add any directories, files, or patterns you don't want to be tracked by version control
 app/media/

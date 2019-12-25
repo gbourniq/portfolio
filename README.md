@@ -7,6 +7,7 @@
     - set up tests
     - travis steps
     - k8s
+    
 
 
 
@@ -165,3 +166,5 @@ Write about:
 - Pre-commit / black
 - Ansible stuff
 - Travis CLI stuff
+- bump2version
+- makefile commands
