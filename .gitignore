@@ -1,24 +1,16 @@
-*.pyc
-*/__pycache__
-*.DS_Store
-main/migrations/*
-app/images/
-.pre-commit-config.yaml
-pyproject.toml
-.pytest_cache
-.env
-
-
-# temps
+# TEMP
 README*.md
 app/tests
-app/tests_moltres
 docker
 /app/conftest.py
 /githooks
+/k8s
+/travis_steps
 
 # Add any directories, files, or patterns you don't want to be tracked by version control
-/media/
+app/media/
+app/images/
+app/main/migrations/*
 /bin/
 /build/
 /static/
@@ -30,17 +22,9 @@ docker
 tags
 /tmp/
 /venv/
-**/nohup.out
 *.dat
 *.code-workspace
-
-
-
-# ignore other repo related files
-manifest.mf
-*feature_history*csv
-*yarn.lock
-*yarn-error.log
+.pytest_cache
 
 # ignore python compiled bytecode files
 *.pyc
@@ -53,15 +37,5 @@ coverage_html_report/
 cov_html/
 
 # ignore environment variables
-eigenapp/.env
-
-# ignore specific pickle files
-data/office365_tokens.pkl
-
-# ignore docker deployment files
-docker_deployment/abbyy/config/*
-docker_deployment/backups/*
-docker_deployment/docker_images/
-
-#ignore any pid file
-*.pid
+app/.env
+.env
