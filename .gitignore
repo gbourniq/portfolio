@@ -1,11 +1,67 @@
 *.pyc
-main/__pycache__
-myportfolio/__pycache__
-.DS_Store
+*/__pycache__
+*.DS_Store
 main/migrations/*
-images/
+app/images/
 .pre-commit-config.yaml
 pyproject.toml
-.flake8
 .pytest_cache
 .env
+
+
+# temps
+README*.md
+app/tests
+app/tests_moltres
+docker
+/app/conftest.py
+/githooks
+
+# Add any directories, files, or patterns you don't want to be tracked by version control
+/media/
+/bin/
+/build/
+/static/
+.*/
+/logs/
+/plugins/
+*__pycache__*
+*.DS_Store
+tags
+/tmp/
+/venv/
+**/nohup.out
+*.dat
+*.code-workspace
+
+
+
+# ignore other repo related files
+manifest.mf
+*feature_history*csv
+*yarn.lock
+*yarn-error.log
+
+# ignore python compiled bytecode files
+*.pyc
+*.python-version
+
+# ignore pytest-cov output
+.coverage
+.coverage.*
+coverage_html_report/
+cov_html/
+
+# ignore environment variables
+eigenapp/.env
+
+# ignore specific pickle files
+data/office365_tokens.pkl
+
+# ignore docker deployment files
+docker_deployment/abbyy/config/*
+docker_deployment/backups/*
+docker_deployment/docker_images/
+
+#ignore any pid file
+*.pid

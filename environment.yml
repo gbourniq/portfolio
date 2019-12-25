@@ -7,6 +7,12 @@ dependencies:
   - pip
   - requests
   - black
+  - git               # GPLv2
+  - mongodb           # Apache 3.0
+  - mongo-tools       # Apache 2.0
+  - nginx             # BSD-2
+  - postgresql        # PSQL
+  - redis             # BSD-3
   - pip:
       - pytest==4.0
       - pre-commit==1.20.0
@@ -15,3 +21,4 @@ dependencies:
       - Pillow==6.2.1
       - django-tinymce4-lite==1.7.5
       - psycopg2==2.7.1
+      - bump2version==0.5.11
