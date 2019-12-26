@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
-UPLOADS_FOLDER_PATH = "images/"
+UPLOADS_FOLDER_PATH = "main/static/uploaded_images/"
+
 
 # Create your models here.\
 class Category(models.Model):

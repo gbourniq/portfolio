@@ -25,7 +25,7 @@ urlpatterns = [
     re_path(r"^email/$", main.views.viewEmailForm, name="viewEmailForm"),
     re_path(r"^success/$", main.views.viewSuccessPage, name="viewSuccessPage"),
     path("admin/", admin.site.urls),
-    re_path(r"^tinymce/$", include("tinymce.urls")),
+    path("tinymce/", include("tinymce.urls")),
     re_path(
         r"^(?P<cat_slug>[\w\-]+)/$",
         main.views.viewSubCategories,
