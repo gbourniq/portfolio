@@ -35,8 +35,10 @@ def viewSubCategories(request, cat_slug: str) -> None:
     logger.info(f"GET request to /{cat_slug}")
 
     matching_sub_categories = _get_subcategories_by_cat_slug(cat_slug)
-    if matching_sub_categories is None:
-        HttpResponse(f"/{cat_slug} does not exist.")
+    if len(matching_sub_categories) == 0 or matching_sub_categories is None:
+        logger.info(f"No sub-category for /{cat_slug}.")
+        logger.info(f"Redirecting to /.")
+        return redirect(homepage)
     subcategories_urls = _get_urls_for_subcategories(matching_sub_categories)
     if subcategories_urls is None:
         HttpResponse(f"No sub-category could be retrieved.")
@@ -58,13 +60,12 @@ def viewArticles(request, cat_slug: str, subcat_slug: str) -> None:
     If user manually goes to /<category>/<sub-category>/ url
     It will be redirected to /<category>/<sub-category>/<first_article>
     """
-    print("Sub category request received\n")
-    print(f"category slug: {cat_slug}")
-    print(f"sub category slug: {subcat_slug}")
-
     matching_articles = _get_articles_by_subcat_slug(subcat_slug)
-    if matching_articles is None:
-        HttpResponse(f"/{subcat_slug} does not contain any articles.")
+    if len(matching_articles) == 0:
+        logger.info(f"No articles for /{cat_slug}/{subcat_slug}/.")
+        logger.info(f"Redirecting to /{cat_slug}.")
+        return redirect(viewSubCategories, cat_slug=cat_slug)
+
     first_article = matching_articles.latest("date_published")
     first_article_slug = first_article.article_slug
 

@@ -68,9 +68,7 @@ def _get_urls_for_subcategories(
         Keys: SubCategory objects
         Values: URLs to first Article for the associated SubCategory
     """
-    logger.info(
-        f"Building sub-categories URLs for {sub_category_objects[0].category_name}"
-    )
+    logger.info(f"Building sub-categories URLs")
     subcategories_urls = {}
     for sub_cat in sub_category_objects:
         matching_articles = _get_articles_by_subcat_slug(
@@ -78,8 +76,18 @@ def _get_urls_for_subcategories(
         )
         if matching_articles is None:
             continue
-        first_article = matching_articles.latest("date_published")
-        first_article_slug = first_article.article_slug
+
+        try:
+            first_article = matching_articles.latest("date_published")
+            first_article_slug = first_article.article_slug
+        except Exception:
+            logger.warning(
+                f"{sub_cat.subcategory_name} does not contain any article."
+            )
+            logger.warning(
+                "Redirecting to leaving sub-category card url to /<category>/<subcategory>"
+            )
+            first_article_slug = ""
 
         # sub_cat.category_name return Categort object
         # Applying str returns name property
