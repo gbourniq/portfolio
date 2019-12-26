@@ -1,7 +1,4 @@
 # TEMP
-README*.md
-docker
-/githooks
 /k8s
 /travis_steps
 /app/tests/templates/*

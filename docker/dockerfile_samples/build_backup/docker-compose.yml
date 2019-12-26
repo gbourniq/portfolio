@@ -1,0 +1,71 @@
+version: "3.5"
+
+services:
+
+  app:
+    build:
+      context: ../..
+      dockerfile: docker-deployment/build/Dockerfile.app
+      args:
+        app_version: $APP_VERSION
+    dns_search: .
+    container_name: myapp     
+    ports:
+      - $APP_HTTP_PORT:$APP_HTTP_PORT
+    healthcheck:
+        test: curl -f -s -S http://localhost:$APP_HTTP_PORT || exit 1
+        interval: 30s
+        timeout: 5s
+        retries: 3
+    restart: always
+    networks:
+        - backend
+    depends_on:
+      - mongo
+    env_file:
+      - .env
+
+  client:
+    build:
+      context: ../..
+      dockerfile: docker-deployment/build/Dockerfile.client
+      args:
+        app_version: ${APP_VERSION}]
+    dns_search: .
+    container_name: myclient 
+    ports:
+      - ${PROXY_HTTP_PORT}:${CLIENT_HTTP_PORT}
+    healthcheck:
+        test: curl -f -s -S http://localhost:${CLIENT_HTTP_PORT} || exit 1
+        interval: 30s
+        timeout: 5s
+        retries: 3
+    restart: always
+    networks:
+        - backend
+    env_file:
+      - .env
+
+  mongo:
+    image: mongo
+    container_name: mymongo
+    dns_search: .
+    expose:
+      - "${MONGO_HTTP_PORT}"
+    volumes:
+      - ../../app/data:/data/db
+    ports:
+      - "${MONGO_HTTP_PORT}:${MONGO_HTTP_PORT}"
+    healthcheck:
+        test: bash -c "ps -ax | grep mongo || exit 1"
+        interval: 30s
+        timeout: 5s
+        retries: 3
+        start_period: 10s
+    restart: always
+    env_file:
+      - .env
+
+networks:
+    backend:
+        driver: bridge

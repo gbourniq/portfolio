@@ -1,0 +1,38 @@
+version: '3.3'
+
+services:
+      
+  elasticsearch:
+    command: ["elasticsearch", 
+    "-Ediscovery.zen.ping.unicast.hosts=elasticsearch", 
+    "-Ediscovery.zen.minimum_master_nodes=1",
+    "-Egateway.expected_nodes=3",
+    "-Egateway.recover_after_nodes=2",
+    "-Etransport.host=0.0.0.0"]
+    volumes:
+      - es-data:/data
+    deploy:
+      replicas: 3
+      endpoint_mode: dnsrr
+      placement:
+        constraints:
+        - node.platform.os == linux
+        - node.role == worker
+    
+  kibana:
+    deploy:
+      placement:
+        constraints:
+        - node.platform.os == linux
+        - node.role == worker
+
+networks:
+  analytics-net:
+    external:
+      name: shared-analytics-network
+  dmz-net:
+    external:
+      name: shared-dmz-network
+
+volumes:
+  es-data:
