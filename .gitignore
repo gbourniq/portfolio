@@ -21,8 +21,8 @@ tags
 /venv/
 *.dat
 *.code-workspacest
-
 .pytest_cache
+app/main/static/uploaded_images/
 
 # ignore python compiled bytecode files
 *.pyc

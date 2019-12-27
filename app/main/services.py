@@ -1,13 +1,12 @@
 import logging
-import os
 from typing import Dict, List, Union
 
 from django.contrib import messages
 from django.core.mail import BadHeaderError, send_mail
 
-from main.models import Article, Category, SubCategory
+from .models import Article, Category, SubCategory
 
-from main.forms import ContactForm
+from .forms import ContactForm
 
 # This retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
@@ -119,7 +118,7 @@ def _is_article_exist(
         return False
 
 
-def _send_email(request) -> None:
+def _send_email(request, to_emails: List[str]) -> None:
     """
     Send email from the contact page, using the fromemail specified.
     ToEmail variable is defined as an environmet variable in .env
@@ -135,9 +134,12 @@ def _send_email(request) -> None:
             form.cleaned_data["subject"],
             form.cleaned_data["message"],
             form.cleaned_data["from_email"],
-            [os.getenv("CONTACT_EMAIL")],
+            to_emails,
+            fail_silently=False,
         )
-        logger.info("Email sent successfully.")
+        logger.info(
+            f'Email sent successfully from {form.cleaned_data["from_email"]} to {to_emails}'
+        )
         return form
     except BadHeaderError:
         logger.warning("Sending email returned BadHeaderError")

@@ -1,0 +1,6 @@
+Django==2.2.6
+django-redis==4.11.0
+django-tinymce4-lite==1.7.5
+Pillow==6.2.1
+psycopg2-binary==2.8.3
+redis==3.2.1

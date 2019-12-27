@@ -1,0 +1,11 @@
+**.env**
+**__pycache__**
+**.pytest_cache**
+**.vscode**
+app/tests
+**Makefile**
+**.DS_Store**
+**.md**
+**.git**
+**README.md**
+**Dockerfile**

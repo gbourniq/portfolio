@@ -1,11 +1,15 @@
 import logging
 
+from django.conf import settings
 from django.contrib import messages
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.views.decorators.cache import cache_page
 
-from main.models import Article, Category, SubCategory
-from main.utils.views_utils import (
+from .forms import ContactForm
+from .models import Article, Category, SubCategory
+from .services import (
     _get_articles_by_subcat_slug,
     _get_subcategories_by_cat_slug,
     _get_urls_for_subcategories,
@@ -13,13 +17,13 @@ from main.utils.views_utils import (
     _send_email,
 )
 
-from .forms import ContactForm
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 # This retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
 
 
-# Create your views here.
+@cache_page(CACHE_TTL)
 def homepage(request):
     """View for /homepage url"""
     categories = Category.objects.all
@@ -27,6 +31,7 @@ def homepage(request):
     return render(request, "main/categories.html", {"categories": categories})
 
 
+@cache_page(CACHE_TTL)
 def viewSubCategories(request, cat_slug: str) -> None:
     """
     View for a /<category> url
@@ -55,6 +60,7 @@ def viewSubCategories(request, cat_slug: str) -> None:
     )
 
 
+@cache_page(CACHE_TTL)
 def viewArticles(request, cat_slug: str, subcat_slug: str) -> None:
     """
     If user manually goes to /<category>/<sub-category>/ url
@@ -77,6 +83,7 @@ def viewArticles(request, cat_slug: str, subcat_slug: str) -> None:
     )
 
 
+@cache_page(CACHE_TTL)
 def viewArticle(request, cat_slug, subcat_slug, article_slug) -> None:
     """
     View for a /<category>/<sub-category>/<article-name> url
@@ -125,11 +132,12 @@ def viewEmailForm(request):
         return render(request, "main/email.html", {"form": form})
 
     if request.method == "POST":
-        form = _send_email(request)
+        to_emails = [settings.EMAIL_HOST_USER]
+        form = _send_email(request, to_emails)
         if not form:
             return HttpResponse("Invalid header found.")
         messages.success(request, "Email sent successfully.")
-        return redirect("success")
+        return redirect(viewSuccessPage)
 
 
 def viewSuccessPage(request):

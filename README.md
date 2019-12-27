@@ -8,7 +8,12 @@
     - travis steps
     - k8s
     
+bugs:
+- test website, navigating, with no subcat, or no article...
+https://www.quora.com/What-are-the-differences-between-nginx-and-gunicorn
 
+
+https://www.nginx.com/blog/configuring-nginx-unit-for-production-applications-serving-django-project/
 
 
 # Portfolio Application
