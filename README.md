@@ -11,11 +11,52 @@
 bugs:
 - test website, navigating, with no subcat, or no article...
 https://www.quora.com/What-are-the-differences-between-nginx-and-gunicorn
-
+- deal with EMAIL_HOST_PASSWORD="B" variable : kubernetes secret? same for SECRET_KEY and dynamic ALLOWED_HOSTS ??
 
 https://www.nginx.com/blog/configuring-nginx-unit-for-production-applications-serving-django-project/
 
 
+
+Build and start the app:
+
+    docker-compose up
+    # Or to rebuild
+    docker-compose up --build
+
+    # migrate and collectstatic
+    docker-compose run app init
+
+    # create admin user
+    docker-compose run app manage createsuperuser
+
+Other helpful commands
+
+    # enter db
+    docker-compose run app manage dbshell
+
+    # run any management command
+    docker-compose run app manage <command and options>
+
+    # enter bash shell
+    docker-compose run app /bin/bash
+
+    # stop everything
+    docker-compose stop
+
+    # stop everything, destroy containers, and volumes
+    docker-compose down
+
+Override the default docker compose variables
+
+    # vim docker-compose.override.yml
+    version: '3'
+    services:
+        web:
+          ports:
+            - 8000:80
+
+
+            
 # Portfolio Application
 
 This is the sample application for the Pluralsight course Docker in Production using AWS.

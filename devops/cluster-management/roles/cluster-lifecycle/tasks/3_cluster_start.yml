@@ -1,0 +1,11 @@
+---
+# This playbook contains all actions that will be run on "local" host.
+
+- name: Start k8s cluster instances
+  ec2:
+    region: eu-west-3
+    instance_tags:
+        Type: "{{ INSTANCE_TAG_TYPE }}"
+    state: running
+  tags:
+    - cluster-start

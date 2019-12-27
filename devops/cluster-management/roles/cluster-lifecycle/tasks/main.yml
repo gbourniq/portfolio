@@ -1,0 +1,49 @@
+---
+# This playbook contains all actions that will be run on "local" host.
+
+# sudo apt-get update
+- name: Update apt packages
+  apt:
+    update_cache: yes
+  tags:
+    - system
+
+
+############### TASKS IMPORT ############### 
+
+- name: Import tasks to create ec2 instances for Kubernetes cluster
+  include_tasks: 1_cluster_create.yml
+  tags:
+    - cluster-create
+
+# - name: Import tasks to configure Kubernetes cluster
+#   include_tasks: 1_cluster_config.yml
+#   tags:
+#     - cluster-config
+
+- name: Import tasks to stop Kubernetes cluster
+  include_tasks: 2_cluster_stop.yml
+  tags:
+    - cluster-stop
+
+- name: Import tasks to stop Kubernetes cluster
+  include_tasks: 3_cluster_start.yml
+  tags:
+    - cluster-start
+
+#############################################
+
+
+# sudo apt-get autoclean
+- name: Remove useless apt packages from the cache
+  apt:
+    autoclean: yes
+  tags:
+    - system
+ 
+# sudo apt-get autoremove
+- name: Remove dependencies that are no longer required
+  apt:
+    autoremove: yes
+  tags:
+    - system

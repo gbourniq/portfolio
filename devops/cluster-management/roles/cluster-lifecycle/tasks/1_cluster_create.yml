@@ -1,0 +1,57 @@
+---
+# This playbook contains all actions that will be run on "local" host.
+
+- name: "Create {{ MASTERS_COUNT }} EC2 instance of type {{ INSTANCE_TYPE_MASTER }} for Kubernetes cluster"
+  ec2:
+    key_name: "{{ AWS_KEY_NAME }}"
+    aws_access_key: "{{ AWS_ACCESS_KEY }}"
+    aws_secret_key: "{{ AWS_SECRET_KEY }}"
+    image: "{{ AMI_ID }}"
+    wait: yes
+    instance_type: "{{ INSTANCE_TYPE_MASTER }}"
+    group_id: "{{ SECURITY_GROUP }}"
+    region: "{{ REGION }}"
+    instance_tags:
+      Name: "{{ MASTER_INSTANCE_TAG_NAME }}"
+      Type: "{{ INSTANCE_TAG_TYPE }}"
+    exact_count: "{{ MASTERS_COUNT }}"
+    count_tag: ubuntuserver
+    volumes:
+      - device_name: /dev/xvda
+        volume_type: gp2  #insert the volume code here
+        volume_size: 8  #size is in GB
+  register: ec2
+  tags:
+    - cluster-create
+
+- name: "Create {{ NODES_COUNT }} EC2 instances of type {{ INSTANCE_TYPE_NODE }} for Kubernetes cluster"
+  ec2:
+    key_name: "{{ AWS_KEY_NAME }}"
+    aws_access_key: "{{ AWS_ACCESS_KEY }}"
+    aws_secret_key: "{{ AWS_SECRET_KEY }}"
+    image: "{{ AMI_ID }}"
+    wait: yes
+    instance_type: "{{ INSTANCE_TYPE_NODE }}"
+    group_id: "{{ SECURITY_GROUP }}"
+    region: "{{ REGION }}"
+    instance_tags:
+      Name: "{{ NODE_INSTANCE_TAG_NAME }}"
+      Type: "{{ INSTANCE_TAG_TYPE }}"
+    exact_count: "{{ NODES_COUNT }}"
+    count_tag: ubuntuserver
+    volumes:
+      - device_name: /dev/xvda
+        volume_type: gp2  #insert the volume code here
+        volume_size: 8  #size is in GB
+  register: ec2
+  tags:
+    - cluster-create
+
+# - name: Store instance details
+#   shell: "echo ANSIBLE_HOST={{ ec2.instances[0].dns_name }} >> .current-instance-id-env"
+#   register: cmdln
+#   failed_when: "cmdln.rc == 2"
+#   tags:
+#     - instance-create
+
+ 

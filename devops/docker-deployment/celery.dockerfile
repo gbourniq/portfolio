@@ -14,12 +14,12 @@ RUN mkdir /code
 WORKDIR /code
 
 # Install librairies
-COPY docker/build/config/requirements.txt .
+COPY devops/docker-deployment/config/requirements.txt .
 RUN python -m pip install --upgrade pip \
     && pip install -r requirements.txt
 
 # Copy entrypoint script
-COPY docker/build/config/run_server.sh .
+COPY devops/docker-deployment/config/run_celery.sh .
 
 # Copy django app
 COPY /app .
@@ -27,5 +27,9 @@ COPY /app .
 # Informs Docker that the container listens on 8000 at runtime
 EXPOSE 8080
 
-# Start django server
-ENTRYPOINT [ "/bin/bash", "-c", "./run_server.sh" ]
+# create unprivileged user for prod
+# RUN adduser --disabled-password --gecos '' celery-user  
+
+# Start celery server
+# defined in compose
+# ENTRYPOINT [ "/bin/bash", "-c", "./run_celery.sh" ]

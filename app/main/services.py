@@ -4,9 +4,9 @@ from typing import Dict, List, Union
 from django.contrib import messages
 from django.core.mail import BadHeaderError, send_mail
 
-from .models import Article, Category, SubCategory
-
 from .forms import ContactForm
+from .models import Article, Category, SubCategory
+from .tasks import celery_function_test
 
 # This retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
@@ -19,7 +19,11 @@ def _get_subcategories_by_cat_slug(
     Retrieves a list of SubCategory objects for a given category name.
     Filtering all SubCategory objects by cat_slug.
     """
+
+    _ = celery_function_test.delay()
+
     logger.info(f"Filtering SubCategory objects by cat_slug={cat_slug}")
+    # logger.info(f"Filtering SubCategory objects by cat_slug={cat_slug} -- {heya}")
     categories = [c.category_slug for c in Category.objects.all()]
     if cat_slug not in categories:
         logger.warning(f"Category {cat_slug} does not exist.")

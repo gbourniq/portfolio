@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_celery_results",
     "main",
     "tinymce",
 ]
@@ -98,38 +99,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "myportfolio.wsgi.application"
 
-
-# Cache time to live is 15 minutes.
-CACHE_TTL = 60 * 15
-
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://"
-        + os.getenv("REDIS_HOST")
-        + ":"
-        + os.getenv("REDIS_PORT")
-        + "/1",
-        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-        "KEY_PREFIX": "example",
-    }
-}
-
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -161,23 +130,60 @@ USE_L10N = True
 USE_TZ = True
 
 
+# Cache time to live is 15 minutes.
+CACHE_TTL = 60 * 15
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/1",
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        "KEY_PREFIX": "example",
+    }
+}
+
+# Database
+# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
+    }
+}
+
+# Celery configuration
+# https://blog.syncano.rocks/configuring-running-django-celery-docker-containers-pt-1/
+
+
+# Set Redis as Broker URL
+BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/2"
+
+# Set django-redis as celery result backend
+CELERY_RESULT_BACKEND = "django-db"
+
+# configure queues, currently we have only one
+# CELERY_DEFAULT_QUEUE = 'default'
+# CELERY_QUEUES = (
+#     Queue('default', Exchange('default'), routing_key='default'),
+# )
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATICFILES_DIRS = [
     "/code/main/static/",
     "/usr/local/lib/python3.7/site-packages/django/contrib/admin/static",
 ]
-
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
 MEDIA_URL = "/media/"
-# MEDIA_ROOT = BASE_DIR
 STATIC_ROOT = os.path.join(BASE_DIR, "media")
 
 # Email parameters
-
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
