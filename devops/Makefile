@@ -1,6 +1,6 @@
 
-# create super user - use existing logic to automatically get the right container id?
-# docker exec -it 1c37cd9c4bf7 python manage.py createsuperuser
+# create super user - use existing logic automatically get the right container id?
+docker exec -it 120f5edfb608 python manage.py createsuperuser
 
 
 # docker compose update

@@ -23,7 +23,7 @@ CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 logger = logging.getLogger(__name__)
 
 
-@cache_page(CACHE_TTL)
+# @cache_page(CACHE_TTL)
 def homepage(request):
     """View for /homepage url"""
     categories = Category.objects.all
@@ -31,7 +31,7 @@ def homepage(request):
     return render(request, "main/categories.html", {"categories": categories})
 
 
-@cache_page(CACHE_TTL)
+# @cache_page(CACHE_TTL)
 def viewSubCategories(request, cat_slug: str) -> None:
     """
     View for a /<category> url

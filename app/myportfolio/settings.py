@@ -89,6 +89,7 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",
+                "django.template.context_processors.media",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -130,8 +131,8 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Cache time to live is 15 minutes.
-CACHE_TTL = 60 * 15
+# Cache time to live is 5 secs.
+CACHE_TTL = 5 * 1
 
 CACHES = {
     "default": {
@@ -165,6 +166,20 @@ BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/2"
 
 # Set django-redis as celery result backend
 CELERY_RESULT_BACKEND = "django-db"
+CELERY_REDIS_MAX_CONNECTIONS = 1
+
+# Sensible settings for celery
+CELERY_ALWAYS_EAGER = False
+CELERY_ACKS_LATE = True
+CELERY_TASK_PUBLISH_RETRY = True
+CELERY_DISABLE_RATE_LIMITS = False
+
+# By default we will ignore result
+# If you want to see results and try out tasks interactively, change it to False
+# Or change this setting on tasks level
+CELERY_IGNORE_RESULT = False
+CELERY_SEND_TASK_ERROR_EMAILS = False
+CELERY_TASK_RESULT_EXPIRES = 600
 
 # configure queues, currently we have only one
 # CELERY_DEFAULT_QUEUE = 'default'
@@ -174,14 +189,24 @@ CELERY_RESULT_BACKEND = "django-db"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-STATICFILES_DIRS = [
-    "/code/main/static/",
-    "/usr/local/lib/python3.7/site-packages/django/contrib/admin/static",
-]
+
+# image url on localhost
+# http://localhost:8000/media/images/e5c.jpg
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 MEDIA_URL = "/media/"
-STATIC_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "main/static"),
+    # os.path.join(BASE_DIR, 'static')
+)
+
+# STATICFILES_DIRS = [
+
+#     # "/usr/local/lib/python3.7/site-packages/django/contrib/admin/static",
+# ]
 
 # Email parameters
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
