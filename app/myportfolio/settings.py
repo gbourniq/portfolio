@@ -131,7 +131,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Cache time to live is 5 secs.
+# Cache time to live is 15 mn.
 CACHE_TTL = 5 * 1
 
 CACHES = {
@@ -200,13 +200,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "main/static"),
-    # os.path.join(BASE_DIR, 'static')
+    # os.path.join(BASE_DIR, 'static'),
+    # "/usr/local/lib/python3.7/site-packages/django/contrib/admin/static",
 )
 
-# STATICFILES_DIRS = [
-
-#     # "/usr/local/lib/python3.7/site-packages/django/contrib/admin/static",
-# ]
 
 # Email parameters
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
