@@ -22,6 +22,9 @@ services:
     build:
       context: ../..
       dockerfile: devops/docker-deployment/app.dockerfile
+      args:
+        app_component : "backend-app"
+        app_version: ${APP_VERSION}
     container_name: app
     volumes:
       - static:/code/staticfiles/
@@ -70,7 +73,10 @@ services:
   celery:
     build:
       context: ../..
-      dockerfile: devops/docker-deployment/celery.dockerfile
+      dockerfile: devops/docker-deployment/app.dockerfile
+      args:
+        app_component : "backend-celery"
+        app_version: ${APP_VERSION}
     container_name: celery
     volumes:
       - static:/code/main/static/

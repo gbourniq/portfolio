@@ -9,10 +9,6 @@ FROM python:3.8.0-alpine as builder
 RUN mkdir /code
 WORKDIR /code
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
 # Install psycopg2 dependencies
 RUN apk update \
     && apk add --no-cache postgresql-dev gcc python3-dev musl-dev
@@ -36,9 +32,16 @@ FROM python:3.8.0-alpine
 
 # Define labels
 ARG app_version
+ARG app_component
 LABEL application.version=${app_version}
-LABEL application.component=backend
+LABEL application.component=${app_component}
 LABEL author="Guillaume Bournique <gbournique@gmail.com>"
+
+# Set environment variables
+# Prevents Python from writing pyc files to disc
+# Prevents Python from buffering stdout and stderr 
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Set working directory
 ENV APP_HOME=/code
@@ -56,8 +59,9 @@ COPY --from=builder /code/requirements.txt .
 RUN pip install --upgrade pip \
     && pip install --no-cache /wheels/*
 
-# Copy entrypoint script
+# Copy entrypoint scripts
 COPY devops/docker-deployment/config/run_server.sh $APP_HOME
+COPY devops/docker-deployment/config/run_celery.sh $APP_HOME
 
 # Copy project
 COPY /app $APP_HOME
@@ -98,7 +102,8 @@ COPY /app $APP_HOME
 #     && pip install -r requirements.txt
 
 # # Copy entrypoint script
-# COPY devops/docker-deployment/config/run_server.sh .
+# COPY devops/docker-deployment/config/run_server.sh $APP_HOME
+# COPY devops/docker-deployment/config/run_celery.sh $APP_HOME
 
 # # Copy django app
 # COPY /app .
@@ -111,7 +116,3 @@ COPY /app $APP_HOME
 
 # # change to the app user
 # # USER app_user
-
-# # Start django server
-# # defined in compose
-# # ENTRYPOINT [ "/bin/bash", "-c", "./run_server.sh" ]
