@@ -6,7 +6,7 @@ services:
     restart: always
     build:
       context: ../..
-      dockerfile: devops/docker-deployment/nginx.dockerfile
+      dockerfile: devops/docker-build-images/nginx.dockerfile
     container_name: nginx
     volumes: 
         - static:/www/staticfiles/
@@ -21,10 +21,9 @@ services:
   app:
     build:
       context: ../..
-      dockerfile: devops/docker-deployment/app.dockerfile
+      dockerfile: devops/docker-build-images/app.dockerfile
       args:
         app_component : "backend-app"
-        app_version: ${APP_VERSION}
     container_name: app
     volumes:
       - static:/code/staticfiles/
@@ -48,7 +47,7 @@ services:
   postgres:
     build:
       context: ../..
-      dockerfile: devops/docker-deployment/postgres.dockerfile
+      dockerfile: devops/docker-build-images/postgres.dockerfile
     container_name: postgres
     restart: unless-stopped
     expose:
@@ -73,10 +72,9 @@ services:
   celery:
     build:
       context: ../..
-      dockerfile: devops/docker-deployment/app.dockerfile
+      dockerfile: devops/docker-build-images/app.dockerfile
       args:
         app_component : "backend-celery"
-        app_version: ${APP_VERSION}
     container_name: celery
     volumes:
       - static:/code/main/static/

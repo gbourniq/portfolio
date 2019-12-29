@@ -14,11 +14,10 @@ RUN apk update \
     && apk add --no-cache postgresql-dev gcc python3-dev musl-dev
 
 # Install Pillow dependencies
-RUN apk add --no-cache jpeg-dev zlib-dev \
-    && apk add --no-cache --virtual .build-deps build-base linux-headers
+RUN apk add --no-cache jpeg-dev zlib-dev
 
 # Install dependencies
-COPY devops/docker-deployment/config/requirements.txt .
+COPY devops/docker-build-images/config/requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /code/wheels -r requirements.txt
 
 
@@ -31,9 +30,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /code/wheels -r requirements.
 FROM python:3.8.0-alpine
 
 # Define labels
-ARG app_version
 ARG app_component
-LABEL application.version=${app_version}
 LABEL application.component=${app_component}
 LABEL author="Guillaume Bournique <gbournique@gmail.com>"
 
@@ -48,20 +45,16 @@ ENV APP_HOME=/code
 RUN mkdir $APP_HOME
 WORKDIR $APP_HOME
 
-# Create directory for static and media files
-RUN mkdir $APP_HOME/staticfiles
-RUN mkdir $APP_HOME/mediafiles
-
 # Install dependencies
-RUN apk update && apk add libpq --no-cache
+RUN apk update && apk add libpq jpeg-dev zlib-dev --no-cache
 COPY --from=builder /code/wheels /wheels
 COPY --from=builder /code/requirements.txt .
 RUN pip install --upgrade pip \
     && pip install --no-cache /wheels/*
 
 # Copy entrypoint scripts
-COPY devops/docker-deployment/config/run_server.sh $APP_HOME
-COPY devops/docker-deployment/config/run_celery.sh $APP_HOME
+COPY devops/docker-build-images/config/run_server.sh $APP_HOME
+COPY devops/docker-build-images/config/run_celery.sh $APP_HOME
 
 # Copy project
 COPY /app $APP_HOME
@@ -97,13 +90,13 @@ COPY /app $APP_HOME
 # WORKDIR /code
 
 # # Install librairies
-# COPY devops/docker-deployment/config/requirements.txt .
+# COPY devops/docker-build-images/config/requirements.txt .
 # RUN python -m pip install --upgrade pip \
 #     && pip install -r requirements.txt
 
 # # Copy entrypoint script
-# COPY devops/docker-deployment/config/run_server.sh $APP_HOME
-# COPY devops/docker-deployment/config/run_celery.sh $APP_HOME
+# COPY devops/docker-build-images/config/run_server.sh $APP_HOME
+# COPY devops/docker-build-images/config/run_celery.sh $APP_HOME
 
 # # Copy django app
 # COPY /app .

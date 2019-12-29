@@ -4,4 +4,4 @@ FROM nginx:1.17-alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy new config file
-COPY devops/docker-deployment/config/django.conf /etc/nginx/conf.d/django.conf
+COPY devops/docker-build-images/config/django.conf /etc/nginx/conf.d/django.conf

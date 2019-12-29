@@ -2,15 +2,7 @@ DEPLOY_DIR=docker-build-images
 ANSIBLE_DIR=ec2-deployment
 SHELL := /bin/bash
 
-export APP_VERSION:=v1 # overrides default APP_VERSION defined in Makefile.settings
-export PROXY_HTTP_PORT:=80
-export APP_HTTP_PORT:=4000
-export CLIENT_HTTP_PORT:=3000
-export MONGO_HTTP_PORT:=27017
-export REPO_NAME_BASE:=myfullstackapp
-export DOCKER_REGISTRY=docker.io
-export ORG_NAME=gbournique
-export DOCKER_USER=gbournique
+
 
 
 
@@ -51,80 +43,47 @@ docker-logout:
 docker-test:
 	${INFO} "Running tests..."
 	# Run unit tests
+	cd .. && pytest .
 
 # Executes a full workflow
 docker-all: docker-clean docker-test docker-build-images docker-tag-latest docker-publish docker-clean
 
-# Build environments: create images, run containers and acceptance tests
-# Then images must be pushed to a registry 
 docker-build-images:
 	${INFO} "Building images..."
-	@ docker-compose $(BUILD_ARGS) build app client mongo
+	@ docker-compose $(BUILD_ARGS) build
 	${SUCCESS} "Images build complete"
 
 docker-start-services:
-	${INFO} "Starting mongo database..."
-	@ docker-compose $(BUILD_ARGS) up -d mongo
-	@ $(call check_service_health,$(BUILD_ARGS),mongo)
-
-	${INFO} "Starting app service..."
-	@ docker-compose $(BUILD_ARGS) up -d app
-	@ $(call check_service_health,$(BUILD_ARGS),app)
-
-	${INFO} "Starting client service..."
-	@ docker-compose $(BUILD_ARGS) up -d client
-	@ $(call check_service_health,$(BUILD_ARGS),client)
-
+	${INFO} "Starting services for build environment..."
+	@ docker-compose $(BUILD_ARGS) up -d
 	${SUCCESS} "Build environment created"
 	${SUCCESS} "App REST endpoint is running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),app,$(APP_HTTP_PORT))$(APP_HTTP_ROOT)"
 	${SUCCESS} "Client REST endpoint is running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),client,$(CLIENT_HTTP_PORT))$(CLIENT_HTTP_ROOT)"
 
+docker-start-services:
+	${INFO} "Checking services health..."
+	@ $(call check_service_health,$(BUILD_ARGS),mongo)
+	@ $(call check_service_health,$(BUILD_ARGS),app)
+	@ $(call check_service_health,$(BUILD_ARGS),client)
+	${SUCCESS} "All services are healthy"
 
-docker-build-package:
-	${INFO} "Work in progress..."
-	# cd ${DEPLOY_DIR}/build; python build_deployment_package.py -di --clean
-
-
-# Prod environment: Pull images from registry and run containers
-docker-run-prod:
-	${INFO} "Building images..."
-	@ docker-compose $(PROD_ARGS) build app client mongo
-	
-	${INFO} "Starting mongo database..."
-	@ docker-compose $(PROD_ARGS) up -d mongo
-	@ $(call check_service_health,$(PROD_ARGS),mongo)
-
-	${INFO} "Starting app service..."
-	@ docker-compose $(PROD_ARGS) up -d app
-	@ $(call check_service_health,$(PROD_ARGS),app)
-
-	${INFO} "Starting client service..."
-	@ docker-compose $(PROD_ARGS) up -d client
-	@ $(call check_service_health,$(PROD_ARGS),client)
-
-	${SUCCESS} "Prod environment created"
-	${SUCCESS} "App REST endpoint is running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(PROD_ARGS),app,$(APP_HTTP_PORT))$(APP_HTTP_ROOT)"
-	${SUCCESS} "Client REST endpoint is running at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(PROD_ARGS),client,$(CLIENT_HTTP_PORT))$(CLIENT_HTTP_ROOT)"
 
 # Cleans environment
-docker-clean: clean-release clean-prod
+docker-clean:
 	${INFO} "Removing dangling images..."
 	@ $(call clean_dangling_images,$(REPO_NAME))
 	${SUCCESS} "Clean up complete"
 
-docker-clean%build:
+docker-down:
 	${INFO} "Destroying build environment..."
 	@ docker-compose $(BUILD_ARGS) down -v || true
 
-docker-clean%prod:
-	${INFO} "Destroying prod environment..."
-	@ docker-compose $(PROD_ARGS) down -v || true
 
 # 'make tag <tag> [<tag>...]' tags development and/or release image with specified tag(s)
 docker-tag/%:
 	${INFO} "Tagging release images with tags $*..."
-	docker tag $(REPO_NAME_BASE)_app $(DOCKER_REGISTRY)/$(ORG_NAME)/$(REPO_NAME_BASE)_app:$*
-	docker tag $(REPO_NAME_BASE)_client $(DOCKER_REGISTRY)/$(ORG_NAME)/$(REPO_NAME_BASE)_client:$*
+	docker tag $(PROJECT_NAME)_app $(DOCKER_REGISTRY)/$(ORG_NAME)/$(REPO_NAME_BASE)_app:$*
+	docker tag $(PROJECT_NAME)_client $(DOCKER_REGISTRY)/$(ORG_NAME)/$(REPO_NAME_BASE)_client:$*
 	${SUCCESS} "Tagging complete"
 
 # Publishes image(s) tagged using make tag commands
