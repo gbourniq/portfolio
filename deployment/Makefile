@@ -20,6 +20,8 @@ logout:
 unit-tests:
 	${INFO} "Running unit tests..."
 	@ echo "In progress..."
+	@ cd ../ && docker build -t myportfolio_tests:latest -f deployment/build-images/app.dockerfile .
+	@ docker run -it myportfolio_tests:latest pytest .
 	${SUCCESS} "Unit tests complete"
 
 # Superuser to be create the first time the app is deployed (fresh PostgreSQL)
@@ -35,11 +37,11 @@ build-images:
 	@ docker-compose $(BUILD_ARGS) build
 	${SUCCESS} "Images build complete"
 
-clean-environments: remove-build-images
+clean-environments: remove-containers remove-build-images
 	${INFO} "Removing dangling images..."
 	@ $(call clean_dangling_images,$(PROJECT_NAME))
 	${SUCCESS} "Clean up complete"
-	
+
 remove-build-images:
 	${INFO} "Remove images starting with $(PROJECT_NAME)..."
 	@ docker rmi $(IMAGES_IDS) --force || true 

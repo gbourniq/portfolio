@@ -7,3 +7,5 @@ gunicorn==20.0.4
 Pillow==6.2.1
 psycopg2-binary==2.8.3
 redis==3.2.1
+pytest==4.0
+pytest-cov==2.8.1
