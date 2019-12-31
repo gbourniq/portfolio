@@ -1,0 +1,132 @@
+version: "3.7"
+
+services:
+
+  nginx:
+    image: docker.io/gbournique/myportfolio_nginx:v1
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+    volumes: 
+        - static:/www/staticfiles/
+        - media:/www/mediafiles/
+    healthcheck:
+      test: stat /etc/nginx/conf.d/django.conf && curl localhost:80 || exit 1
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    ports: 
+      - 1221:80
+    networks:
+      - proxy
+    depends_on:
+      - app
+      
+  app:
+    image: docker.io/gbournique/myportfolio_app:v1
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+    env_file:
+      - .env
+    volumes:
+      - static:/code/staticfiles/
+      - media:/code/mediafiles/
+      - redisdata:/data
+    healthcheck:
+      test: curl -f -s -S http://localhost:8080 || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - backend
+      - proxy
+    entrypoint:
+      - ./run_server.sh
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: docker.io/gbournique/myportfolio_postgres:v1
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - pgdata:/var/lib/postgresql/data/ 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - backend
+
+  redis:
+    image: docker.io/gbournique/myportfolio_redis:v1
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: bash /usr/local/bin/run_redis_healthcheck.sh
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - backend
+
+
+  celery:
+    image: docker.io/gbournique/myportfolio_celery:v1
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+    env_file:
+      - .env
+    volumes:
+      - static:/code/main/static/
+      - media:/code/main/mediafiles/
+      - redisdata:/data
+    healthcheck:
+      test: ps | grep celery || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - backend
+      - proxy
+    entrypoint:
+      - ./run_celery.sh
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  static:
+  media:
+  pgdata:
+  redisdata:
+
+networks:
+  backend:
+    driver: overlay
+  proxy:
+    driver: overlay

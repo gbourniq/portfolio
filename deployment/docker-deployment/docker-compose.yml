@@ -1,0 +1,120 @@
+version: "3.7"
+
+services:
+
+  nginx:
+    image: ${DOCKER_REGISTRY}/${ORG_NAME}/${PROJECT_NAME}_nginx:${PROD_TAG_TO_PULL}
+    container_name: nginx
+    restart: always
+    volumes: 
+        - static:/www/staticfiles/
+        - media:/www/mediafiles/
+    healthcheck:
+      test: stat /etc/nginx/conf.d/django.conf && curl localhost:80 || exit 1
+      interval: 120s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    ports: 
+      - "${PROXY_PORT}:${PROXY_PORT_INTERNAL}"
+    networks:
+      - proxy
+    depends_on:
+      - app
+      
+  app:
+    image: ${DOCKER_REGISTRY}/${ORG_NAME}/${PROJECT_NAME}_app:${PROD_TAG_TO_PULL}
+    container_name: app
+    restart: "no"
+    env_file:
+      - ./config/app.env
+    volumes:
+      - static:/code/staticfiles/
+      - media:/code/mediafiles/
+      - redisdata:/data
+    healthcheck:
+      test: curl -f -s -S http://localhost:${APP_PORT} || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    expose: 
+      - ${APP_PORT}
+    networks:
+      - backend
+      - proxy
+    entrypoint:
+      - ./run_server.sh
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: ${DOCKER_REGISTRY}/${ORG_NAME}/${PROJECT_NAME}_postgres:${PROD_TAG_TO_PULL}
+    container_name: postgres
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data/ 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    expose:
+      - 5432
+    networks:
+      - backend
+
+  redis:
+    image: ${DOCKER_REGISTRY}/${ORG_NAME}/${PROJECT_NAME}_redis:${PROD_TAG_TO_PULL}
+    container_name: redis
+    restart: "no"
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: bash /usr/local/bin/run_redis_healthcheck.sh
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    expose:
+      - 6379
+    networks:
+      - backend
+
+
+  celery:
+    image: ${DOCKER_REGISTRY}/${ORG_NAME}/${PROJECT_NAME}_celery:${PROD_TAG_TO_PULL}
+    container_name: celery
+    restart: "no"
+    env_file:
+      - ./config/app.env
+    volumes:
+      - static:/code/main/static/
+      - media:/code/main/mediafiles/
+      - redisdata:/data
+    healthcheck:
+      test: ps | grep celery || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    expose: 
+      - ${APP_PORT}
+    networks:
+      - backend
+      - proxy
+    entrypoint:
+      - ./run_celery.sh
+    depends_on:
+      - postgres
+      - redis
+
+volumes:
+  static:
+  media:
+  pgdata:
+  redisdata:
+
+networks:
+  backend:
+    driver: bridge
+  proxy:
+    driver: bridge

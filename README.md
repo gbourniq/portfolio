@@ -12,7 +12,7 @@ bugs:
 - test website, navigating, with no subcat, or no article...
 https://www.quora.com/What-are-the-differences-between-nginx-and-gunicorn
 - deal with EMAIL_HOST_PASSWORD="B" variable : kubernetes secret? same for SECRET_KEY and dynamic ALLOWED_HOSTS ??
-
+- check email. should remove -from email- just get contact details: name, email, message
 https://www.nginx.com/blog/configuring-nginx-unit-for-production-applications-serving-django-project/
 
 
