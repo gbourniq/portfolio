@@ -13,9 +13,6 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-# before_script:
-#   - docker-compose up -d --build
-
 script:
   - cd deployment && make docker-all
 

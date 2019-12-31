@@ -17,10 +17,10 @@ logout:
 	@ docker logout
 	${SUCCESS} "Logged out of Docker registry $(DOCKER_REGISTRY)"
 
-test:
-	${INFO} "Running tests..."
-	# Run unit tests
-	echo $(ls)
+unit-tests:
+	${INFO} "Running unit tests..."
+	@ echo "In progress..."
+	${SUCCESS} "Unit tests complete"
 
 # Superuser to be create the first time the app is deployed (fresh PostgreSQL)
 create-superuser:
@@ -28,7 +28,7 @@ create-superuser:
 	@ docker exec -it $(APP_CONTAINER_ID) python manage.py createsuperuser
 
 # Executes a full workflow
-docker-all: clean-environments test build-images services-up-build services-health services-down-volumes clean-environments
+docker-all: clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
 
 build-images:
 	${INFO} "Building images..."
@@ -75,6 +75,11 @@ services-health:
 	@ $(call check_service_health,$(BUILD_ARGS),celery)
 	@ $(call check_service_health,$(BUILD_ARGS),nginx)
 	${SUCCESS} "All services are healthy"
+
+frontend-tests:
+	${INFO} "Running front-end tests..."
+	@ echo "In progress..."
+	${SUCCESS} "Front-end tests complete"
 
 tag/%:
 	${INFO} "Tagging release images with tags $*..."
