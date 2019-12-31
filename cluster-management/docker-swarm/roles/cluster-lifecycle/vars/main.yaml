@@ -19,15 +19,10 @@ AWS_SECRET_KEY: !vault |
 
 AWS_KEY_NAME: "my_aws_key"
 AMI_ID: ami-09755588fffb6d3c3
-MASTERS_COUNT: 1
-INSTANCE_TYPE_MASTER: t2.micro
-NODES_COUNT: 2
-INSTANCE_TYPE_NODE: t2.micro
+INSTANCE_TYPE: t2.micro
 SECURITY_GROUP: sg-0a7f001fcf0bc78ad
 REGION: eu-west-3
-MASTER_INSTANCE_TAG_NAME: k8s-master
-NODE_INSTANCE_TAG_NAME: k8s-node
-INSTANCE_TAG_TYPE: k8s-cluster
+INSTANCE_TAG_TYPE: swarm
 
 # need this line, other it errors "boto required for ec2 module"
-ansible_python_interpreter: /Users/guillaume.bournique/anaconda3/envs/k8s/bin/python
+ansible_python_interpreter: /Users/guillaume.bournique/anaconda3/envs/portfolio-env/bin/python

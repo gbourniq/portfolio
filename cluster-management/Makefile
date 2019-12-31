@@ -45,7 +45,7 @@ cluster-create:
 		--vault-id user@~/.ssh/ansible-vault-pw \
 		--tags=cluster-create \
 		-vvv
-	${SUCCESS} "Instances created successfully with tag: type=k8s-cluster"
+	${SUCCESS} "Instances created successfully with tag: type=swarm"
 
 
 cluster-configure:
@@ -62,7 +62,7 @@ cluster-configure:
 	
 
 cluster-stop:
-	${INFO} "Stopping all instances with the following tag: type=k8s-cluster"
+	${INFO} "Stopping all instances with the following tag: type=swarm"
 	@ ansible-playbook ${ANSIBLE_DIR}/cluster_lifecycle_playbook.yml \
 		--vault-id user@~/.ssh/ansible-vault-pw \
 		--tags=cluster-stop \
@@ -70,7 +70,7 @@ cluster-stop:
 	${SUCCESS} "Cluster stopped successfully"
 
 cluster-start:
-	${INFO} "Starting all instances with the following tag: type=k8s-cluster"
+	${INFO} "Starting all instances with the following tag: type=swarm"
 	@ ansible-playbook ${ANSIBLE_DIR}/cluster_lifecycle_playbook.yml \
 		--vault-id user@~/.ssh/ansible-vault-pw \
 		--tags=cluster-start \

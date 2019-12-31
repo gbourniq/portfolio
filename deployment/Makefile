@@ -37,7 +37,7 @@ build-images:
 	@ docker-compose $(BUILD_ARGS) build
 	${SUCCESS} "Images build complete"
 
-clean-environments: remove-containers remove-build-images
+clean-environments: remove-build-images
 	${INFO} "Removing dangling images..."
 	@ $(call clean_dangling_images,$(PROJECT_NAME))
 	${SUCCESS} "Clean up complete"
