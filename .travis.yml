@@ -14,16 +14,18 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
 
 before_script:
-  - cd deployment && make clean-environments
-  - cd deployment && make unit-tests
+  - cd deployment
+  - make clean-environments
+  - make unit-tests
 
 script:
-  - cd deployment && make build-images
-  - cd deployment && make services-up-build
-  - cd deployment && make services-health
-  - cd deployment && make frontend-tests
-  - cd deployment && make services-down-volumes
-  - cd deployment && make clean-environments
+  - cd deployment
+  - make build-images
+  - make services-up-build
+  - make services-health
+  - make frontend-tests
+  - make services-down-volumes
+  - make clean-environments
 
 after_script:
   - echo "Successfully run tests and checked services health"

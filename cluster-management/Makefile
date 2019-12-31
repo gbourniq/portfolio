@@ -1,20 +1,12 @@
-DEPLOY_DIR=docker-deployment
-ANSIBLE_DIR=ec2-deployment
-SHELL := /bin/bash
-
-
-# Include env variables
-include .ansible-env
-include ec2-deployment/.current-instance-id-env
-# Common settings
-include Makefile.settings
-
 # Set shell
 SHELL=/bin/bash -e -o pipefail
 
 # Common settings
-ANSIBLE_DIR=cluster-deployment
-MASTER_INSTANCE_IP=ec2-15-188-177-177.eu-west-3.compute.amazonaws.com
+include Makefile.settings
+
+# Common settings
+DOCKER_SWARM_DIR=docker-swarm
+INSTANCE_IP=ec2-15-188-177-177.eu-west-3.compute.amazonaws.com
 
 # Cosmetics
 RED := "\e[1;31m"
@@ -30,22 +22,14 @@ WARNING := @bash -c 'printf $(RED); echo "[WARNING] $$1"; printf $(NC)' MESSAGE
 # Common settings
 include Makefile.settings
 
-packer-build-ami:
-	${INFO} "Running packer.json to build an Amazon Machine Image..."
-	@ packer build ${PACKER_DIR}/packer.json
 
+#################################################################
+########### DOCKER-SWARM - SINGLE INSTANCE MANAGEMENT ###########
+#################################################################
 ansible-checksyntax:
 	${INFO} "Checking ansible command syntax..."
-	@ ansible-playbook -i ${ANSIBLE_DIR}/inventory.yml ${ANSIBLE_DIR}/cluster_lifecycle_playbook.yml --syntax-check
+	@ ansible-playbook -i ${DOCKER_SWARM_DIR}/inventory.yml ${DOCKER_SWARM_DIR}/cluster_lifecycle_playbook.yml --syntax-check
 	${SUCCESS} "Syntax check complete"
-
-cluster-create:
-	${INFO} "Running ansible playbook to create the following ec2 instances: 1 Master, X Nodes"
-	@ ansible-playbook ${ANSIBLE_DIR}/cluster_lifecycle_playbook.yml \
-		--vault-id user@~/.ssh/ansible-vault-pw \
-		--tags=cluster-create \
-		-vvv
-	${SUCCESS} "Instances created successfully with tag: type=swarm"
 
 
 cluster-configure:
@@ -63,7 +47,7 @@ cluster-configure:
 
 cluster-stop:
 	${INFO} "Stopping all instances with the following tag: type=swarm"
-	@ ansible-playbook ${ANSIBLE_DIR}/cluster_lifecycle_playbook.yml \
+	@ ansible-playbook ${DOCKER_SWARM_DIR}/cluster_lifecycle_playbook.yml \
 		--vault-id user@~/.ssh/ansible-vault-pw \
 		--tags=cluster-stop \
 		-vv
@@ -71,11 +55,11 @@ cluster-stop:
 
 cluster-start:
 	${INFO} "Starting all instances with the following tag: type=swarm"
-	@ ansible-playbook ${ANSIBLE_DIR}/cluster_lifecycle_playbook.yml \
+	@ ansible-playbook ${DOCKER_SWARM_DIR}/cluster_lifecycle_playbook.yml \
 		--vault-id user@~/.ssh/ansible-vault-pw \
 		--tags=cluster-start \
 		-vv
-	${SUCCESS} "Cluster starting... Master running on ${MASTER_INSTANCE_IP}"
+	${SUCCESS} "Instance starting... running on ${INSTANCE_IP}"
 	
 # Executes a full workflow
 ansible-all: ansible-checksyntax ansible-instance-setup ansible-deploy-build ansible-instance-cleanup ansible-deploy-prod
@@ -113,3 +97,8 @@ docker-deploy-stack:
 	${INFO} "Running ansible playbook to start services"
 	@ ansible-playbook -i ec2-deployment/inventory.yml --vault-id ec2-deployment/roles/setup/vars/ansible-vault-pw ec2-deployment/site.yml -vv --tags=start-services
 	${SUCCESS} "Start services complete"
+
+
+#######################################################
+########### KUBERNETES - CLUSTER MANAGEMENT ###########
+#######################################################
