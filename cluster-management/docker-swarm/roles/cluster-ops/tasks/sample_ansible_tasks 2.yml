@@ -1,0 +1,96 @@
+# This playbook contains docker actions that will be run on "remote" host.
+
+
+# install packages
+
+# sudo apt-get install *
+- name: Install Python
+  apt:
+    name: ['python3', 'python3-pip']
+    update_cache: true
+    state: present
+  tags:
+    - instance-setup
+
+- name: Install pip packages
+  pip:
+    name:
+      - docker
+      - docker-compose
+  tags:
+    - instance-setup
+    
+# Docker cleanup tasks
+- name: Stop running containers
+  shell: docker stop $(docker ps -a -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - docker-cleanup
+
+- name: Remove all stopped containers
+  shell: docker rm $(docker ps -a -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - docker-cleanup
+
+- name: Docker prune all
+  shell: docker system prune -a -f
+  tags:
+    - docker-cleanup
+
+
+
+# Working with directories
+- name: Deleting repo folder if exists
+  become: yes
+  file:
+    path: "{{ REPO_LOCAL_PATH }}"
+    state: absent
+  tags:
+    - clone-repo
+
+- name: Create a docker_deployment directory if it does not exist
+  file:
+    path: "{{ REPO_LOCAL_PATH }}"
+    state: directory
+    mode: '0755'
+  tags:
+    - clone-repo
+
+- name: Recursively change ownership of a directory
+  file:
+    path: "{{ REPO_LOCAL_PATH }}"
+    state: directory
+    recurse: yes
+    owner: ubuntu
+    group: ubuntu
+  tags:
+    - clone-repo
+
+- name: Clone github repo
+  become: no
+  git:
+    repo: https://{{ GITHUB_USER }}:{{ GITHUB_PASSWORD }}@github.com/{{ GITHUB_USER }}/{{ GITHUB_REPO_NAME }}.git
+    version: master
+    dest: "{{ REPO_LOCAL_PATH }}"
+    update: yes
+  tags:
+    - clone-repo
+
+
+# Sending bash commands
+- name: Tagging release images with tags latest...
+  shell: cd {{ REPO_LOCAL_PATH }} && make docker-tag/latest
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - tag-images
+
+- name: Curl app front-end
+  shell: if [ $(curl 0.0.0.0:80 | wc -w) -gt 0 ]; then echo "front-end running"; else exit 2; fi
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - acceptance-tests

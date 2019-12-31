@@ -1,0 +1,12 @@
+---
+# This playbook sets up whole stack.
+# https://medium.com/@rossbulat/ansible-automating-app-build-and-deployment-from-a-github-repository-7d613985f686
+
+# To run ansible, need to have ssh pass on host to connect to ec2 instance
+# brew install http://git.io/sshpass.rb
+
+- name: Run cluster-lifecycle role on localhost
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - cluster-lifecycle

@@ -1,0 +1,20 @@
+
+webservers:
+  hosts:
+      k8s-master:
+        ansible_connection: ssh
+        ansible_host: ec2-15-188-17-57.eu-west-3.compute.amazonaws.com
+        ansible_user: ubuntu
+        ansible_password: !vault |
+                          $ANSIBLE_VAULT;1.2;AES256;user
+                          66623266666131353634666433336663663264663365363266656131336562376534643532633737
+                          3863646539383564343337393063336630616264316531660a346432663438653961626562303864
+                          31643461336163356464386662353863653834393464356238353739613762646661666661393839
+                          3036343364323861360a386565303461366436306463353463366530633361616665383964613266
+                          6562
+        # ansible_ssh_private_key_file: ~/.ssh/my_aws_key.pem
+        ansible_become: true
+        
+      localhost:
+        ansible_connection: local
+        ansible_python_interpreter: python

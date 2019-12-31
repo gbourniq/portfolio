@@ -1,0 +1,37 @@
+# TEMP
+/app/tests/templates/*
+
+# Add any directories, files, or patterns you don't want to be tracked by version control
+app/info.log
+app/media/
+app/images/
+app/main/migrations/*
+/bin/
+/build/
+/static/
+.*/
+/logs/
+/plugins/
+*__pycache__*
+*.DS_Store
+tags
+/tmp/
+/venv/
+*.dat
+*.code-workspacest
+.pytest_cache
+app/main/static/uploaded_images/
+
+# ignore python compiled bytecode files
+*.pyc
+*.python-version
+
+# ignore pytest-cov output
+.coverage
+.coverage.*
+coverage_html_report/
+cov_html/
+
+# ignore environment variables
+app/.env
+.env
