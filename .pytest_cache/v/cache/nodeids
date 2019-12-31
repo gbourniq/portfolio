@@ -1,4 +1,5 @@
 [
+  "app/tests/test_env_settings.py::DebugSettingTest::test_debug_setting",
   "app/tests/models/test_article.py::TestArticle::test_1",
   "app/tests/models/test_article.py::TestArticle::test_2",
   "app/tests/models/test_category.py::TestCategory::test_1",

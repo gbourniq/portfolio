@@ -2,7 +2,6 @@
 **__pycache__**
 **.pytest_cache**
 **.vscode**
-app/tests
 **Makefile**
 **.DS_Store**
 **.md**
