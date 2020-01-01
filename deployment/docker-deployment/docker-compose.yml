@@ -26,10 +26,11 @@ services:
     image: docker.io/gbournique/myportfolio_app:latest
     container_name: app
     restart: "no"
-    env_file:
-      - ./config/app.env
     environment:
-      Debug: ${DEBUG}
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: "*"
+      SECRET_KEY: ${SECRET_KEY}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/staticfiles/
@@ -91,7 +92,10 @@ services:
     env_file:
       - ./config/app.env
     environment:
-      Debug: ${DEBUG}
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: "*"
+      SECRET_KEY: ${SECRET_KEY}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/main/static/

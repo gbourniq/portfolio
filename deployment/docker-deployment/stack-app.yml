@@ -34,8 +34,12 @@ services:
         parallelism: 1
       restart_policy:
         condition: on-failure
-    env_file:
-      - .env
+    environment:
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: "*"
+      SECRET_KEY: ${SECRET_KEY}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/staticfiles/
       - media:/code/mediafiles/
@@ -99,8 +103,12 @@ services:
         parallelism: 1
       restart_policy:
         condition: on-failure
-    env_file:
-      - .env
+    environment:
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: "*"
+      SECRET_KEY: ${SECRET_KEY}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/main/static/
       - media:/code/main/mediafiles/
