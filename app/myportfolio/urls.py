@@ -22,8 +22,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("", main.views.homepage, name="homepage"),
-    re_path(r"^email/$", main.views.viewEmailForm, name="viewEmailForm"),
-    re_path(r"^success/$", main.views.viewSuccessPage, name="viewSuccessPage"),
+    re_path(r"^contact/$", main.views.contactPage, name="contactPage"),
+    re_path(
+        r"^info/(?P<code>[\w\-]+)/$", main.views.goBackPage, name="goBackPage"
+    ),
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
     re_path(
@@ -48,3 +50,7 @@ urlpatterns = (
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + urlpatterns
 )
+
+# Custom views for 404 and 500
+handler404 = "main.views.handler404"
+handler500 = "main.views.handler500"

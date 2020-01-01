@@ -27,13 +27,15 @@ unit-tests:
 # Superuser to be create the first time the app is deployed via docker-compose (fresh PostgreSQL)
 create-superuser:
 	${INFO} "Creating initial temporary superuser: username: admin, password: pass..."
-	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | docker exec -it $(APP_CONTAINER_ID) python manage.py shell
+	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | docker exec -i app python manage.py shell
+	${SUCCESS} "Superuser created"
 
 # Executes a full workflow
-docker-all: clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
+docker-all-up: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests
+docker-all-test: clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
 docker-all-push-registry: clean-environments unit-tests build-images services-up-build services-health frontend-tests tag/latest publish/latest services-down-volumes clean-environments
 
-build-images:
+create-build-images:
 	${INFO} "Building images..."
 	@ docker-compose $(BUILD_ARGS) build
 	${SUCCESS} "Images build complete"

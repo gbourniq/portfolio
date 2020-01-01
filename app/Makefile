@@ -16,12 +16,17 @@ INSTRUCTION := @bash -c 'printf $(NC); echo "   $$1"; printf $(NC)' MESSAGE
 SUCCESS := @bash -c 'printf $(GREEN); echo "[SUCCESS] $$1"; printf $(NC)' MESSAGE
 WARNING := @bash -c 'printf $(RED); echo "[WARNING] $$1"; printf $(NC)' MESSAGE
 
-run-test:
+# Superuser to be create the first time the app is deployed via docker-compose (fresh PostgreSQL)
+create-superuser:
+	${INFO} "Creating initial temporary superuser: username: admin, password: pass..."
+	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | python manage.py shell
+
+tests-run:
 	${INFO} "Running tests"
 	@ pytest .
 	${SUCCESS} "Tests run successful"
 
-coverage:
+tests-coverage:
 	${INFO} "Running test coverage scan"
 	@ pytest --cov=. --cov-report=term-missing
 	${SUCCESS} "Coverage run successful"

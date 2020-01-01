@@ -35,3 +35,6 @@ cov_html/
 # ignore environment variables
 app/.env
 .env
+
+# ignore files uploaded to app
+app/mediafiles/

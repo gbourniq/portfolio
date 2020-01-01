@@ -1,398 +1,74 @@
-2019-12-27 02:17:36,525 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:17:53,076 INFO main.views Homepage
-2019-12-27 02:18:59,749 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
-2019-12-27 02:19:00,290 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:19:19,928 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
-2019-12-27 02:19:20,350 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:19:21,641 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
-2019-12-27 02:19:22,042 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:19:36,400 INFO main.services Email sent successfully.
-2019-12-27 02:19:36,474 ERROR django.request Internal Server Error: /email/
-Traceback (most recent call last):
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
-    response = get_response(request)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
-    response = self.process_exception_by_middleware(e, request)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 137, in viewEmailForm
-    return redirect("success")
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/shortcuts.py", line 58, in redirect
-    return redirect_class(resolve_url(to, *args, **kwargs))
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/shortcuts.py", line 148, in resolve_url
-    return reverse(to, args=args, kwargs=kwargs)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/urls/base.py", line 90, in reverse
-    return iri_to_uri(resolver._reverse_with_prefix(view, prefix, *args, **kwargs))
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/urls/resolvers.py", line 668, in _reverse_with_prefix
-    raise NoReverseMatch(msg)
-django.urls.exceptions.NoReverseMatch: Reverse for 'success' not found. 'success' is not a valid view function or pattern name.
-2019-12-27 02:21:12,169 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
-2019-12-27 02:21:12,594 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:21:29,892 INFO main.views GET request to /education
-2019-12-27 02:21:29,892 INFO main.services Filtering SubCategory objects by cat_slug=education
-2019-12-27 02:21:29,908 INFO main.services Building sub-categories URLs
-2019-12-27 02:21:29,908 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-27 02:21:29,920 WARNING main.services fwefwqf does not contain any article.
-2019-12-27 02:21:29,920 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-27 02:21:30,646 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-27 02:21:30,657 INFO main.views No articles for /education/qwefqwef/.
-2019-12-27 02:21:30,657 INFO main.views Redirecting to /education.
-2019-12-27 02:21:37,318 INFO main.services Email sent successfully.
-2019-12-27 02:24:45,147 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
-2019-12-27 02:24:45,743 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:25:11,593 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
-2019-12-27 02:25:12,025 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:25:17,626 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
-2019-12-27 02:25:18,062 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:25:40,804 INFO main.services Email sent successfully.
-2019-12-27 02:28:41,863 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:28:57,685 INFO main.services Email sent successfully from guillaume.bournique@gmail.com to ['gbournique@gmail.com']
-2019-12-27 02:30:32,000 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
-2019-12-27 02:30:32,637 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:30:40,436 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
-2019-12-27 02:30:40,934 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:32:38,654 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
-2019-12-27 02:32:39,246 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:33:40,994 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 02:33:41,542 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:34:00,473 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:34:15,984 ERROR django.request Internal Server Error: /email/
-Traceback (most recent call last):
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
-    response = get_response(request)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
-    response = self.process_exception_by_middleware(e, request)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 133, in viewEmailForm
-    form = _send_email(request, to_emails)
-  File "/Users/guillaume.bournique/Documents/portfolio/app/main/services.py", line 138, in _send_email
-    fail_silently=False
-TypeError: send_mail() got an unexpected keyword argument 'to'
-2019-12-27 02:34:29,912 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
-2019-12-27 02:34:30,333 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:34:33,005 INFO main.services Email sent successfully from gbournique@gmail.com to ['gbournique@gmail.com']
-2019-12-27 02:34:34,692 INFO main.views Homepage
-2019-12-27 02:36:57,261 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 02:36:57,838 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:37:09,845 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 02:37:10,262 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:37:54,644 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 02:37:55,252 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:38:09,918 ERROR django.request Internal Server Error: /email/
-Traceback (most recent call last):
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
-    response = get_response(request)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
-    response = self.process_exception_by_middleware(e, request)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 133, in viewEmailForm
-    form = _send_email(request, to_emails)
-  File "/Users/guillaume.bournique/Documents/portfolio/app/main/services.py", line 138, in _send_email
-    fail_silently=False
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/mail/__init__.py", line 60, in send_mail
-    return mail.send()
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/mail/message.py", line 291, in send
-    return self.get_connection(fail_silently).send_messages([self])
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/mail/backends/smtp.py", line 103, in send_messages
-    new_conn_created = self.open()
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/mail/backends/smtp.py", line 70, in open
-    self.connection.login(self.username, self.password)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/smtplib.py", line 730, in login
-    raise last_exception
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/smtplib.py", line 721, in login
-    initial_response_ok=initial_response_ok)
-  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/smtplib.py", line 642, in auth
-    raise SMTPAuthenticationError(code, resp)
-smtplib.SMTPAuthenticationError: (535, b'5.7.8 Username and Password not accepted. Learn more at\n5.7.8  https://support.google.com/mail/?p=BadCredentials g25sm14750594wmh.3 - gsmtp')
-2019-12-27 02:40:00,907 INFO main.services Email sent successfully from guillaume.bournique@gmail.com to ['gbournique@gmail.com']
-2019-12-27 02:41:38,131 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 02:41:38,686 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 02:42:17,690 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 02:42:18,347 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 11:41:31,904 INFO main.views Homepage
-2019-12-27 20:55:35,459 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 20:56:21,016 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/urls.py changed, reloading.
-2019-12-27 20:56:23,635 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 20:56:42,193 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/urls.py changed, reloading.
-2019-12-27 20:56:42,867 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 20:56:51,645 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 20:56:52,298 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 20:57:10,715 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/urls.py changed, reloading.
-2019-12-27 20:57:11,344 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 20:57:39,637 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/urls.py changed, reloading.
-2019-12-27 20:57:40,190 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 20:57:56,573 INFO main.views Homepage
-2019-12-27 20:57:56,575 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 20:57:56,576 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 20:57:57,014 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 20:57:57,018 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 20:57:58,877 INFO main.views GET request to /education
-2019-12-27 20:57:59,250 INFO main.services Filtering SubCategory objects by cat_slug=education
-2019-12-27 20:57:59,270 INFO main.services Building sub-categories URLs
-2019-12-27 20:57:59,270 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-27 20:57:59,278 WARNING main.services fwefwqf does not contain any article.
-2019-12-27 20:57:59,278 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-27 20:57:59,292 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 20:58:10,444 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 20:59:58,729 WARNING django.request Not Found: /favicon.ico/
-2019-12-27 21:01:31,967 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:01:31,968 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:01:33,552 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:01:33,554 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:01:33,555 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:01:33,556 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:01:39,548 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:01:46,501 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:01:50,508 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:01:50,514 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:02:37,323 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:02:37,325 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:02:39,397 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:02:39,399 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:03:14,830 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:03:14,833 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:03:14,834 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:03:14,835 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:03:28,020 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:03:28,022 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:03:31,680 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:03:31,682 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:03:33,570 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:03:33,570 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:08,413 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 21:11:10,881 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:11:10,882 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:10,895 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:11:10,897 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:17,080 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:11:38,405 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:38,407 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:11:39,394 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:11:40,624 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-27 21:11:40,637 INFO main.views No articles for /education/qwefqwef/.
-2019-12-27 21:11:40,637 INFO main.views Redirecting to /education.
-2019-12-27 21:11:40,651 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:11:42,402 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:11:42,405 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:44,042 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:44,043 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:11:45,144 INFO main.views GET request to /1wergw
-2019-12-27 21:11:45,334 INFO main.services Filtering SubCategory objects by cat_slug=1wergw
-2019-12-27 21:11:45,347 INFO main.views No sub-category for /1wergw.
-2019-12-27 21:11:45,347 INFO main.views Redirecting to /.
-2019-12-27 21:11:45,362 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:45,363 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:11:46,357 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:11:48,002 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:11:48,006 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:12:33,412 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:12:33,413 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:14:28,093 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:14:28,095 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:14:28,214 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:14:28,217 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:14:29,220 INFO main.views Homepage
-2019-12-27 21:14:29,224 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:14:29,226 WARNING django.request Not Found: /media/main/static/uploaded_images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_xdjN7tN.jpg
-2019-12-27 21:14:30,712 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:14:30,717 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:14:36,042 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:15:49,000 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:15:49,008 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:15:50,853 INFO main.views GET request to /1wergw
-2019-12-27 21:15:50,855 INFO main.services Filtering SubCategory objects by cat_slug=1wergw
-2019-12-27 21:15:50,892 INFO main.views No sub-category for /1wergw.
-2019-12-27 21:15:50,892 INFO main.views Redirecting to /.
-2019-12-27 21:16:16,633 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 21:16:18,451 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:18,453 INFO main.views GET request to /1wergw
-2019-12-27 21:16:18,612 INFO main.services Filtering SubCategory objects by cat_slug=1wergw
-2019-12-27 21:16:18,624 INFO main.views No sub-category for /1wergw.
-2019-12-27 21:16:18,624 INFO main.views Redirecting to /.
-2019-12-27 21:16:38,059 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:42,434 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:43,303 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:43,307 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:43,830 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:43,835 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,047 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,060 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,227 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,251 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,378 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,414 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,422 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,581 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,587 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,730 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,746 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,919 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:44,925 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,063 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,084 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,211 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,234 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,359 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,379 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,507 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,520 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,654 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,660 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,831 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,850 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:45,979 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,006 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,143 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,165 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,173 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,321 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,326 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,483 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:46,487 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:47,567 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:47,572 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:16:59,667 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
-2019-12-27 21:17:00,428 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 21:17:02,867 INFO main.views Homepage
-2019-12-27 21:17:02,876 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:17:02,930 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:17:04,867 INFO main.views Homepage
-2019-12-27 21:17:04,874 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:17:04,903 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:17:30,062 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
-2019-12-27 21:17:30,846 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 21:17:52,659 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 21:17:53,280 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 21:18:18,285 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:20,182 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:21,276 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:21,282 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:21,590 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:21,596 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:21,907 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:21,912 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:22,293 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:22,298 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:22,530 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:22,536 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,204 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,211 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,378 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,386 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,552 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,558 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,722 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,726 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,879 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:23,887 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,043 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,049 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,204 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,209 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,371 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,378 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,535 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:24,543 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:25,458 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:25,468 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:26,091 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:26,098 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:28,704 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:28,710 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:29,915 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:29,920 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:30,765 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:30,770 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:31,845 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:31,849 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:32,543 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:32,549 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:46,911 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:47,680 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:48,424 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:48,429 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:48,983 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:48,987 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:49,824 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:49,832 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:50,320 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:50,326 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:50,816 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:50,821 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:51,221 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:51,226 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:51,450 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:51,455 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:51,692 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:51,701 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:52,014 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:52,019 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:52,605 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:52,610 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:53,254 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:53,259 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:54,092 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:54,098 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:56,506 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-27 21:18:57,245 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 21:18:58,399 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:58,409 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:59,057 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:18:59,061 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:00,311 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:00,316 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:01,000 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:01,006 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:01,627 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:01,632 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:02,245 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:02,249 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:02,827 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:02,835 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:03,399 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:03,404 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:04,011 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:04,019 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:04,548 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:04,557 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:05,125 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:05,130 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:05,690 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:05,698 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:06,251 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:06,257 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:06,866 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:06,871 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:07,501 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:07,508 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:08,066 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:08,073 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:08,627 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:08,633 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:09,166 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:09,175 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:09,713 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:09,721 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:10,274 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:10,280 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:10,821 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:10,829 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:11,386 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:11,394 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:12,021 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:12,025 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:18,429 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-27 21:19:22,446 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:22,454 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:23,600 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:19:23,610 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-27 21:19:25,872 INFO main.views GET request to /1wergw
-2019-12-27 21:19:25,891 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:19:26,029 INFO main.services Filtering SubCategory objects by cat_slug=1wergw
-2019-12-27 21:19:26,038 WARNING main.services Category 1wergw does not exist.
-2019-12-27 21:19:26,087 ERROR django.request Internal Server Error: /1wergw/
+2020-01-01 15:11:11,580 INFO main.views Homepage
+2020-01-01 15:11:11,642 WARNING django.request Not Found: /mediafiles/images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_kWieW9d.jpg
+2020-01-01 15:11:11,659 WARNING django.request Not Found: /mediafiles/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_jUnkZLS.jpg
+2020-01-01 15:11:11,660 WARNING django.request Not Found: /mediafiles/images/IMG_2911_WLSh5xg.jpg
+2020-01-01 15:11:11,661 WARNING django.request Not Found: /mediafiles/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
+2020-01-01 15:11:12,526 INFO main.views GET request to /11111
+2020-01-01 15:11:12,538 INFO main.services Filtering SubCategory objects by cat_slug=11111
+2020-01-01 15:11:12,543 INFO main.services Building sub-categories URLs
+2020-01-01 15:11:12,543 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 15:11:12,546 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 15:11:12,547 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 15:11:12,548 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 15:11:12,583 WARNING django.request Not Found: /mediafiles/images/IMG_2911_WLSh5xg_R615tRA.jpg
+2020-01-01 15:11:12,584 WARNING django.request Not Found: /mediafiles/images/IMG_2911_WLSh5xg_tosiz79.jpg
+2020-01-01 15:13:28,173 WARNING django.request Not Found: /staticfiles/admin/js/vendor/jquery/jquery.min.js
+2020-01-01 15:13:28,174 WARNING django.request Not Found: /staticfiles/admin/js/vendor/xregexp/xregexp.min.js
+2020-01-01 15:13:28,174 WARNING django.request Not Found: /staticfiles/admin/js/actions.min.js
+2020-01-01 15:13:28,175 WARNING django.request Not Found: /staticfiles/admin/js/prepopulate.min.js
+2020-01-01 15:13:29,209 WARNING django.request Not Found: /staticfiles/admin/js/prepopulate.min.js
+2020-01-01 15:13:29,210 WARNING django.request Not Found: /staticfiles/admin/js/actions.min.js
+2020-01-01 15:13:29,211 WARNING django.request Not Found: /staticfiles/admin/js/vendor/jquery/jquery.min.js
+2020-01-01 15:13:29,212 WARNING django.request Not Found: /staticfiles/admin/js/vendor/xregexp/xregexp.min.js
+2020-01-01 15:13:29,254 WARNING django.request Not Found: /favicon.ico/
+2020-01-01 15:13:33,055 WARNING django.request Not Found: /mediafiles/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
+2020-01-01 15:13:33,093 WARNING django.request Not Found: /favicon.ico/
+2020-01-01 15:13:40,969 WARNING django.request Not Found: /mediafiles/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
+2020-01-01 15:17:40,400 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 15:17:43,005 INFO main.views Homepage
+2020-01-01 15:17:43,056 WARNING django.request Not Found: /mediafiles/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_jUnkZLS.jpg
+2020-01-01 15:17:43,057 WARNING django.request Not Found: /mediafiles/images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_kWieW9d.jpg
+2020-01-01 15:17:43,057 WARNING django.request Not Found: /mediafiles/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
+2020-01-01 15:17:43,058 WARNING django.request Not Found: /mediafiles/images/IMG_2911_WLSh5xg.jpg
+2020-01-01 15:17:47,573 INFO main.views GET request to /1444
+2020-01-01 15:17:47,843 INFO main.services Filtering SubCategory objects by cat_slug=1444
+2020-01-01 15:17:47,849 WARNING main.services Category 1444 does not contain any sub-category.
+2020-01-01 15:17:47,849 INFO main.views No sub-category for /1444.
+2020-01-01 15:17:47,849 INFO main.views Redirecting to gobackpage.html
+2020-01-01 15:17:49,917 INFO main.views Homepage
+2020-01-01 15:17:49,918 WARNING django.request Not Found: /mediafiles/images/IMG_2911_WLSh5xg.jpg
+2020-01-01 15:17:49,918 WARNING django.request Not Found: /mediafiles/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_jUnkZLS.jpg
+2020-01-01 15:17:49,919 WARNING django.request Not Found: /mediafiles/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
+2020-01-01 15:17:49,919 WARNING django.request Not Found: /mediafiles/images/78f2241c-3b94-4810-abd1-3c330339eb05_VIR565W_kWieW9d.jpg
+2020-01-01 15:30:26,380 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 15:30:33,458 WARNING django.request Not Found: /staticfiles/admin/js/vendor/jquery/jquery.min.js
+2020-01-01 15:30:33,458 WARNING django.request Not Found: /staticfiles/admin/js/actions.min.js
+2020-01-01 15:30:33,459 WARNING django.request Not Found: /staticfiles/admin/js/vendor/xregexp/xregexp.min.js
+2020-01-01 15:30:33,459 WARNING django.request Not Found: /staticfiles/admin/js/prepopulate.min.js
+2020-01-01 15:30:35,222 WARNING django.request Not Found: /staticfiles/admin/js/vendor/jquery/jquery.min.js
+2020-01-01 15:30:35,224 WARNING django.request Not Found: /staticfiles/admin/js/vendor/xregexp/xregexp.min.js
+2020-01-01 15:30:35,224 WARNING django.request Not Found: /staticfiles/admin/js/prepopulate.min.js
+2020-01-01 15:30:35,224 WARNING django.request Not Found: /staticfiles/admin/js/actions.min.js
+2020-01-01 15:30:35,259 WARNING django.request Not Found: /favicon.ico/
+2020-01-01 17:07:25,210 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:07:30,468 INFO main.views Homepage
+2020-01-01 17:07:34,702 INFO main.views GET request to /1333
+2020-01-01 17:07:34,978 INFO main.services Filtering SubCategory objects by cat_slug=1333
+2020-01-01 17:07:34,982 WARNING main.services Category 1333 does not contain any sub-category.
+2020-01-01 17:07:34,982 INFO main.views No sub-category for /1333.
+2020-01-01 17:07:34,982 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:07:36,032 INFO main.views Homepage
+2020-01-01 17:07:37,713 INFO main.views GET request to /1444
+2020-01-01 17:07:37,721 INFO main.services Filtering SubCategory objects by cat_slug=1444
+2020-01-01 17:07:37,731 WARNING main.services Category 1444 does not contain any sub-category.
+2020-01-01 17:07:37,731 INFO main.views No sub-category for /1444.
+2020-01-01 17:07:37,731 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:07:39,993 INFO main.views GET request to /2222
+2020-01-01 17:07:40,004 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:07:40,007 INFO main.services Building sub-categories URLs
+2020-01-01 17:07:40,007 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:07:40,011 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:07:40,049 ERROR django.request Internal Server Error: /2222/
 Traceback (most recent call last):
   File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
     response = get_response(request)
@@ -402,14 +78,28 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/utils/decorators.py", line 142, in _wrapped_view
     response = view_func(request, *args, **kwargs)
-  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 43, in viewSubCategories
-    if len(matching_sub_categories) == 0 or matching_sub_categories is None:
-TypeError: object of type 'NoneType' has no len()
-2019-12-27 21:19:26,177 WARNING django.request Not Found: /favicon.ico/
-2019-12-27 21:19:28,548 INFO main.views GET request to /1qwefqwe
-2019-12-27 21:19:28,550 INFO main.services Filtering SubCategory objects by cat_slug=1qwefqwe
-2019-12-27 21:19:28,559 WARNING main.services Category 1qwefqwe does not exist.
-2019-12-27 21:19:28,601 ERROR django.request Internal Server Error: /1qwefqwe/
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 57, in viewSubCategories
+    matching_sub_categories
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/services.py", line 105, in _get_urls_for_subcategories
+    + sub_cat.subcategory_slug
+AttributeError: 'SubCategory' object has no attribute 'category_slug'
+2020-01-01 17:07:40,102 WARNING django.request Not Found: /favicon.ico/
+2020-01-01 17:14:13,287 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:14:13,868 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:17:35,532 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:17:36,207 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:21:57,863 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:21:58,580 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:22:29,965 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:22:30,683 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:22:33,112 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:22:33,769 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:22:35,688 INFO main.views GET request to /2222
+2020-01-01 17:22:35,890 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:22:35,900 INFO main.services Building sub-categories URLs
+2020-01-01 17:22:35,900 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:22:35,902 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:22:35,953 ERROR django.request Internal Server Error: /2222/
 Traceback (most recent call last):
   File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
     response = get_response(request)
@@ -419,200 +109,234 @@ Traceback (most recent call last):
     response = wrapped_callback(request, *callback_args, **callback_kwargs)
   File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/utils/decorators.py", line 142, in _wrapped_view
     response = view_func(request, *args, **kwargs)
-  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 43, in viewSubCategories
-    if len(matching_sub_categories) == 0 or matching_sub_categories is None:
-TypeError: object of type 'NoneType' has no len()
-2019-12-27 21:19:28,662 WARNING django.request Not Found: /favicon.ico/
-2019-12-27 21:23:15,367 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-27 21:23:15,372 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-28 00:15:00,047 INFO main.views Homepage
-2019-12-28 00:15:00,051 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-28 00:19:21,730 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 00:19:24,142 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 00:19:44,958 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 00:19:45,545 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 00:19:59,754 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 00:20:00,374 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 00:20:05,024 INFO main.views Homepage
-2019-12-28 00:20:05,031 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-28 00:20:06,294 INFO main.views GET request to /education
-2019-12-28 00:20:06,693 INFO main.services Filtering SubCategory objects by cat_slug=education
-2019-12-28 00:20:06,708 INFO main.services Building sub-categories URLs
-2019-12-28 00:20:06,709 INFO main.services Filtering Article objects by subcat_slug=1qwefq
-2019-12-28 00:20:06,719 WARNING main.services qwef does not contain any article.
-2019-12-28 00:20:06,719 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:20:06,720 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-28 00:20:06,722 WARNING main.services fwefwqf does not contain any article.
-2019-12-28 00:20:06,722 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:20:06,742 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-28 00:20:16,313 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-28 00:20:16,314 INFO main.views Homepage
-2019-12-28 00:20:17,291 INFO main.views GET request to /education
-2019-12-28 00:20:17,293 INFO main.services Filtering SubCategory objects by cat_slug=education
-2019-12-28 00:20:17,294 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-28 00:20:17,303 INFO main.services Building sub-categories URLs
-2019-12-28 00:20:17,303 INFO main.services Filtering Article objects by subcat_slug=1qwefq
-2019-12-28 00:20:17,306 WARNING main.services qwef does not contain any article.
-2019-12-28 00:20:17,306 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:20:17,307 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-28 00:20:17,308 WARNING main.services fwefwqf does not contain any article.
-2019-12-28 00:20:17,308 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:20:18,535 INFO main.services Filtering Article objects by subcat_slug=1qwefq
-2019-12-28 00:20:18,552 INFO main.views No articles for /education/1qwefq/.
-2019-12-28 00:20:18,552 INFO main.views Redirecting to /education.
-2019-12-28 00:20:18,576 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-28 00:20:42,022 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27_GQc9psX.png
-2019-12-28 00:20:42,023 INFO main.views Homepage
-2019-12-28 00:20:45,288 INFO main.views GET request to /emp
-2019-12-28 00:20:45,289 INFO main.services Filtering SubCategory objects by cat_slug=emp
-2019-12-28 00:20:45,302 INFO main.views No sub-category for /emp.
-2019-12-28 00:20:45,302 INFO main.views Redirecting to /.
-2019-12-28 00:20:46,969 INFO main.views GET request to /education
-2019-12-28 00:20:46,970 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-28 00:20:46,972 INFO main.services Filtering SubCategory objects by cat_slug=education
-2019-12-28 00:20:46,989 INFO main.services Building sub-categories URLs
-2019-12-28 00:20:46,989 INFO main.services Filtering Article objects by subcat_slug=1qwefq
-2019-12-28 00:20:46,992 WARNING main.services qwef does not contain any article.
-2019-12-28 00:20:46,992 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:20:46,993 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-28 00:20:46,995 WARNING main.services fwefwqf does not contain any article.
-2019-12-28 00:20:46,995 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:20:49,335 INFO main.views GET request to /emp
-2019-12-28 00:20:49,336 INFO main.services Filtering SubCategory objects by cat_slug=emp
-2019-12-28 00:20:49,347 INFO main.views No sub-category for /emp.
-2019-12-28 00:20:49,347 INFO main.views Redirecting to /.
-2019-12-28 00:20:49,352 INFO main.views Homepage
-2019-12-28 00:20:50,660 INFO main.views GET request to /emp
-2019-12-28 00:20:50,661 INFO main.services Filtering SubCategory objects by cat_slug=emp
-2019-12-28 00:20:50,673 INFO main.views No sub-category for /emp.
-2019-12-28 00:20:50,673 INFO main.views Redirecting to /.
-2019-12-28 00:20:54,671 INFO main.views GET request to /emp
-2019-12-28 00:20:54,672 INFO main.services Filtering SubCategory objects by cat_slug=emp
-2019-12-28 00:20:54,683 INFO main.views No sub-category for /emp.
-2019-12-28 00:20:54,683 INFO main.views Redirecting to /.
-2019-12-28 00:20:54,689 INFO main.views Homepage
-2019-12-28 00:21:24,412 INFO main.views GET request to /emp
-2019-12-28 00:21:24,414 INFO main.services Filtering SubCategory objects by cat_slug=emp
-2019-12-28 00:21:24,435 INFO main.views No sub-category for /emp.
-2019-12-28 00:21:24,435 INFO main.views Redirecting to /.
-2019-12-28 00:21:24,440 INFO main.views Homepage
-2019-12-28 00:21:25,775 INFO main.views GET request to /education
-2019-12-28 00:21:25,775 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-28 00:21:25,777 INFO main.services Filtering SubCategory objects by cat_slug=education
-2019-12-28 00:21:25,787 INFO main.services Building sub-categories URLs
-2019-12-28 00:21:25,787 INFO main.services Filtering Article objects by subcat_slug=1qwefq
-2019-12-28 00:21:25,796 WARNING main.services qwef does not contain any article.
-2019-12-28 00:21:25,796 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:21:25,797 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-28 00:21:25,799 WARNING main.services fwefwqf does not contain any article.
-2019-12-28 00:21:25,799 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 00:21:42,598 INFO main.views Homepage
-2019-12-28 00:21:45,077 INFO main.views GET request to /emp
-2019-12-28 00:21:45,079 INFO main.services Filtering SubCategory objects by cat_slug=emp
-2019-12-28 00:21:45,094 INFO main.views No sub-category for /emp.
-2019-12-28 00:21:45,094 INFO main.views Redirecting to /.
-2019-12-28 00:21:50,621 WARNING django.request Not Found: /favicon.ico/
-2019-12-28 00:22:32,775 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 00:22:33,601 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 00:57:29,433 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 00:57:46,826 INFO main.views Homepage
-2019-12-28 00:57:46,882 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 00:57:46,893 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 00:58:29,775 INFO main.views Homepage
-2019-12-28 00:58:29,775 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 00:58:29,817 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 00:58:40,455 WARNING django.request Not Found: /favicon.ico/
-2019-12-28 01:15:59,956 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:16:10,797 INFO main.views Homepage
-2019-12-28 01:16:10,799 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:16:10,839 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:16:10,846 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:16:54,489 WARNING django.request Not Found: /favicon.ico/
-2019-12-28 01:17:03,178 WARNING django.request Not Found: /favicon.ico/
-2019-12-28 01:19:24,259 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:19:24,264 INFO main.views Homepage
-2019-12-28 01:19:24,267 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:19:24,269 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:19:41,533 INFO main.views Homepage
-2019-12-28 01:19:41,545 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:19:41,546 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:19:41,547 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:22:00,849 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 01:22:01,679 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:25:49,342 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 01:25:50,185 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:26:48,673 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 01:26:49,482 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:26:55,159 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 01:26:55,788 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:27:04,627 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 01:27:05,182 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:27:50,803 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
-2019-12-28 01:27:51,409 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:27:59,700 INFO main.views Homepage
-2019-12-28 01:27:59,705 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:27:59,705 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:27:59,707 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:27:59,770 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:27:59,772 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:27:59,773 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:29:30,281 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:29:33,079 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:29:33,081 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:29:33,082 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:29:33,083 INFO main.views Homepage
-2019-12-28 01:29:35,038 INFO main.views GET request to /vvvvvv1
-2019-12-28 01:29:35,223 INFO main.services Filtering SubCategory objects by cat_slug=vvvvvv1
-2019-12-28 01:29:35,234 INFO main.views No sub-category for /vvvvvv1.
-2019-12-28 01:29:35,234 INFO main.views Redirecting to /.
-2019-12-28 01:29:35,264 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:29:35,277 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:29:35,277 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:29:36,832 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:29:36,833 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:29:36,834 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:29:39,622 WARNING django.request Not Found: /media/main/static/uploaded_images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-28 01:29:39,623 INFO main.views GET request to /education
-2019-12-28 01:29:39,624 INFO main.services Filtering SubCategory objects by cat_slug=education
-2019-12-28 01:29:39,644 INFO main.services Building sub-categories URLs
-2019-12-28 01:29:39,644 INFO main.services Filtering Article objects by subcat_slug=1qwefq
-2019-12-28 01:29:39,648 WARNING main.services qwef does not contain any article.
-2019-12-28 01:29:39,649 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 01:29:39,650 INFO main.services Filtering Article objects by subcat_slug=qwefqwef
-2019-12-28 01:29:39,651 WARNING main.services fwefwqf does not contain any article.
-2019-12-28 01:29:39,651 WARNING main.services Redirecting to leaving sub-category card url to /<category>/<subcategory>
-2019-12-28 01:29:39,692 WARNING django.request Not Found: /media/images/Screenshot_2019-12-24_at_12.45.27.png
-2019-12-28 01:29:41,558 INFO main.views Homepage
-2019-12-28 01:29:41,562 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:29:41,564 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:29:41,567 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:46:15,015 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 01:46:20,603 INFO main.views Homepage
-2019-12-28 01:46:20,619 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:46:20,649 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:46:20,650 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:46:20,653 WARNING django.request Not Found: /media/main/images/IMG_2911_WLSh5xg.jpg
-2019-12-28 01:46:21,789 INFO main.views Homepage
-2019-12-28 01:46:21,799 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:46:21,800 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:46:21,801 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:46:21,819 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 01:46:21,820 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 01:46:21,821 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 01:46:21,822 WARNING django.request Not Found: /media/main/images/IMG_2911_WLSh5xg.jpg
-2019-12-28 02:17:04,612 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 02:17:13,485 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/models.py changed, reloading.
-2019-12-28 02:17:14,040 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 02:17:31,449 INFO django.utils.autoreload Watching for file changes with StatReloader
-2019-12-28 02:17:39,852 INFO main.views Homepage
-2019-12-28 02:17:39,865 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 02:17:39,903 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 02:17:39,910 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 02:17:39,912 WARNING django.request Not Found: /media/main/images/IMG_2911_WLSh5xg.jpg
-2019-12-28 02:17:40,745 INFO main.views Homepage
-2019-12-28 02:17:40,751 WARNING django.request Not Found: /media/images/e5ca8e87-c52c-4717-87f9-aacf7b761aa6_L9G9z2p.jpg
-2019-12-28 02:17:40,778 WARNING django.request Not Found: /media/images/guillaume.jpg
-2019-12-28 02:17:40,780 WARNING django.request Not Found: /media/main/static/images/5a0904f4-1927-4019-8f85-a74df872bb14.jpg
-2019-12-28 02:17:40,781 WARNING django.request Not Found: /media/main/images/IMG_2911_WLSh5xg.jpg
-2019-12-28 02:18:23,495 WARNING django.request Not Found: /favicon.ico/
-2019-12-28 02:18:45,366 WARNING django.request Not Found: /favicon.ico/
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 57, in viewSubCategories
+    matching_sub_categories
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/services.py", line 105, in _get_urls_for_subcategories
+    + sub_cat.subcategory_slug
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/query.py", line 399, in get
+    clone = self.filter(*args, **kwargs)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/query.py", line 892, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/query.py", line 910, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1290, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1318, in _add_q
+    split_subq=split_subq, simple_col=simple_col,
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1190, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1049, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1420, in names_to_path
+    "Choices are: %s" % (name, ", ".join(available)))
+django.core.exceptions.FieldError: Cannot resolve keyword 'category_name' into field. Choices are: article_name, article_slug, content, date_published, id, image, subcategory_name, subcategory_name_id, summary
+2020-01-01 17:22:43,522 INFO main.views Homepage
+2020-01-01 17:22:46,409 INFO main.views GET request to /1333
+2020-01-01 17:22:46,418 INFO main.services Filtering SubCategory objects by cat_slug=1333
+2020-01-01 17:22:46,422 WARNING main.services Category 1333 does not contain any sub-category.
+2020-01-01 17:22:46,422 INFO main.views No sub-category for /1333.
+2020-01-01 17:22:46,422 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:22:48,893 INFO main.views GET request to /1444
+2020-01-01 17:22:48,906 INFO main.services Filtering SubCategory objects by cat_slug=1444
+2020-01-01 17:22:48,914 WARNING main.services Category 1444 does not contain any sub-category.
+2020-01-01 17:22:48,914 INFO main.views No sub-category for /1444.
+2020-01-01 17:22:48,914 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:22:49,828 INFO main.views Homepage
+2020-01-01 17:22:50,427 INFO main.views GET request to /2222
+2020-01-01 17:22:50,436 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:22:50,439 INFO main.services Building sub-categories URLs
+2020-01-01 17:22:50,439 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:22:50,447 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:22:50,497 ERROR django.request Internal Server Error: /2222/
+Traceback (most recent call last):
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/utils/decorators.py", line 142, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 57, in viewSubCategories
+    matching_sub_categories
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/services.py", line 105, in _get_urls_for_subcategories
+    + sub_cat.subcategory_slug
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/query.py", line 399, in get
+    clone = self.filter(*args, **kwargs)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/query.py", line 892, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/query.py", line 910, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1290, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1318, in _add_q
+    split_subq=split_subq, simple_col=simple_col,
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1190, in build_filter
+    lookups, parts, reffed_expression = self.solve_lookup_type(arg)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1049, in solve_lookup_type
+    _, field, _, lookup_parts = self.names_to_path(lookup_splitted, self.get_meta())
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/db/models/sql/query.py", line 1420, in names_to_path
+    "Choices are: %s" % (name, ", ".join(available)))
+django.core.exceptions.FieldError: Cannot resolve keyword 'category_name' into field. Choices are: article_name, article_slug, content, date_published, id, image, subcategory_name, subcategory_name_id, summary
+2020-01-01 17:24:43,965 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:24:44,608 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:24:51,127 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:24:51,748 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:24:54,621 INFO main.views GET request to /2222
+2020-01-01 17:24:54,783 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:24:54,786 INFO main.services Building sub-categories URLs
+2020-01-01 17:24:54,786 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:24:54,788 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:26:19,770 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:26:20,505 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:26:23,968 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:26:24,557 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:26:27,317 INFO main.views GET request to /2222
+2020-01-01 17:26:27,468 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:26:27,471 INFO main.services Building sub-categories URLs
+2020-01-01 17:26:27,471 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:26:27,473 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:26:30,854 INFO main.views GET request to /1333
+2020-01-01 17:26:30,864 INFO main.services Filtering SubCategory objects by cat_slug=1333
+2020-01-01 17:26:30,871 WARNING main.services Category 1333 does not contain any sub-category.
+2020-01-01 17:26:30,871 INFO main.views No sub-category for /1333.
+2020-01-01 17:26:30,871 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:26:31,978 INFO main.views Homepage
+2020-01-01 17:26:32,649 INFO main.views GET request to /2222
+2020-01-01 17:26:32,657 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:26:32,660 INFO main.services Building sub-categories URLs
+2020-01-01 17:26:32,661 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:26:32,663 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:26:41,246 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:26:41,854 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:26:43,759 INFO main.views GET request to /2222
+2020-01-01 17:26:43,938 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:26:43,942 INFO main.services Building sub-categories URLs
+2020-01-01 17:26:43,943 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:26:43,950 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:26:43,951 INFO main.services Filtering Article objects by subcat_slug=122222
+2020-01-01 17:26:45,792 INFO main.views Homepage
+2020-01-01 17:26:46,744 INFO main.views GET request to /11111
+2020-01-01 17:26:46,752 INFO main.services Filtering SubCategory objects by cat_slug=11111
+2020-01-01 17:26:46,756 INFO main.services Building sub-categories URLs
+2020-01-01 17:26:46,756 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 17:26:46,758 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 17:26:46,759 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 17:26:46,760 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 17:26:47,407 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 17:26:47,416 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 17:26:47,416 INFO main.views No articles for /11111/1111/.
+2020-01-01 17:26:47,416 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:26:49,181 INFO main.views GET request to /2222
+2020-01-01 17:26:49,195 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:26:49,198 INFO main.services Building sub-categories URLs
+2020-01-01 17:26:49,198 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:26:49,200 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:26:49,201 INFO main.services Filtering Article objects by subcat_slug=122222
+2020-01-01 17:26:49,811 INFO main.views GET request to /2222/122222/12222
+2020-01-01 17:26:52,777 INFO main.views GET request to /2222/122222/1222
+2020-01-01 17:26:54,149 INFO main.views Homepage
+2020-01-01 17:26:55,304 INFO main.views GET request to /1333
+2020-01-01 17:26:55,319 INFO main.services Filtering SubCategory objects by cat_slug=1333
+2020-01-01 17:26:55,326 WARNING main.services Category 1333 does not contain any sub-category.
+2020-01-01 17:26:55,327 INFO main.views No sub-category for /1333.
+2020-01-01 17:26:55,327 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:26:58,178 INFO main.views GET request to /1444
+2020-01-01 17:26:58,186 INFO main.services Filtering SubCategory objects by cat_slug=1444
+2020-01-01 17:26:58,189 WARNING main.services Category 1444 does not contain any sub-category.
+2020-01-01 17:26:58,189 INFO main.views No sub-category for /1444.
+2020-01-01 17:26:58,189 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:26:59,644 INFO main.views Homepage
+2020-01-01 17:30:26,786 INFO main.views GET request to /1333
+2020-01-01 17:30:26,794 INFO main.services Filtering SubCategory objects by cat_slug=1333
+2020-01-01 17:30:26,797 WARNING main.services Category 1333 does not contain any sub-category.
+2020-01-01 17:30:26,797 INFO main.views No sub-category for /1333.
+2020-01-01 17:30:26,797 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:30:28,007 INFO main.views Homepage
+2020-01-01 17:30:28,551 INFO main.views GET request to /2222
+2020-01-01 17:30:28,561 INFO main.services Filtering SubCategory objects by cat_slug=2222
+2020-01-01 17:30:28,564 INFO main.services Building sub-categories URLs
+2020-01-01 17:30:28,564 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:30:28,568 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:30:28,569 INFO main.services Filtering Article objects by subcat_slug=122222
+2020-01-01 17:30:29,496 INFO main.services Filtering Article objects by subcat_slug=22221
+2020-01-01 17:30:29,506 WARNING main.services Sub-category 22221 does not contain any article.
+2020-01-01 17:30:29,506 INFO main.views No articles for /2222/22221/.
+2020-01-01 17:30:29,506 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:30:55,767 INFO main.views Homepage
+2020-01-01 17:34:53,087 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
+2020-01-01 17:34:53,643 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:35:30,509 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
+2020-01-01 17:35:31,139 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:35:40,031 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:35:40,677 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:35:59,243 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:35:59,791 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:38:15,672 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:38:16,233 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:38:25,072 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:38:25,640 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:38:57,059 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:38:57,677 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:40:23,173 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/forms.py changed, reloading.
+2020-01-01 17:40:23,802 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:40:56,403 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:40:56,975 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:41:04,747 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:41:05,322 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:41:31,466 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:41:32,030 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:42:19,774 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:42:20,421 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:43:52,430 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:48:34,045 ERROR django.request Internal Server Error: /contact/
+Traceback (most recent call last):
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 148, in contactPage
+    form = _send_email(request, to_emails, from_email)
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/services.py", line 161, in _send_email
+    f'Email sent successfully from {form.cleaned_data["from_email"]} to {to_emails}'
+KeyError: 'from_email'
+2020-01-01 17:48:34,102 WARNING django.request Not Found: /favicon.ico/
+2020-01-01 17:49:30,734 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/forms.py changed, reloading.
+2020-01-01 17:49:31,513 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:51:18,754 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:51:21,175 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:51:33,130 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:51:33,755 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:52:04,583 INFO main.services Email sent successfully from Guillaume Bournique to ['gbournique@gmail.com']
+2020-01-01 17:52:12,447 INFO main.views Homepage
+2020-01-01 17:53:44,078 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:53:44,897 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:54:30,057 INFO main.views GET request to /11111
+2020-01-01 17:54:30,734 INFO main.services Filtering SubCategory objects by cat_slug=11111
+2020-01-01 17:54:30,750 INFO main.services Building sub-categories URLs
+2020-01-01 17:54:30,750 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 17:54:30,758 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 17:54:30,759 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 17:54:30,760 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 17:54:33,090 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-01 17:54:33,094 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-01 17:54:33,094 INFO main.views No articles for /11111/1111/.
+2020-01-01 17:54:33,094 INFO main.views Redirecting to gobackpage.html
+2020-01-01 17:54:34,156 INFO main.views Homepage
+2020-01-01 17:57:35,718 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 17:57:36,539 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 17:58:16,311 INFO main.services Email sent successfully from qweg qwegqw to ['gbournique@gmail.com']
+2020-01-01 18:00:31,966 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-01 18:00:32,597 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 19:10:32,938 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 22:06:15,853 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-01 22:06:22,177 INFO main.views Homepage
+2020-01-01 22:06:38,492 INFO main.services Email sent successfully from hjhgjh to ['gbournique@gmail.com']
+2020-01-01 22:37:11,811 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
+2020-01-01 22:37:12,699 INFO django.utils.autoreload Watching for file changes with StatReloader

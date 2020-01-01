@@ -37,6 +37,7 @@ services:
       - ./config/app.env
     environment:
       Debug: ${DEBUG}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/staticfiles/
       - media:/code/mediafiles/
@@ -48,6 +49,7 @@ services:
       retries: 3
     expose: 
       - 8080
+      - 587
     networks:
       - backend
       - proxy
@@ -106,6 +108,7 @@ services:
       - ./config/app.env
     environment:
       Debug: ${DEBUG}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/main/static/
       - media:/code/main/mediafiles/
@@ -117,6 +120,7 @@ services:
       retries: 3
     expose: 
       - 8080
+      - 587
     networks:
       - backend
       - proxy
