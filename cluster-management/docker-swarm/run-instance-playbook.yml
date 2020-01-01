@@ -5,8 +5,8 @@
 # To run ansible, need to have ssh pass on host to connect to ec2 instance
 # brew install http://git.io/sshpass.rb
 
-- name: Run cluster-lifecycle role on localhost
+- name: Run run-instance role on localhost
   hosts: localhost
   gather_facts: true
   roles:
-    - cluster-lifecycle
+    - run-instance

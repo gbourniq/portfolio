@@ -1,12 +1,11 @@
 ---
 # This playbook contains all actions that will be run on "local" host.
 
-
-- name: Stop k8s cluster instances
+- name: Start instances tagged with type=swarm
   ec2:
     region: eu-west-3
     instance_tags:
         Type: "{{ INSTANCE_TAG_TYPE }}"
-    state: stopped
+    state: running
   tags:
-    - cluster-stop
+    - start-instance

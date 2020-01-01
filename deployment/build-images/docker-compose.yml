@@ -18,7 +18,7 @@ services:
       retries: 3
       start_period: 20s
     ports: 
-      - "${PROXY_PORT}:${PROXY_PORT_INTERNAL}"
+      - "80:80"
     networks:
       - proxy
     depends_on:
@@ -42,12 +42,12 @@ services:
       - media:/code/mediafiles/
       - redisdata:/data
     healthcheck:
-      test: curl -f -s -S http://localhost:${APP_PORT} || exit 1
+      test: curl -f -s -S http://localhost:8080 || exit 1
       interval: 10s
       timeout: 5s
       retries: 3
     expose: 
-      - ${APP_PORT}
+      - 8080
     networks:
       - backend
       - proxy
@@ -116,7 +116,7 @@ services:
       timeout: 5s
       retries: 3
     expose: 
-      - ${APP_PORT}
+      - 8080
     networks:
       - backend
       - proxy

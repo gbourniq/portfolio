@@ -176,7 +176,7 @@ The final stage is to publish the release images.
 
 To be able to publish your release images, you will need to reconfigure this project to point to a parent repository and Docker registry that you have write access to.
 
-This can be achieved by editing the [`Makefile`](./Makefile) and configuring the `ORG_NAME` and `DOCKER_REGISTRY` settings:
+This can be achieved by editing the [`Makefile`](./Makefile) and configuring the `DOCKER_USER` and `DOCKER_REGISTRY` settings:
 
 ```
 ...

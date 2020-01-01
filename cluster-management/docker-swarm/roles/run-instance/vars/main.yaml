@@ -1,0 +1,8 @@
+---
+# Variables listed here are applicable to "run-instance" role
+
+# Variables to manage instance (start/stop)
+INSTANCE_TAG_TYPE: swarm
+
+# need this line, other it errors "boto required for ec2 module"
+ansible_python_interpreter: /Users/guillaume.bournique/anaconda3/envs/portfolio-env/bin/python

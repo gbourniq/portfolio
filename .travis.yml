@@ -13,13 +13,10 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
-before_script:
+script:
   - cd deployment
   - make clean-environments
   - make unit-tests
-
-script:
-  - cd deployment
   - make build-images
   - make services-up-build
   - make services-health

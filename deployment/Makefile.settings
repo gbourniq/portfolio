@@ -6,6 +6,10 @@ SHELL=/bin/bash -e -o pipefail
 ######## PROJECT SETTINGS #########
 ###################################
 export PROJECT_NAME := myportfolio
+export DOCKER_REGISTRY := docker.io
+export DOCKER_USER := gbournique
+
+
 BUILD_COMPOSE_FILE := build-images/docker-compose.yml
 BUILD_ARGS = -p $(PROJECT_NAME) -f $(BUILD_COMPOSE_FILE)
 PROD_COMPOSE_FILE := docker-deployment/docker-compose.yml

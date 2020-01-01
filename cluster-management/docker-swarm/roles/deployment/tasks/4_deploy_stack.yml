@@ -1,0 +1,14 @@
+- name: "Logging in to Docker registry..."
+  shell: docker login -u {{ DOCKER_USER }} -p {{ DOCKER_PASSWORD }}
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - deploy-stack
+
+
+- name: Pulling release images from Docker registry and starting services...
+  shell: cd {{ REPO_LOCAL_PATH }}/deployment && make stack-deploy
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - deploy-stack

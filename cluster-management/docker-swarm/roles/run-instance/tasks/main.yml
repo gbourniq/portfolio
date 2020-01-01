@@ -1,0 +1,12 @@
+---
+# This playbook contains all actions that will be run on "local" host.
+
+- name: Import tasks to start Swarm manager instance
+  include_tasks: 1_start_instance.yml
+  tags:
+    - start-instance
+
+- name: Import tasks to stop Swarm manager instance
+  include_tasks: 2_stop_instance.yml
+  tags:
+    - stop-instance

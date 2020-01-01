@@ -1,0 +1,36 @@
+# This playbook contains docker actions that will be run on "remote" host.
+
+- name: Remove running myportfolio stack
+  shell: docker stack rm {{ STACK_NAME }} 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - docker-prune
+
+- name: Stop running containers
+  shell: docker stop $(docker ps -a -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - docker-prune
+
+- name: Remove all stopped containers
+  shell: docker rm $(docker ps -a -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - docker-prune
+
+- name: Docker prune all
+  shell: docker system prune -a -f
+  tags:
+    - docker-prune
+
+- name: Remove volumes
+  shell: docker volume rm $(docker volume ls -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - docker-prune
+
+  

@@ -1,0 +1,11 @@
+# This playbook contains common handlers that can be called in "setup" tasks.
+# Handles can be called from tasks using "notify", they are run after the task completes
+# eg.
+# tasks: 
+#   - name: Install Nginx
+#     apt: pkg=nginx state=installed update_cache=true
+#     notify:
+#       - Start Nginx
+# handlers:
+#   - name: Start Nginx
+#     service: name=nginx state=started

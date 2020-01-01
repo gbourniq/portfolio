@@ -1,0 +1,14 @@
+---
+# This playbook sets up whole stack.
+# https://medium.com/@rossbulat/ansible-automating-app-build-and-deployment-from-a-github-repository-7d613985f686
+
+# To run ansible, need to have ssh pass on host to connect to ec2 instance
+# brew install http://git.io/sshpass.rb
+
+- name: Run deployment role on swarm-manager
+  gather_facts: true
+  hosts: swarm-manager
+  remote_user: "{{ ANSIBLE_USER }}"
+  become: yes
+  roles:
+    - deployment

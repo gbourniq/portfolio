@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 
 # Include env variables
-include .env
+# include .env
 # Common settings
 include Makefile.settings
 
@@ -24,13 +24,14 @@ unit-tests:
 	@ docker run -it myportfolio_tests:latest pytest .
 	${SUCCESS} "Unit tests complete"
 
-# Superuser to be create the first time the app is deployed (fresh PostgreSQL)
+# Superuser to be create the first time the app is deployed via docker-compose (fresh PostgreSQL)
 create-superuser:
-	${INFO} "Creating superuser..."
-	@ docker exec -it $(APP_CONTAINER_ID) python manage.py createsuperuser
+	${INFO} "Creating initial temporary superuser: username: admin, password: pass..."
+	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | docker exec -it $(APP_CONTAINER_ID) python manage.py shell
 
 # Executes a full workflow
 docker-all: clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
+docker-all-push-registry: clean-environments unit-tests build-images services-up-build services-health frontend-tests tag/latest publish/latest services-down-volumes clean-environments
 
 build-images:
 	${INFO} "Building images..."
@@ -51,13 +52,13 @@ services-up-build:
 	${INFO} "Starting services for build environment..."
 	@ docker-compose $(BUILD_ARGS) up -d
 	${SUCCESS} "Build environment created"
-	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,$(PROXY_PORT_INTERNAL))" || true
+	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,80)" || true
 
 services-up-prod:
 	${INFO} "Starting services for production environment..."
 	@ docker-compose $(PROD_ARGS) up -d
 	${SUCCESS} "Production environment created"
-	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,$(PROXY_PORT_INTERNAL))"
+	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,80)"
 
 services-down:
 	${INFO} "Destroying build environment excluding volumes..."
@@ -85,26 +86,28 @@ frontend-tests:
 
 tag/%:
 	${INFO} "Tagging release images with tags $*..."
-	docker tag $(PROJECT_NAME)_app $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_app:$*
-	docker tag $(PROJECT_NAME)_celery $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_celery:$*
-	docker tag $(PROJECT_NAME)_postgres $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_postgres:$*
-	docker tag $(PROJECT_NAME)_nginx $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_nginx:$*
-	docker tag $(PROJECT_NAME)_redis $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_redis:$*
+	docker tag $(PROJECT_NAME)_app $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_app:$*
+	docker tag $(PROJECT_NAME)_celery $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_celery:$*
+	docker tag $(PROJECT_NAME)_postgres $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_postgres:$*
+	docker tag $(PROJECT_NAME)_nginx $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_nginx:$*
+	docker tag $(PROJECT_NAME)_redis $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_redis:$*
 	${SUCCESS} "Tagging complete"
 
 publish/%::
-	${INFO} "Publishing release images with tags $* to $(DOCKER_REGISTRY)/$(ORG_NAME)..."
-	docker push $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_app:$*
-	docker push $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_celery:$*
-	docker push $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_postgres:$*
-	docker push $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_nginx:$*
-	docker push $(DOCKER_REGISTRY)/$(ORG_NAME)/$(PROJECT_NAME)_redis:$*
+	${INFO} "Publishing release images with tags $* to $(DOCKER_REGISTRY)/$(DOCKER_USER)..."
+	docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_app:$*
+	docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_celery:$*
+	docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_postgres:$*
+	docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_nginx:$*
+	docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_redis:$*
 	${SUCCESS} "Publishing complete"
 
 stack-deploy:
+	${INFO} "Deploying stack..."
 	@ docker stack deploy -c docker-deployment/stack-app.yml myportfolio
+	${SUCCESS} "Stack deployment complete..."
 
-stack-show-logs:
+
 
 
 
