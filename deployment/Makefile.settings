@@ -2,13 +2,15 @@
 ############ SET SHELL ############
 SHELL=/bin/bash -e -o pipefail
 
+# DEBUG used by docker-compose for build environment
+export DEBUG := False
+
 ###################################
 ######## PROJECT SETTINGS #########
 ###################################
 export PROJECT_NAME := myportfolio
 export DOCKER_REGISTRY := docker.io
 export DOCKER_USER := gbournique
-
 
 BUILD_COMPOSE_FILE := build-images/docker-compose.yml
 BUILD_ARGS = -p $(PROJECT_NAME) -f $(BUILD_COMPOSE_FILE)
