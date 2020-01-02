@@ -7,7 +7,7 @@ then
     exit 1
 fi
 
-set -euxo pipefail
+# set -euxo pipefail
 
 # export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
 
@@ -20,19 +20,19 @@ s3_location="s3://guillaume.bournique/myportfolio-postgres-backup/"
 
 container_id=$(docker ps | grep $service_name | awk '{print $1}')
 
-${INFO} "Create pg backup file inside the container"
-docker exec $container_id pg_dump -U postgres -f /tmp/$backup_filename $database_name
+# Create pg backup file inside the container"
+sudo docker exec $container_id pg_dump -U postgres -f /tmp/$backup_filename $database_name
 
 # copy file inside contaienr to host
-docker cp $container_id:/tmp/$backup_filename .
+sudo docker cp $container_id:/tmp/$backup_filename .
 
 # remove file in container
-docker exec $container_id rm /tmp/$backup_filename
+sudo docker exec $container_id rm /tmp/$backup_filename
 
 # compress
-gzip $backup_filename
+sudo gzip $backup_filename
 
 # upload to s3
-aws s3 cp $backup_filename_zipped $s3_location
+sudo aws s3 cp $backup_filename_zipped $s3_location
 
-rm $backup_filename_zipped
+sudo rm $backup_filename_zipped
