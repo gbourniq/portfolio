@@ -77,6 +77,13 @@ swarm-deploy-stack:
 		--tags=deploy-stack
 	${SUCCESS} "Start services complete"
 
+swarm-backup-postgres:
+	${INFO} "Backing up pg data to S3"
+	@ ansible-playbook ${DOCKER_SWARM_DIR}/deployment-playbook.yml \
+		-i ${DOCKER_SWARM_DIR}/inventory.yml \
+		-vv \
+		--tags=backup-postgres
+	${SUCCESS} "Backup complete"
 
 #######################################################
 ########### KUBERNETES - CLUSTER MANAGEMENT ###########

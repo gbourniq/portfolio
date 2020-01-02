@@ -20,3 +20,8 @@
   include_tasks: 4_deploy_stack.yml
   tags:
     - deploy-stack
+
+- name: Backup postgres data to S3 bucket
+  include_tasks: 5_backup_postgres.yml
+  tags:
+    - backup-postgres

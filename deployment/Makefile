@@ -34,6 +34,7 @@ create-superuser:
 docker-all-up: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests
 docker-all-test: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
 docker-all-publish: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests tag/latest publish/latest services-down-volumes clean-environments
+swarm-all: services-down clean-environments stack-rm stack-deploy
 
 create-build-images:
 	${INFO} "Building images..."
@@ -47,7 +48,7 @@ clean-environments: remove-build-images
 
 remove-build-images:
 	${INFO} "Remove images starting with $(PROJECT_NAME)..."
-	@ docker rmi $(IMAGES_IDS) --force || true 
+	@ docker rmi $(IMAGES_IDS) --force 2>/dev/null || true
 	${SUCCESS} "Images removed successfully"
 
 services-up-build:
@@ -109,10 +110,12 @@ stack-deploy:
 	@ docker stack deploy -c docker-deployment/stack-app.yml myportfolio
 	${SUCCESS} "Stack deployment complete..."
 
+stack-rm:
+	${INFO} "Removing stack..."
+	@ docker stack rm myportfolio || true 
+	${SUCCESS} "Stack remove complete..."
 
-
-
-
-# IMPORTANT - ensures arguments are not interpreted as make targets
-# %:
-# 	@:
+# postgres-backup:
+# 	${INFO} "Backing up PostgreSQL data to S3"
+# 	@ cd ../cluster-management/utils && bash backup-postgres.sh
+# 	${SUCCESS} "Backup complete..."

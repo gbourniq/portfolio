@@ -1,6 +1,12 @@
 ---
 # This playbook contains all actions that will be run on "local" host.
 
+- name: Running postgres backup script
+  shell: cd {{ REPO_LOCAL_PATH }}/cluster-management/utils && bash backup-postgres.sh
+  register: cmdln
+  ignore_errors: yes
+  tags:
+    - stop-instance
 
 - name: Stop instances tagged with type=swarm
   ec2:

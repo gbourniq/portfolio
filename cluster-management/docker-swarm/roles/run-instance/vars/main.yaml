@@ -6,3 +6,5 @@ INSTANCE_TAG_TYPE: swarm
 
 # need this line, other it errors "boto required for ec2 module"
 ansible_python_interpreter: /Users/guillaume.bournique/anaconda3/envs/portfolio-env/bin/python
+
+REPO_LOCAL_PATH: /home/ubuntu/myportfolio
