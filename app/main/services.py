@@ -142,8 +142,6 @@ def _send_email(request, to_emails: List[str], from_email: str) -> None:
     """
     form = ContactForm(request.POST)
     if not form.is_valid():
-        for msg in form.error_messages:
-            messages.error(request, f"{msg}: {form.error_messages[msg]}")
         logger.warning("Email form is invalid.")
         return None
 

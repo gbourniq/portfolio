@@ -33,10 +33,11 @@ services:
         app_debug: ${DEBUG}
     container_name: app
     restart: "no"
-    env_file:
-      - ./config/app.env
     environment:
-      Debug: ${DEBUG}
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: "*"
+      SECRET_KEY: ${SECRET_KEY}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/staticfiles/
@@ -49,7 +50,6 @@ services:
       retries: 3
     expose: 
       - 8080
-      - 587
     networks:
       - backend
       - proxy
@@ -104,10 +104,11 @@ services:
         app_debug: ${DEBUG}
     container_name: celery
     restart: "no"
-    env_file:
-      - ./config/app.env
     environment:
-      Debug: ${DEBUG}
+      DEBUG: ${DEBUG}
+      ALLOWED_HOSTS: "*"
+      SECRET_KEY: ${SECRET_KEY}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - static:/code/main/static/
@@ -120,7 +121,6 @@ services:
       retries: 3
     expose: 
       - 8080
-      - 587
     networks:
       - backend
       - proxy

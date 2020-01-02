@@ -340,3 +340,44 @@ KeyError: 'from_email'
 2020-01-01 22:06:38,492 INFO main.services Email sent successfully from hjhgjh to ['gbournique@gmail.com']
 2020-01-01 22:37:11,811 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
 2020-01-01 22:37:12,699 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 00:21:43,554 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 00:21:51,591 INFO main.views Homepage
+2020-01-02 00:22:09,190 ERROR django.request Internal Server Error: /contact/
+Traceback (most recent call last):
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/views.py", line 148, in contactPage
+    form = _send_email(request, to_emails, from_email)
+  File "/Users/guillaume.bournique/Documents/portfolio/app/main/services.py", line 145, in _send_email
+    for msg in form.error_messages:
+AttributeError: 'ContactForm' object has no attribute 'error_messages'
+2020-01-02 00:23:35,388 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/services.py changed, reloading.
+2020-01-02 00:23:36,183 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 00:23:41,311 WARNING main.services Email form is invalid.
+2020-01-02 00:23:54,435 WARNING main.services Email form is invalid.
+2020-01-02 00:24:41,297 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
+2020-01-02 00:24:41,871 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 00:24:47,210 WARNING main.services Email form is invalid.
+2020-01-02 00:24:47,244 ERROR django.request Internal Server Error: /contact/
+Traceback (most recent call last):
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/guillaume.bournique/anaconda3/envs/portfolio-env/lib/python3.6/site-packages/django/core/handlers/base.py", line 126, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view main.views.contactPage didn't return an HttpResponse object. It returned None instead.
+2020-01-02 00:26:38,758 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
+2020-01-02 00:26:39,548 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 00:26:45,936 WARNING main.services Email form is invalid.
+2020-01-02 00:27:04,028 WARNING main.services Email form is invalid.
+2020-01-02 00:27:41,946 WARNING main.services Email form is invalid.
+2020-01-02 00:27:45,064 INFO main.views Homepage
+2020-01-02 00:28:03,104 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/main/views.py changed, reloading.
+2020-01-02 00:28:03,654 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 00:28:57,844 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
+2020-01-02 00:28:58,659 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 00:32:22,893 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
+2020-01-02 00:32:23,804 INFO django.utils.autoreload Watching for file changes with StatReloader

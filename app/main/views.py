@@ -147,7 +147,8 @@ def contactPage(request):
         from_email = settings.EMAIL_HOST_USER
         form = _send_email(request, to_emails, from_email)
         if not form:
-            return HttpResponse("Invalid header found.")
+            # if form invalid, stay on the same page
+            return redirect(request.META["HTTP_REFERER"])
         messages.success(request, "Email sent successfully.")
         return redirect(goBackPage, code=3)
 

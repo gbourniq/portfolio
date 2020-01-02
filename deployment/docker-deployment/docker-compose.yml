@@ -89,8 +89,6 @@ services:
     image: docker.io/gbournique/myportfolio_celery:latest
     container_name: celery
     restart: "no"
-    env_file:
-      - ./config/app.env
     environment:
       DEBUG: ${DEBUG}
       ALLOWED_HOSTS: "*"

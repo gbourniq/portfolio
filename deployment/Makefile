@@ -32,8 +32,8 @@ create-superuser:
 
 # Executes a full workflow
 docker-all-up: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests
-docker-all-test: clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
-docker-all-push-registry: clean-environments unit-tests build-images services-up-build services-health frontend-tests tag/latest publish/latest services-down-volumes clean-environments
+docker-all-test: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
+docker-all-publish: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests tag/latest publish/latest services-down-volumes clean-environments
 
 create-build-images:
 	${INFO} "Building images..."
