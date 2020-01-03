@@ -55,13 +55,13 @@ services-up-build:
 	${INFO} "Starting services for build environment..."
 	@ docker-compose $(BUILD_ARGS) up -d
 	${SUCCESS} "Build environment created"
-	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,80)" || true
+	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,443)" || true
 
 services-up-prod:
 	${INFO} "Starting services for production environment..."
 	@ docker-compose $(PROD_ARGS) up -d
 	${SUCCESS} "Production environment created"
-	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,80)"
+	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,443)"
 
 services-down:
 	${INFO} "Destroying build environment excluding volumes..."

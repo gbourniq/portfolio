@@ -11,3 +11,5 @@ RUN apk update \
 
 # Copy new config file
 COPY deployment/build-images/config/nginx.conf /etc/nginx/conf.d/nginx.conf
+
+EXPOSE 443
