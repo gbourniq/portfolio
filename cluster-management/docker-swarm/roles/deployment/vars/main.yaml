@@ -29,6 +29,7 @@ GITHUB_REPO_NAME: portfolio
 STACK_NAME: myportfolio
 
 DEBUG: False
+NGINX_FILE: "prod"
 
 EMAIL_HOST_USER: !vault |
             $ANSIBLE_VAULT;1.2;AES256;user

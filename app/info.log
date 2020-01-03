@@ -381,3 +381,18 @@ ValueError: The view main.views.contactPage didn't return an HttpResponse object
 2020-01-02 00:28:58,659 INFO django.utils.autoreload Watching for file changes with StatReloader
 2020-01-02 00:32:22,893 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
 2020-01-02 00:32:23,804 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 22:26:28,065 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 22:27:54,559 INFO django.utils.autoreload /Users/guillaume.bournique/Documents/portfolio/app/myportfolio/settings.py changed, reloading.
+2020-01-02 22:27:55,147 INFO django.utils.autoreload Watching for file changes with StatReloader
+2020-01-02 22:29:33,984 INFO main.views Homepage
+2020-01-02 22:31:27,484 INFO main.views Homepage
+2020-01-02 22:31:29,376 WARNING django.request Not Found: /favicon.ico
+2020-01-02 22:35:13,824 INFO main.views Homepage
+2020-01-02 22:35:18,413 INFO main.views GET request to /11111
+2020-01-02 22:35:18,769 INFO main.services Filtering SubCategory objects by cat_slug=11111
+2020-01-02 22:35:18,778 INFO main.services Building sub-categories URLs
+2020-01-02 22:35:18,778 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-02 22:35:18,786 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-02 22:35:18,787 INFO main.services Filtering Article objects by subcat_slug=1111
+2020-01-02 22:35:18,789 WARNING main.services Sub-category 1111 does not contain any article.
+2020-01-03 00:31:04,623 INFO main.views Homepage

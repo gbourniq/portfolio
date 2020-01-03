@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
@@ -233,6 +233,6 @@ LOGGING = {
         },
     },
     "loggers": {
-        "": {"handlers": ["file"], "level": "INFO", "propagate": True,},
+        "": {"handlers": ["file"], "level": "INFO", "propagate": True},
     },
 }

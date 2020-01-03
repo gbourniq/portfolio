@@ -3,24 +3,15 @@
 
 # Add any directories, files, or patterns you don't want to be tracked by version control
 app/info.log
-app/media/
+app/mediafiles/
 app/images/
+app/main/static/
 app/main/migrations/*
-/bin/
-/build/
-/static/
-.*/
-/logs/
-/plugins/
-*__pycache__*
-*.DS_Store
-tags
-/tmp/
-/venv/
-*.dat
-*.code-workspacest
+__pycache__/
 .pytest_cache
-app/main/static/uploaded_images/
+.idea/
+*.DS_Store
+/logs/
 
 # ignore python compiled bytecode files
 *.pyc
@@ -35,6 +26,3 @@ cov_html/
 # ignore environment variables
 app/.env
 .env
-
-# ignore files uploaded to app
-app/mediafiles/
