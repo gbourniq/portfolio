@@ -42,6 +42,7 @@ swarm-instance-start:
 ########### DEPLOYMENT PLAYBOOK ###########
 
 swarm-deployment-all: swarm-instance-start swarm-setup-instance swarm-docker-prune swarm-clone-repo swarm-deploy-stack
+swarm-deployment-no-setup: swarm-instance-start swarm-docker-prune swarm-clone-repo swarm-deploy-stack
 
 swarm-setup-instance:
 	${INFO} "Install dependencies: Git, Python, Docker ..."

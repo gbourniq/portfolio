@@ -1,4 +1,4 @@
-version: "3.7"
+version: "3.5"
 
 services:
 
@@ -9,12 +9,13 @@ services:
     volumes: 
         - static:/www/staticfiles/
         - media:/www/mediafiles/
-    healthcheck:
-      test: stat /etc/nginx/conf.d/nginx.conf && curl localhost:80 || exit 1
-      interval: 120s
-      timeout: 5s
-      retries: 3
-      start_period: 30s
+        - /data/certs:/etc/nginx/certs
+    # healthcheck:
+    #   test: stat /etc/nginx/conf.d/nginx.conf && curl localhost:443 || exit 1
+    #   interval: 120s
+    #   timeout: 5s
+    #   retries: 3
+    #   start_period: 30s
     ports: 
       - "80:80"
       - "443:443"
