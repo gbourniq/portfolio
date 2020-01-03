@@ -7,5 +7,7 @@ RUN rm /etc/nginx/conf.d/default.conf
 RUN apk update \
     && apk add --no-cache curl
 
+# RUN chmod -R 600 /etc/nginx/ssl
+
 # Copy new config file
 COPY deployment/build-images/config/nginx.conf /etc/nginx/conf.d/nginx.conf

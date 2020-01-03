@@ -16,7 +16,8 @@ services:
       retries: 3
       start_period: 30s
     ports: 
-      - "443:80"
+      - "80:80"
+      - "443:443"
     networks:
       - proxy
     depends_on:

@@ -13,6 +13,7 @@ services:
     volumes: 
         - static:/www/staticfiles/
         - media:/www/mediafiles/
+        - /data/certs:/etc/nginx/certs
     healthcheck:
       test: stat /etc/nginx/conf.d/nginx.conf && curl localhost:80 || exit 1
       interval: 20s
@@ -20,7 +21,8 @@ services:
       retries: 3
       start_period: 20s
     ports: 
-      - 443:80
+      - "80:80"
+      - "443:443"
     networks:
       - proxy
     depends_on:
