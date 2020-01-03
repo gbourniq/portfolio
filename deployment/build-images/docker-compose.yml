@@ -12,7 +12,7 @@ services:
       - static:/www/staticfiles/
       - media:/www/mediafiles/
     healthcheck:
-      test: stat /etc/nginx/conf.d/nginx-prod.conf && curl localhost:80 || exit 1
+      test: stat /etc/nginx/conf.d/nginx.conf && curl localhost:80 || exit 1
       interval: 120s
       timeout: 5s
       retries: 3

@@ -16,6 +16,5 @@
     SECRET_KEY: "{{ DJANGO_SECRET_KEY }}"
     EMAIL_HOST_USER: "{{ EMAIL_HOST_USER }}"
     EMAIL_HOST_PASSWORD: "{{ EMAIL_HOST_PASSWORD }}"
-    NGINX_FILE: "{{ NGINX_FILE }}"
   tags:
     - deploy-stack
