@@ -10,12 +10,12 @@ services:
         - static:/www/staticfiles/
         - media:/www/mediafiles/
         - /data/certs:/etc/nginx/certs
-    # healthcheck:
-    #   test: stat /etc/nginx/conf.d/nginx.conf && curl localhost:443 || exit 1
-    #   interval: 120s
-    #   timeout: 5s
-    #   retries: 3
-    #   start_period: 30s
+    healthcheck:
+      test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
+      interval: 120s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     ports: 
       - "80:80"
       - "443:443"

@@ -11,12 +11,12 @@ services:
     volumes: 
       - static:/www/staticfiles/
       - media:/www/mediafiles/
-    # healthcheck:
-    #   test: stat /etc/nginx/conf.d/nginx.conf && curl localhost:443 || exit 1
-    #   interval: 120s
-    #   timeout: 5s
-    #   retries: 3
-    #   start_period: 20s
+    healthcheck:
+      test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
+      interval: 120s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     ports: 
       - "80:80"
       - "443:443"
@@ -87,7 +87,7 @@ services:
     volumes:
       - redisdata:/data
     healthcheck:
-      test: bash /usr/local/bin/run_redis_healthcheck.sh
+      test: sh /usr/local/bin/run_redis_healthcheck.sh
       interval: 10s
       timeout: 5s
       retries: 3

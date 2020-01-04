@@ -74,12 +74,12 @@ services-down-volumes:
 	${SUCCESS} "Removed images and volumes for prod environment"
 
 services-health:
-	${INFO} "Checking services health..."
+	${INFO} "Checking services health (exclude nginx)..."
 	@ $(call check_service_health,$(BUILD_ARGS),postgres)
 	@ $(call check_service_health,$(BUILD_ARGS),redis)
 	@ $(call check_service_health,$(BUILD_ARGS),app)
 	@ $(call check_service_health,$(BUILD_ARGS),celery)
-	@ $(call check_service_health,$(BUILD_ARGS),nginx)
+	# @ $(call check_service_health,$(BUILD_ARGS),nginx)
 	${SUCCESS} "All services are healthy"
 
 frontend-tests:
