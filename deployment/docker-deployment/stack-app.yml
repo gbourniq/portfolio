@@ -1,7 +1,6 @@
 version: "3.5"
 
 services:
-
   nginx:
     image: docker.io/gbournique/myportfolio_nginx:latest
     deploy:

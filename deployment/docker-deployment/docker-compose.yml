@@ -77,7 +77,7 @@ services:
     volumes:
       - redisdata:/data
     healthcheck:
-      test: bash /usr/local/bin/run_redis_healthcheck.sh
+      test: sh /usr/local/bin/run_redis_healthcheck.sh
       interval: 10s
       timeout: 5s
       retries: 3
