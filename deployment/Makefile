@@ -31,15 +31,15 @@ create-superuser:
 	${SUCCESS} "Superuser created"
 
 # Executes a full workflow
-docker-all-up: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests
-docker-all-test: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests services-down-volumes clean-environments
-docker-all-publish: services-down clean-environments unit-tests build-images services-up-build services-health frontend-tests tag/latest publish/latest services-down-volumes clean-environments
+docker-all-up: services-down clean-environments unit-tests services-up-build services-health frontend-tests
+docker-all-test: services-down clean-environments unit-tests services-up-build services-health frontend-tests services-down-volumes clean-environments
+docker-all-publish: services-down clean-environments unit-tests services-up-build services-health frontend-tests tag/latest publish/latest services-down-volumes clean-environments
 swarm-all: services-down clean-environments stack-rm stack-deploy
 
-create-build-images:
-	${INFO} "Building images..."
-	@ docker-compose $(BUILD_ARGS) build
-	${SUCCESS} "Images build complete"
+# create-build-images:
+# 	${INFO} "Building images..."
+# 	@ docker-compose $(BUILD_ARGS) build
+# 	${SUCCESS} "Images build complete"
 
 clean-environments: remove-build-images
 	${INFO} "Removing dangling images..."

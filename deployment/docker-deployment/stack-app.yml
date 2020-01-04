@@ -8,11 +8,9 @@ services:
       replicas: 1
       update_config:
         parallelism: 1
-      restart_policy:
-        condition: on-failure
     volumes: 
-        - static:/www/staticfiles/
-        - media:/www/mediafiles/
+        - /data/staticfiles:/www/staticfiles/
+        - /data/mediafiles:/www/mediafiles/
         - /data/certs:/etc/nginx/certs
     healthcheck:
       test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
@@ -25,8 +23,6 @@ services:
       - "443:443"
     networks:
       - proxy
-    depends_on:
-      - app
       
   app:
     image: docker.io/gbournique/myportfolio_app:latest
@@ -34,8 +30,6 @@ services:
       replicas: 1
       update_config:
         parallelism: 1
-      restart_policy:
-        condition: on-failure
     environment:
       DEBUG: ${DEBUG}
       ALLOWED_HOSTS: "*"
@@ -43,9 +37,9 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
-      - static:/code/staticfiles/
-      - media:/code/mediafiles/
-      - redisdata:/data
+      - /data/staticfiles:/code/staticfiles/
+      - /data/mediafiles:/code/mediafiles/
+      - /data/redisdata:/data
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
       interval: 10s
@@ -56,9 +50,6 @@ services:
       - proxy
     entrypoint:
       - ./run_server.sh
-    depends_on:
-      - postgres
-      - redis
 
   postgres:
     image: docker.io/gbournique/myportfolio_postgres:latest
@@ -66,10 +57,8 @@ services:
       replicas: 1
       update_config:
         parallelism: 1
-      restart_policy:
-        condition: on-failure
     volumes:
-      - pgdata:/var/lib/postgresql/data/ 
+      - /data/pgdata:/var/lib/postgresql/data/ 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -84,18 +73,15 @@ services:
       replicas: 1
       update_config:
         parallelism: 1
-      restart_policy:
-        condition: on-failure
     volumes:
-      - redisdata:/data
+      - /data/redisdata:/data
     healthcheck:
-      test: bash /usr/local/bin/run_redis_healthcheck.sh
+      test: sh /usr/local/bin/run_redis_healthcheck.sh
       interval: 10s
       timeout: 5s
       retries: 3
     networks:
       - backend
-
 
   celery:
     image: docker.io/gbournique/myportfolio_celery:latest
@@ -103,8 +89,6 @@ services:
       replicas: 1
       update_config:
         parallelism: 1
-      restart_policy:
-        condition: on-failure
     environment:
       DEBUG: ${DEBUG}
       ALLOWED_HOSTS: "*"
@@ -112,9 +96,9 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
-      - static:/code/main/static/
-      - media:/code/main/mediafiles/
-      - redisdata:/data
+      - /data/staticfiles:/code/staticfiles/
+      - /data/mediafiles:/code/mediafiles/
+      - /data/redisdata:/data
     healthcheck:
       test: ps | grep celery || exit 1
       interval: 10s
@@ -125,15 +109,7 @@ services:
       - proxy
     entrypoint:
       - ./run_celery.sh
-    depends_on:
-      - postgres
-      - redis
 
-volumes:
-  static:
-  media:
-  pgdata:
-  redisdata:
 
 networks:
   backend:
