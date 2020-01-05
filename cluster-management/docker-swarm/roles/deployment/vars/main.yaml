@@ -4,6 +4,7 @@
 # Variables to set up docker and docker-compose
 ANSIBLE_USER: ubuntu
 DOCKER_GROUP: docker
+# DOCKER_COMPOSE_VERSION: 1.24.1
 DOCKER_COMPOSE_VERSION: 1.24.1
 
 # Variables for app deployment 

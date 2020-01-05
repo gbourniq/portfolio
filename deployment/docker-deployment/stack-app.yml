@@ -8,6 +8,7 @@ services:
       update_config:
         parallelism: 1
     volumes: 
+        - ./nginx/conf.d:/etc/nginx/conf.d
         - /data/staticfiles:/www/staticfiles/
         - /data/mediafiles:/www/mediafiles/
         - /data/certs:/etc/nginx/certs
@@ -43,13 +44,15 @@ services:
       interval: 30s
       timeout: 30s
       retries: 5
+    expose: 
+      - 8080
     networks:
       - backend
       - proxy
     entrypoint:
-      - ./run_server.sh
+      - ./entrypoints/run_server.sh
 
-  celery:
+  worker:
     image: docker.io/gbournique/myportfolio_celery:latest
     deploy:
       replicas: 1
@@ -62,6 +65,7 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
+      - ./app/:/code/entrypoints/
       - /data/staticfiles:/code/staticfiles/
       - /data/mediafiles:/code/mediafiles/
       - /data/redisdata:/data
@@ -70,25 +74,39 @@ services:
       interval: 60s
       timeout: 30s
       retries: 5
+    expose: 
+      - 8081
     networks:
       - backend
       - proxy
     entrypoint:
-      - ./run_celery.sh
+      - ./entrypoints/run_celery.sh
 
   postgres:
-    image: docker.io/gbournique/myportfolio_postgres:latest
+    image: postgres:12-alpine
     deploy:
       replicas: 1
       update_config:
         parallelism: 1
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_DB: "myportfoliodb"
+      POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
+      # POSTGRES_SERVICE: "postgres"
+      # POSTGRES_PORT: 5432
     volumes:
+      - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
+      - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
       - /data/pgdata:/var/lib/postgresql/data/ 
+      - /data/pglogs:/var/log/postgresql/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 10
+    expose:
+      - 5432
     networks:
       - backend
 
@@ -101,10 +119,12 @@ services:
     volumes:
       - /data/redisdata:/data
     healthcheck:
-      test: sh /usr/local/bin/run_redis_healthcheck.sh
+      test: if ping="$(redis-cli localhost ping)" && [ "$ping" = 'PONG' ]; then exit 0; else exit 1; fi
       interval: 10s
       timeout: 5s
       retries: 10
+    expose:
+      - 6379
     networks:
       - backend
 
