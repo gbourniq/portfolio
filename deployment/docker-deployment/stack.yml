@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   nginx:
-    image: docker.io/gbournique/myportfolio_nginx:latest
+    image: nginx:1.17-alpine
     deploy:
       replicas: 1
       update_config:
@@ -36,6 +36,7 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
+      - ./app/:/code/entrypoints/
       - /data/staticfiles:/code/staticfiles/
       - /data/mediafiles:/code/mediafiles/
       - /data/redisdata:/data
@@ -93,8 +94,6 @@ services:
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: "myportfoliodb"
       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
-      # POSTGRES_SERVICE: "postgres"
-      # POSTGRES_PORT: 5432
     volumes:
       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
       - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
@@ -111,15 +110,16 @@ services:
       - backend
 
   redis:
-    image: docker.io/gbournique/myportfolio_redis:latest
+    image: redis:alpine
     deploy:
       replicas: 1
       update_config:
         parallelism: 1
     volumes:
+      - ./redis:/healthcheck/
       - /data/redisdata:/data
     healthcheck:
-      test: if ping="$(redis-cli localhost ping)" && [ "$ping" = 'PONG' ]; then exit 0; else exit 1; fi
+      test: sh /healthcheck/redis_healthcheck.sh
       interval: 10s
       timeout: 5s
       retries: 10

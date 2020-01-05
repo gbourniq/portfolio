@@ -96,7 +96,7 @@ publish/%::
 
 stack-deploy:
 	${INFO} "Deploying stack..."
-	@ docker stack deploy -c docker-deployment/stack-app.yml myportfolio
+	@ docker stack deploy -c docker-deployment/stack.yml myportfolio
 	${SUCCESS} "Stack deployment complete..."
 
 stack-rm:

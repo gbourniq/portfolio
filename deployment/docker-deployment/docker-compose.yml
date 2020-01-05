@@ -31,7 +31,6 @@ services:
     environment:
       DEBUG: ${DEBUG}
       ALLOWED_HOSTS: "*"
-      # ALLOWED_HOSTS: "$(hostname -i || echo '127.0.0.1')"
       SECRET_KEY: ${SECRET_KEY}
       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
@@ -58,7 +57,7 @@ services:
 
   worker:
     image: docker.io/gbournique/myportfolio_app:latest
-    container_name: app
+    container_name: worker
     restart: "no"
     environment:
       DEBUG: ${DEBUG}
@@ -84,8 +83,7 @@ services:
     entrypoint:
       - ./entrypoints/run_celery.sh
     depends_on:
-      - postgres
-      - redis
+      - app
 
   postgres:
     image: postgres:12-alpine
@@ -96,8 +94,6 @@ services:
       POSTGRES_PASSWORD: "postgres"
       POSTGRES_DB: "myportfoliodb"
       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
-      # POSTGRES_SERVICE: "postgres"
-      # POSTGRES_PORT: 5432
     volumes:
       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
       - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
@@ -112,17 +108,18 @@ services:
       - 5432
     networks:
       - backend
-    # entrypoint:
-    #   - ./docker-entrypoint-initdb.d/run_db_setup.sh
+    entrypoint:
+      - ./docker-entrypoint-initdb.d/run_db_setup.sh
 
   redis:
     image: redis:alpine
     container_name: redis
     restart: "no"
     volumes:
+      - ./redis:/healthcheck/
       - /data/redisdata:/data
     healthcheck:
-      test: if ping="$(redis-cli localhost ping)" && [ "$ping" = 'PONG' ]; then exit 0; else exit 1; fi
+      test: sh /healthcheck/redis_healthcheck.sh
       interval: 10s
       timeout: 5s
       retries: 10
