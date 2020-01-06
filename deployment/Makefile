@@ -104,6 +104,11 @@ stack-rm:
 	@ docker stack rm myportfolio || true 
 	${SUCCESS} "Stack remove complete..."
 
+
+# error Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use
+# sudo lsof -nP | grep LISTEN
+# sudo kill -9 1548
+
 # postgres-backup:
 # 	${INFO} "Backing up PostgreSQL data to S3"
 # 	@ cd ../cluster-management/utils && bash backup-postgres.sh

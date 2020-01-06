@@ -21,8 +21,8 @@ services:
       - "443:443"
     networks:
       - proxy
-    depends_on:
-      - app
+    # depends_on:
+    #   - app
       
   app:
     image: docker.io/gbournique/myportfolio_app:latest
@@ -51,9 +51,9 @@ services:
       - proxy
     entrypoint:
       - ./entrypoints/run_server.sh
-    depends_on:
-      - postgres
-      - redis
+    # depends_on:
+    #   - postgres
+    #   - redis
 
   worker:
     image: docker.io/gbournique/myportfolio_app:latest
@@ -82,8 +82,8 @@ services:
       - proxy
     entrypoint:
       - ./entrypoints/run_celery.sh
-    depends_on:
-      - app
+    # depends_on:
+    #   - app
 
   postgres:
     image: postgres:12-alpine
@@ -108,8 +108,6 @@ services:
       - 5432
     networks:
       - backend
-    entrypoint:
-      - ./docker-entrypoint-initdb.d/run_db_setup.sh
 
   redis:
     image: redis:alpine
