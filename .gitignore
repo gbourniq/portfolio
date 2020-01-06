@@ -2,7 +2,6 @@
 /app/tests/templates/*
 
 # Add any directories, files, or patterns you don't want to be tracked by version control
-app/info.log
 app/mediafiles/
 app/images/
 app/main/static/
@@ -26,3 +25,4 @@ cov_html/
 # ignore environment variables
 app/.env
 .env
+app/info.log

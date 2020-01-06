@@ -5,6 +5,12 @@ SHELL := /bin/bash
 # Common settings
 include Makefile.settings
 
+# Executes a full workflow
+rebuild-app-image: remove-app-image clean-environment build-app-image
+publish-app-image: remove-app-image clean-environment build-app-image tag/latest publish/latest
+deploy-compose: services-down clean-environment services-up
+swarm-all: services-down clean-environment stack-rm stack-deploy
+
 # Login to Docker registry
 login-ask-cli:
 	${INFO} "Logging in to Docker registry $(DOCKER_REGISTRY)..."
@@ -28,12 +34,6 @@ create-superuser:
 	${INFO} "Creating initial temporary superuser: username: admin, password: pass..."
 	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | docker exec -i app python manage.py shell
 	${SUCCESS} "Superuser created"
-
-# Executes a full workflow
-rebuild-app-image: remove-app-image clean-environment build-app-image
-publish-app-image: remove-app-image clean-environment build-app-image tag/latest publish/latest
-deploy-compose: services-down clean-environment services-up
-swarm-all: services-down clean-environment stack-rm stack-deploy
 
 clean-environment:
 	${INFO} "Removing dangling images..."
