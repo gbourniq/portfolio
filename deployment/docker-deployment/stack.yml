@@ -54,7 +54,7 @@ services:
       - ./entrypoints/run_server.sh
 
   worker:
-    image: docker.io/gbournique/myportfolio_celery:latest
+    image: docker.io/gbournique/myportfolio_app:latest
     deploy:
       replicas: 1
       update_config:
