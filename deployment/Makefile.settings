@@ -14,14 +14,10 @@ export DOCKER_USER := gbournique
 
 BUILD_COMPOSE_FILE := build-images/docker-compose.yml
 BUILD_ARGS = -p $(PROJECT_NAME) -f $(BUILD_COMPOSE_FILE)
-PROD_COMPOSE_FILE := docker-deployment/docker-compose.yml
-PROD_ARGS = -p $(PROJECT_NAME) -f $(PROD_COMPOSE_FILE)
 
-DOCKER_PASSWORD ?= $(shell bash -c 'read -s -p "Password: " pwd; echo $$pwd')
+DOCKER_PASSWORD_CLI ?= $(shell bash -c 'read -s -p "Password: " pwd; echo $$pwd')
 
 APP_CONTAINER_ID := $(shell echo $$(docker ps --filter "name=app" -q))
-IMAGES_IDS := $(shell echo $$(docker images $(PROJECT_NAME)_* -q))
-
 
 ###########################
 ######## COSMETICS ########

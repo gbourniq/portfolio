@@ -6,6 +6,12 @@ SHELL := /bin/bash
 include Makefile.settings
 
 # Login to Docker registry
+login-ask-cli:
+	${INFO} "Logging in to Docker registry $(DOCKER_REGISTRY)..."
+	@ docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD_CLI)
+	${SUCCESS} "Logged in to Docker registry $(DOCKER_REGISTRY)"
+
+# Login to Docker registry
 login:
 	${INFO} "Logging in to Docker registry $(DOCKER_REGISTRY)..."
 	@ docker login -u $(DOCKER_USER) -p $(DOCKER_PASSWORD)
@@ -16,13 +22,6 @@ logout:
 	${INFO} "Logging out of Docker registry $(DOCKER_REGISTRY)..."
 	@ docker logout
 	${SUCCESS} "Logged out of Docker registry $(DOCKER_REGISTRY)"
-
-# unit-tests:
-# 	${INFO} "Running unit tests..."
-# 	@ echo "In progress..."
-# 	@ cd ../ && docker build -t myportfolio_tests:latest -f deployment/build-images/app.dockerfile .
-# 	@ docker run -it myportfolio_tests:latest pytest .
-# 	${SUCCESS} "Unit tests complete"
 
 # Superuser to be create the first time the app is deployed via docker-compose (fresh PostgreSQL)
 create-superuser:
@@ -46,52 +45,49 @@ build-app-image:
 	@ docker-compose $(BUILD_ARGS) build
 	${SUCCESS} "Image build complete"
 
-remove-app-image:
+unit-tests:
+	${INFO} "Running unit tests..."
+	@ docker run -it myportfolio_app:latest pytest .
+	${SUCCESS} "Unit tests complete"
+
+prune-all:
 	${INFO} "Remove images starting with $(PROJECT_NAME)..."
-	@ docker rmi $(IMAGES_IDS) --force 2>/dev/null || true
+	@ docker system prune -a -f 2>/dev/null || true
 	${SUCCESS} "Images removed successfully"
 	
 services-up:
-	${INFO} "Starting services for production environment..."
-	@ docker-compose $(PROD_ARGS) up -d
+	${INFO} "Starting services for build environment..."
+	@ docker-compose $(BUILD_ARGS) up -d
 	${SUCCESS} "Production environment created"
 	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):$(call get_port_mapping,$(BUILD_ARGS),nginx,443)"
 
 services-down:
-	${INFO} "Destroying prod environment excluding volumes..."
-	@ docker-compose $(PROD_ARGS) down
+	${INFO} "Destroying build environment..."
+	@ docker-compose $(BUILD_ARGS) down
 	${SUCCESS} "Removed images and volumes for prod environment"
 
-# app-health:
-# 	${INFO} "Checking services health (exclude nginx)..."
-# 	@ $(call check_service_health,$(BUILD_ARGS),postgres)
-# 	@ $(call check_service_health,$(BUILD_ARGS),redis)
-# 	@ $(call check_service_health,$(BUILD_ARGS),app)
-# 	@ $(call check_service_health,$(BUILD_ARGS),celery)
-# 	# @ $(call check_service_health,$(BUILD_ARGS),nginx)
-# 	${SUCCESS} "All services are healthy"
+services-health:
+	${INFO} "Checking services health..."
+	@ $(call check_service_health,$(BUILD_ARGS),postgres)
+	@ $(call check_service_health,$(BUILD_ARGS),redis)
+	@ $(call check_service_health,$(BUILD_ARGS),app)
+	@ $(call check_service_health,$(BUILD_ARGS),worker)
+	@ $(call check_service_health,$(BUILD_ARGS),nginx)
+	${SUCCESS} "All services are healthy"
 
-# frontend-tests:
-# 	${INFO} "Running front-end tests..."
-# 	@ echo "In progress..."
-# 	${SUCCESS} "Front-end tests complete"
+frontend-tests:
+	${INFO} "Running front-end tests..."
+	@ echo "Front-end tests under progress..."
+	${SUCCESS} "Front-end tests complete"
 
 tag/%:
 	${INFO} "Tagging release images with tags $*..."
 	docker tag $(PROJECT_NAME)_app $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_app:$*
-	# docker tag $(PROJECT_NAME)_celery $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_celery:$*
-	# docker tag $(PROJECT_NAME)_postgres $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_postgres:$*
-	# docker tag $(PROJECT_NAME)_nginx $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_nginx:$*
-	# docker tag $(PROJECT_NAME)_redis $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_redis:$*
 	${SUCCESS} "Tagging complete"
 
 publish/%::
 	${INFO} "Publishing release images with tags $* to $(DOCKER_REGISTRY)/$(DOCKER_USER)..."
 	docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_app:$*
-	# docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_celery:$*
-	# docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_postgres:$*
-	# docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_nginx:$*
-	# docker push $(DOCKER_REGISTRY)/$(DOCKER_USER)/$(PROJECT_NAME)_redis:$*
 	${SUCCESS} "Publishing complete"
 
 stack-deploy:
@@ -103,6 +99,10 @@ stack-rm:
 	${INFO} "Removing stack..."
 	@ docker stack rm myportfolio || true 
 	${SUCCESS} "Stack remove complete..."
+
+watch-containers:
+	${INFO} "Watch containers lifecycle..."
+	@ watch -n 2 'docker ps --format "table {{.ID}}\t {{.Image}}\t {{.Status}}"'
 
 
 # error Error starting userland proxy: listen tcp 0.0.0.0:80: bind: address already in use

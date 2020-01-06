@@ -15,14 +15,14 @@ before_install:
 
 script:
   - cd deployment
-  - make clean-environments
+  - make clean-environment
+  - make login
+  - make build-app-image
   - make unit-tests
-  - make build-images
-  - make services-up-build
+  - make services-up
   - make services-health
   - make frontend-tests
-  - make services-down-volumes
-  - make clean-environments
+  - make services-down
 
 after_script:
   - echo "Successfully run tests and checked services health"
