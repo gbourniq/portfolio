@@ -44,7 +44,8 @@ $ conda env activate portfolio-env
 ```
 
 2. Set the following environment variables
-|**Environment Variables**     |**What it does**                                                  |
+
+|**Environment Variables**     |**Description**                                                  |
 |------------------------------|------------------------------------------------------------------|
 |`DEBUG`                       | Django variable in settings.py                                   |
 |`SECRET_KEY`                  | Django variable in settings.py                                   |
