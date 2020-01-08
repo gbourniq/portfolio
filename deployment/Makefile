@@ -7,7 +7,7 @@ include Makefile.settings
 
 # Executes a full workflow
 rebuild-app-image: remove-app-image clean-environment build-app-image
-publish-app-image: remove-app-image clean-environment build-app-image tag/latest publish/latest
+publish-app-image: tag/latest publish/latest
 deploy-compose: services-down clean-environment services-up
 swarm-all: services-down clean-environment stack-rm stack-deploy
 

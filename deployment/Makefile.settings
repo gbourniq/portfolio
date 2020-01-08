@@ -6,7 +6,7 @@ SHELL=/bin/bash -e -o pipefail
 export DEBUG := False
 
 ###################################
-######## PROJECT SETTINGS #########
+######## PROJECT VARIABLES ########
 ###################################
 export PROJECT_NAME := myportfolio
 export DOCKER_REGISTRY := docker.io

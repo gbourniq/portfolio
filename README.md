@@ -1,216 +1,156 @@
-### To-Do's
-- write steps to build images
-- write down steps to run it with docker-compose
-- Portfolio - un-gitingore folders, and re-structure them one by one to work with app
-    - docker folder
-    - test githooks?
-    - set up tests
-    - travis steps
-    - k8s
-    
-bugs:
-- test website, navigating, with no subcat, or no article...
-https://www.quora.com/What-are-the-differences-between-nginx-and-gunicorn
-- deal with EMAIL_HOST_PASSWORD="B" variable : kubernetes secret? same for SECRET_KEY and dynamic ALLOWED_HOSTS ??
-- check email. should remove -from email- just get contact details: name, email, message
-https://www.nginx.com/blog/configuring-nginx-unit-for-production-applications-serving-django-project/
-
-
-
-Build and start the app:
-
-    docker-compose up
-    # Or to rebuild
-    docker-compose up --build
-
-    # migrate and collectstatic
-    docker-compose run app init
-
-    # create admin user
-    docker-compose run app manage createsuperuser
-
-Other helpful commands
-
-    # enter db
-    docker-compose run app manage dbshell
-
-    # run any management command
-    docker-compose run app manage <command and options>
-
-    # enter bash shell
-    docker-compose run app /bin/bash
-
-    # stop everything
-    docker-compose stop
-
-    # stop everything, destroy containers, and volumes
-    docker-compose down
-
-Override the default docker compose variables
-
-    # vim docker-compose.override.yml
-    version: '3'
-    services:
-        web:
-          ports:
-            - 8000:80
-
-
-            
 # Portfolio Application
+This project is a Django web application that can be used by anyone as a template to create a blog or any personal portfolio. 
 
-This is the sample application for the Pluralsight course Docker in Production using AWS.
+By accessing the Django Admin section, it is possible to easily manage the following website content:
+The following component can be created
+- Categories
+- Sub-categories
+- Articles 
 
-The application is based upon the excellent [Vert.x Microservices Workshop](https://github.com/cescoffier/vertx-microservices-workshop), although a number of modifications have been made as outlined below:
+To do:
+* Diagram showing relationship between Categories, Sub-Categories and Articles
+* Screenshot of main application page
 
-- Full continuous delivery workflow using Docker (based upon my course [Continuous Delivery using Docker and Ansible](https://www.pluralsight.com/courses/docker-ansible-continuous-delivery))
-- Use of Gradle as the multi-project build tool.
-- Use of the [Typesafe config library](https://github.com/typesafehub/config) for friendlier 12-factor environment variable based configuration support.
-- Use of [Flyway](https://flywaydb.org) for lightweight database migrations
-- Some of the individual microservices have been refactored to be more resilient to failure
-- Addition of unit/integration tests and acceptance tests
 
 ## Contents
 
 - [Application Architecture](#application-architecture)
 - [Quick Start](#quick-start)
-- [Docker Workflow](#docker-workflow)
-- [Environment Configuration Settings](#environment-configuration-settings)
-- [Branches](#branches)
-- [Repository Timeline](#repository-timeline)
-- [Errata](#errata)
+- [Manual Deployment Options](#manual-deployment-options)
+- [Automated Deployment Options](#automated-deployment-options)
+- [Backing up Postgres](#backing-up-postgres)
 
 
 ## Application Architecture
+The application is composed of the following micro-services:
+- Nginx as a reverse proxy
+- Django web server
+- Celery for asynchronous tasks
+- Redis as a message broker and caching
+- Postgres to store web server data
+- (MongoDB to store image data?)
 
-The application consists of four Microservices that collectively comprise a simple fictitious stock trading application:
-
-- [Quote Generator](./microtrader-quote) - periodically generates stock market quotes for three fictitious companies
-- [Portfolio Service](./microtrader-portfolio) - trades stocks starting from an initial portfolio of $10000 cash on hand.  The trading logic is completely random and non-sensical.
-- [Service discovery](http://vertx.io/docs/vertx-service-discovery/java/) - allows Microservices to discover, locate and interact with other services.  Vert.x includes a simple distributed map structure to store service discovery, however this can be replaced with several popular backends such as Consul and Kubernetes.
-
-
-#### Scripts ####
-
-These are scripts defined in `eigen_ui/package.json`.
-
-|**Command**                   |**What it does**                                                    |
-|------------------------------|-----------------                                                   |
-|`npm run test`                | Runs the test suite                                                |
-|`npm run test:watch`          | Runs the test suite in watch mode                                  |
-|`npm run test:coverage`       | Runs tests and checks test coverage of code                        |
-|`npm run test:teamcity-lint`  | Runs eslint outputting in teamcity format                          |
-|`npm run test:lint`           | Run eslint                                                         |
-|`npm run test:licenses`       | Collects all dependency licenses and appends them to package.json  |
-|`npm run build`               | Produces a production build bundle                                 |
-|`npm run start`               | Starts development server                                          |
-|`npm run start-external`      | Starts development on external IP                                  |
-|`npm run test:coverage-server`| Create coverage report and hosts it on 127.0.0.1:8080              |
-|`npm run flow`                | Run static type checking on frontend                               |
+In order to faciliate testing and deployment tasks, a full CI/CD workflow has been implemented using Travis CLI, Ansible, and Docker/Kubernetes.
 
 
 ## Quick Start
 
-### Building the Application Locally
+### Prerequisites
+Before building and running the application locally, your system must meet the following prerequisites :
 
-Before building and running the application locally, your system must have the following prerequisites installed:
-
-- Java JDK 8
-- NodeJS 4.x or higher (to install the `npm` package manager)
-- Bower (`npm install -g bower`)
-
-You first need to build "fat" jars for each Microservice, using the Gradle shadowJar plugin as shown below:
-
+1. Install dependencies
 ```
-$ ./gradlew clean test shadowJar
-...
-...
-:clean
+$ conda env create -f environment.yml
+$ conda env activate portfolio-env
 ```
 
-### Application Versioning
+2. Set the following environment variables
+|**Environment Variables**     |**What it does**                                                  |
+|------------------------------|------------------------------------------------------------------|
+|`DEBUG`                       | Django variable in settings.py                                   |
+|`SECRET_KEY`                  | Django variable in settings.py                                   |
+|`EMAIL_HOST_USER`             | Email addr. for users to send messages (contact page) (optional) |
+|`EMAIL_HOST_PASSWORD`         | Email address password (optional)                                |
 
-The application uses a simple versioning scheme for all components:
+3. Create a local Postgres database `myportfoliodb`
 
-  `<git-commit-timestamp>.<git-commit-short-hash>`
-
-You can use the `make version` command to view the current version.  The versioning scheme also appends a build identifier if the `BUILD_ID` environment variable is set:
-
+### Running the app locally (dev/test)
+Running the server locally without external docker services
 ```
-$ make version
-20161018004318.d4ce05e
-
-$ export BUILD_ID=1234
-$ make version
-20161018004318.d4ce05e.1234
-```
-
-### Running the Application Locally
-
-To run the application locally, first execute audit database migrations as demonstrated below to create the initial DB schema. 
-
-## Docker Workflow
-
-The repository includes a Docker-based continuous delivery workflow that creates two environments:
-
-- Test Environment
-- Release Environment
-
-### Test Environment
-
-The test environment is expressed via a [`docker-compose.yml`](./docker/test/docker-compose.yml) file in the [docker/test](./docker/test) folder.
-
-### Running the Workflow
-
-To run the workflow your system must meet the following requirements:
-
-- Docker 1.12 or higher client installed and pointed to a local or remote Docker Engine
-- Docker Compose 1.7 or higher
-- GNU Make
-
-The workflow consists of the following tasks:
-
-### Publishing Release Images
-
-The final stage is to publish the release images.
-
-To be able to publish your release images, you will need to reconfigure this project to point to a parent repository and Docker registry that you have write access to.
-
-This can be achieved by editing the [`Makefile`](./Makefile) and configuring the `DOCKER_USER` and `DOCKER_REGISTRY` settings:
-
-```
-...
-...
-# Project variables
+$ cd app/
+$ source .env
+$ make create-superuser
+$ make tests-run
+$ make tests-coverage
+$ make run
+$ make logs-show
 ```
 
-### Cleaning Up
+Note: The following services will not run (require docker containers)
+- Celery
+- Redis
+- Nginx 
 
-To clean up the Docker environments, run the `make clean` task:
 
+## Manual Deployment Options
+
+### Local deployment with docker-compose (dev/test)
 ```
-$ make clean
-=> Destroying test environment...
-...
+$ cd deployment/
+$ make rebuild-app-image
+$ make deploy-compose
+$ make services-health
+$ make login && make publish-app-image
+$ make clean-environment
 ```
 
-### Running an End-to-end Workflow
+Note: Travis CLI (.travis.yml) workflow performs automatically the steps describe above.
+For every push to master, the Docker-based continuous delivery workflow looks like this:
+- Test app source code
+- Package app source code into a docker container
+- Create all services with docker-compose (Nginx, Django server, Celery, Redis, and Postgres)
+- Check that all services are up and healthy
 
-The workflow includes a convenient `make all` task, which automatically runs the following tasks:
+### Publishing release image
+The final stage is to publish the release images for the django app. This assumes that all services are up locally and healthy and a satisfactory image `portfolio_app` has been created from the previous step.
+```
+$ make publish-app-image
+```
 
-- `make clean`
-- `make test`
-- `make release`
-- `make tag:default` - tags the current version (i.e. `make version`), short commit hash, any annotated tags that are present on the current commit and the 'latest' tag
-- `make publish`
-- `make clean` 
+Note: To be able to publish your release images, you will need to specify a Docker registry that you have write access to.
+This can be achieved by editing the `PROJECT VARIABLES` in [`Makefile.settings`](./deployment/Makefile.settings) and configuring the `DOCKER_USER` and `DOCKER_REGISTRY` settings.
 
+### Ubuntu Deployment with docker-compose (dev/test)
+```
+$ cd deployment/
+$ docker-compose -f docker-deployment/docker-compose.yml up
+$ make watch-containers (separate terminal)
+```
 
-### Running an End-to-end Workflow
+### Ubuntu Deployment with Docker Swarm (prod)
+```
+$ cd deployment/
+$ make stack-deploy
+$ make watch-containers (separatez terminal)
+```
 
-Write about:
-- Pre-commit / black
-- Ansible stuff
-- Travis CLI stuff
-- bump2version
-- makefile commands
+### Ubuntu Deployment with Kubernetes (prod)
+```
+Work in progress
+```
+
+## Automated Deployment Options
+
+### Automated Deployment on Ubuntu with Docker Swarm and Ansible
+Ensure the Manager node instance is running:
+```
+$ cd cluster-management
+$ make swarm-instance-start
+```
+
+### Deployment without instance setup (docker and other dependencies installation)
+```
+$ make swarm-deployment-no-setup
+```
+At a high level this command triggers an Ansible script to perform the following tasks:
+- Clone repo
+- Prune all docker components
+- Run stack deployment
+- Check services are up and healthy
+
+### Deployment without instance setup (docker and other dependencies installation)
+```
+$ make swarm-deployment-all
+```
+At a high level this command triggers an Ansible script to perform the following tasks:
+- Install dependencies (eg. Docker, Docker-Compose, etc)
+- Clone repo
+- Prune all docker components
+- Run stack deployment
+- Check services are up and healthy
+
+## Backing up Postgres
+This assume the postgres container is up and running on the docker swarm manager instance.
+```
+make swarm-backup-postgres
+```
