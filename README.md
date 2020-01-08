@@ -130,6 +130,7 @@ $ make swarm-instance-start
 
 ### Deployment without instance setup (docker and other dependencies installation)
 ```
+$ cd cluster-management
 $ make swarm-deployment-no-setup
 ```
 At a high level this command triggers an Ansible script to perform the following tasks:
@@ -140,6 +141,7 @@ At a high level this command triggers an Ansible script to perform the following
 
 ### Deployment without instance setup (docker and other dependencies installation)
 ```
+$ cd cluster-management
 $ make swarm-deployment-all
 ```
 At a high level this command triggers an Ansible script to perform the following tasks:
@@ -152,5 +154,6 @@ At a high level this command triggers an Ansible script to perform the following
 ## Backing up Postgres
 This assume the postgres container is up and running on the docker swarm manager instance.
 ```
-make swarm-backup-postgres
+$ cd cluster-management
+$ make swarm-backup-postgres
 ```
