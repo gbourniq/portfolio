@@ -1,11 +1,10 @@
 # Portfolio Application
-This project is a Django web application that can be used by anyone as a template to create a blog or any personal portfolio. 
+This project is a Django web application that can be used as a template to create any blog or personal portfolio. 
 
-By accessing the Django Admin section, it is possible to easily manage the following website content:
-The following component can be created
-- Categories
-- Sub-categories
+By accessing the Django Admin section, a user can easily manage the following website content such as:
 - Articles 
+- Sub-categories
+- Categories
 
 To do:
 * Diagram showing relationship between Categories, Sub-Categories and Articles
