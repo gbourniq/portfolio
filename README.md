@@ -121,34 +121,34 @@ Work in progress
 
 ## Automated Deployment Options
 
-### Automated Deployment on Ubuntu with Docker Swarm and Ansible
-Ensure the Manager node instance is running:
+### Ensure the Manager node instance is running:
 ```
 $ cd cluster-management
 $ make swarm-instance-start
 ```
 
-### Deployment without instance setup (docker and other dependencies installation)
+### Docker Swarm deployment
 ```
 $ cd cluster-management
-$ make swarm-deployment-no-setup
+$ make swarm-deployment-all
 ```
-At a high level this command triggers an Ansible script to perform the following tasks:
+This command triggers an Ansible script to perform the following tasks:
+- Install dependencies (eg. Docker, Docker-Compose, etc)
 - Clone repo
 - Prune all docker components
 - Run stack deployment
 - Check services are up and healthy
 
-### Deployment without instance setup (docker and other dependencies installation)
+### Kubernetes deployment
 ```
 $ cd cluster-management
-$ make swarm-deployment-all
+$ make k8s-deployment-all
 ```
-At a high level this command triggers an Ansible script to perform the following tasks:
+This command triggers an Ansible script to perform the following tasks:
 - Install dependencies (eg. Docker, Docker-Compose, etc)
 - Clone repo
 - Prune all docker components
-- Run stack deployment
+- Run kubernetes objects deployment
 - Check services are up and healthy
 
 ## Backing up Postgres
