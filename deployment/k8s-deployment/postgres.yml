@@ -144,3 +144,18 @@ spec:
         # - name: mongo-volume
         #   mountPath: /data/db
 
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  labels:
+    app: mongo
+spec:
+  selector:
+    app: mongo
+  ports:
+  - name: "27017"
+    port: 27017
+    targetPort: 27017
