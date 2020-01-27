@@ -14,14 +14,56 @@ spec:
       labels:
         app: nginx
     spec:
+      volumes:
+        - name: staticfiles
+          hostPath:
+            path: /data/staticfiles
+            type: Directory
+        - name: mediafiles
+          hostPath:
+            path: /data/mediafiles
+            type: Directory
+        - name: certs
+          hostPath:
+            path: /data/certs
+            type: Directory
+        - name: config-volume
+          configMap:
+            name: nginx-config
       containers:
-      - image: codewithdan/nginx
+      - image: nginx:1.17-alpine
         imagePullPolicy: IfNotPresent
         name: nginx
         ports:
         - containerPort: 80
         - containerPort: 443
+        volumeMounts:
+        - name: staticfiles
+          mountPath: /www/staticfiles/
+          readOnly: false
+        - name: mediafiles
+          mountPath: /www/mediafiles/
+          readOnly: false
+        - name: certs
+          mountPath: /etc/nginx/certs
+          readOnly: true
+        - name: config-volume
+          mountPath: /etc/nginx/conf.d
         resources: {}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 443
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          exec:
+            command:
+            - bin/sh
+            - -c
+            - stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
+          initialDelaySeconds: 20
+          periodSeconds: 30
 
 ---
 
@@ -34,12 +76,70 @@ metadata:
 spec:
   selector:
     app: nginx
-  type: LoadBalancer
+  type: NodePort
   ports:
-  - name: "80"
-    port: 80
-    targetPort: 80
   - name: "443"
     port: 443
-    targetPort: 443
+    nodePort: 30001
   
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: nginx-config
+data:
+  nginx.conf: |+
+    edirect all www to non-www
+    #
+    server {
+        server_name          gbournique.com;
+        ssl_certificate      /etc/nginx/certs/cert_chain.crt;
+        ssl_certificate_key  /etc/nginx/certs/www_gbournique_com.key;
+        listen               *:80;
+        listen               *:443 ssl;
+        listen               [::]:80 ipv6only=on;
+        listen               [::]:443 ssl ipv6only=on;
+
+        return 301 https://www.gbournique.com$request_uri;
+    }
+
+    #
+    # Redirect all non-encrypted to encrypted
+    #
+    server {
+        server_name          www.gbournique.com;
+        listen               *:80;
+        listen               [::]:80;
+
+        return 301 https://www.gbournique.com$request_uri;
+    }
+
+    #
+    # There we go!
+    #
+    server {
+        server_name          www.gbournique.com;
+        ssl_certificate      /etc/nginx/certs/cert_chain.crt;
+        ssl_certificate_key  /etc/nginx/certs/www_gbournique_com.key;
+        listen               *:443 ssl;
+        listen               [::]:443 ssl;
+
+        location / {
+            proxy_pass http://app:8080;
+            # proxy_set_header Host $host;
+            # proxy_set_header X-Real-IP $remote_addr;
+            # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+
+        location /staticfiles {
+            autoindex on;
+            alias /www/staticfiles/;
+        }
+
+        location /mediafiles {
+            autoindex on;
+            alias /www/mediafiles/;
+        }
+    }

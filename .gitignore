@@ -11,6 +11,7 @@ __pycache__/
 .idea/
 *.DS_Store
 /logs/
+*.vscode
 
 # ignore python compiled bytecode files
 *.pyc

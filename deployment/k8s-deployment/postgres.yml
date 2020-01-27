@@ -1,15 +1,44 @@
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  labels:
-    app: mongo-env
-  name: mongo-env
+  creationTimestamp: null
+  name: postgres-env
 data:
-  MONGODB_DBNAME: codeWithDan
-  MONGODB_ROLE: readWrite
-  MONGODB_ROOT_ROLE: root
-  MONGODB_ROOT_USERNAME: dbadmin
-  MONGODB_USERNAME: webrole
+  POSTGRES_DB: myportfoliodb
+  POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_USER: postgres
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: postgres-config
+data:
+  postgres.conf: |+
+    sten_addresses = '*'
+    logging_collector = on
+    log_directory = '/var/log/postgresql/'
+    log_checkpoints = on
+    log_line_prefix = '%m [%p] %q%u@%d '
+    log_autovacuum_min_duration = 300
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: postgres-setup
+data:
+  run_db_setup.sh: |
+    #!/bin/sh
+    psql -U postgres -c "CREATE USER $POSTGRES_USER PASSWORD '$POSTGRES_PASSWORD'"
+    psql -U postgres -c "CREATE DATABASE $POSTGRES_DB OWNER $POSTGRES_USER"
+    psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE $POSTGRES_DB TO $POSTGRES_USER"
 
 ---
 
@@ -18,8 +47,6 @@ apiVersion: storage.k8s.io/v1
 metadata:
   name: local-storage
 provisioner: kubernetes.io/no-provisioner
-# The reclaim policy applies to the persistent volumes not the storage class itself. 
-# pvs and pvcs that are created using that storage class will inherit the reclaim policy set here.
 reclaimPolicy: Retain
 volumeBindingMode: WaitForFirstConsumer
 
@@ -27,25 +54,21 @@ volumeBindingMode: WaitForFirstConsumer
 
 # Note: While a local storage PV works, going with a more durable solution 
 # (NFS, cloud option, etc.) is recommended
-# Adding this for demo purposes to run on Docker Desktop Kubernetes since it 
-# only supports a single Node
 # https://kubernetes.io/blog/2018/04/13/local-persistent-volumes-beta/
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: mongo-pv
+  name: postgres-pv
 spec:
   capacity:
     storage: 1Gi
-  # volumeMode block feature gate enabled by default with 1.13+
   volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce
-  # StorageClass has a reclaim policy default so it'll be "inherited" by the PV
-  # persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: pg-local-storage
   local:
-    path: /tmp/data/db
+    path: /data/pgdata
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -60,11 +83,11 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongo-pvc
+  name: postgres-pvc
 spec:
   accessModes:
   - ReadWriteOnce
-  storageClassName: local-storage
+  storageClassName: pg-local-storage
   resources:
     requests:
       storage: 1Gi
@@ -75,87 +98,86 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   labels:
-    app: mongo
-  name: mongo
+    app: postgres
+  name: postgres
 spec:
-  serviceName: mongo
+  serviceName: postgres
   replicas: 1
   selector:
     matchLabels:
-      app: mongo
+      app: postgres
   template:
     metadata:
       labels:
-        app: mongo
+        app: postgres
     spec:
-      # Can uncomment following lines if on Mac/Linux 
-      # (issue on Docker for Windows prevents this from working)
-      # volumes:
-      # - name: mongo-volume
-      #   persistentVolumeClaim:
-      #     claimName: mongo-pvc
+      volumes:
+      - name: postgres-volume
+        persistentVolumeClaim:
+          claimName: postgres-pvc
+      - name: config-volume
+        configMap:
+          name: postgres-config
+      - name: setup-volume
+        configMap:
+          name: postgres-setup
       containers:
       - env:
-        - name: MONGODB_DBNAME
+        - name: POSTGRES_DB
           valueFrom:
             configMapKeyRef:
-              key: MONGODB_DBNAME
-              name: mongo-env
-        # Pull password from secrets
-        - name: MONGODB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-passwords
-              key: db-password
-        - name: MONGODB_ROLE
+              key: POSTGRES_DB
+              name: postgres-env
+        - name: POSTGRES_PASSWORD
           valueFrom:
             configMapKeyRef:
-              key: MONGODB_ROLE
-              name: mongo-env
-        # Pull password from secrets
-        - name: MONGODB_ROOT_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: db-passwords
-              key: db-root-password
-        - name: MONGODB_ROOT_ROLE
+              key: POSTGRES_PASSWORD
+              name: postgres-env
+        - name: POSTGRES_USER
           valueFrom:
             configMapKeyRef:
-              key: MONGODB_ROOT_ROLE
-              name: mongo-env
-        - name: MONGODB_ROOT_USERNAME
+              key: POSTGRES_USER
+              name: postgres-env
+        - name: POSTGRES_INITDB_ARGS
           valueFrom:
             configMapKeyRef:
-              key: MONGODB_ROOT_USERNAME
-              name: mongo-env
-        - name: MONGODB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              key: MONGODB_USERNAME
-              name: mongo-env
-        image: codewithdan/mongo
+              key: POSTGRES_INITDB_ARGS
+              name: postgres-env
+        image: postgres:12-alpine
         imagePullPolicy: IfNotPresent
-        name: mongo
+        name: postgres
         ports:
-        - containerPort: 27017
-        resources:        
-        # Can uncomment following lines if on Mac/Linux (issue on Docker for Windows prevents this from working)     
-        # volumeMounts:
-        # - name: mongo-volume
-        #   mountPath: /data/db
+        - containerPort: 5432
+        resources: {}   
+        volumeMounts:
+        - name: setup-volume
+          mountPath: /docker-entrypoint-initdb.d/
+          readOnly: false
+        - name: config-volume
+          mountPath: /etc/postgres/postgres.conf
+          readOnly: true
+        - mountPath: "/var/lib/postgresql/data"
+          name: postgres-volume
+        livenessProbe:
+          exec:
+            command:
+            - pg_isready -U postgre
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          failureThreshold: 10
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo
+  name: postgres
   labels:
-    app: mongo
+    app: postgres
 spec:
   selector:
-    app: mongo
+    app: postgres
   ports:
-  - name: "27017"
-    port: 27017
-    targetPort: 27017
+  - name: "5432"
+    port: 5432
+    targetPort: 5432
