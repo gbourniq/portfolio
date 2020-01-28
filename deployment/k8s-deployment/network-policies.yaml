@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      role: db
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: app
+    # ports:
+    # - protocol: TCP
+    #   port: 5432
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          role: frontend
+    # ports:
+    # - protocol: TCP
+    #   port: 5978
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      role: cache
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          role: app
+    # ports:
+    # - protocol: TCP
+    #   port: 5432
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          role: app
+    # ports:
+    # - protocol: TCP
+    #   port: 5978

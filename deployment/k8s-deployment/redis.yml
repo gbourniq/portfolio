@@ -21,8 +21,8 @@ spec:
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
-  local:
+  storageClassName: redis-local-storage
+  hostPath:
     path: /data/redisdata
 
 ---
@@ -56,6 +56,7 @@ spec:
     metadata:
       labels:
         app: redis
+        role: cache
     spec:
       volumes:
       - name: config-volume
@@ -80,8 +81,7 @@ spec:
         livenessProbe:
           exec:
             command:
-            - bin/sh
-            - -c
+            - sh
             - /healthcheck/redis_healthcheck.sh
           initialDelaySeconds: 20
           periodSeconds: 10

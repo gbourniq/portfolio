@@ -5,11 +5,11 @@ metadata:
   creationTimestamp: null
   name: app-env
 data:
-  DEBUG: ${DEBUG}
+  DEBUG: "False"
   ALLOWED_HOSTS: "*"
-  SECRET_KEY: ${SECRET_KEY}
-  EMAIL_HOST_USER: ${EMAIL_HOST_USER}
-  EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+  SECRET_KEY: 'azxey(r8ieohsd1qc93j*%@+1+@-c&kwbgugz2ojvb@sj=!4*c'
+  EMAIL_HOST_USER: gbournique.dev@gmail.com
+  EMAIL_HOST_PASSWORD: "2341234"
 
 ---
 
@@ -45,6 +45,7 @@ spec:
     metadata:
       labels:
         app: app
+        role: app
     spec:
       volumes:
       - name: config-volume
@@ -52,18 +53,18 @@ spec:
           name: app-config
       - name: staticfiles
         hostPath:
-          path: /data/staticfiles
+          path: /data/staticfiles/
           type: Directory
       - name: mediafiles
         hostPath:
-          path: /data/mediafiles
+          path: /data/mediafiles/
           type: Directory
       - name: redisdata
         hostPath:
-          path: /data/redisdata
+          path: /data/redisdata/
           type: Directory
       containers:
-      - name: node-codewithdan
+      - name: app
         image: docker.io/gbournique/myportfolio_app:latest
         imagePullPolicy: IfNotPresent
         env:
@@ -100,7 +101,7 @@ spec:
           mountPath: /code/mediafiles/
           readOnly: false
         - name: redisdata
-          mountPath: /data
+          mountPath: /data/
           readOnly: false
         - name: config-volume
           mountPath: /code/entrypoints/
@@ -139,6 +140,7 @@ spec:
     metadata:
       labels:
         app: worker
+        role: app
     spec:
       volumes:
       - name: config-volume
@@ -146,15 +148,15 @@ spec:
           name: app-config
       - name: staticfiles
         hostPath:
-          path: /data/staticfiles
+          path: /data/staticfiles/
           type: Directory
       - name: mediafiles
         hostPath:
-          path: /data/mediafiles
+          path: /data/mediafiles/
           type: Directory
       - name: redisdata
         hostPath:
-          path: /data/redisdata
+          path: /data/redisdata/
           type: Directory
       containers:
       - name: node-codewithdan
@@ -194,7 +196,7 @@ spec:
           mountPath: /code/mediafiles/
           readOnly: false
         - name: redisdata
-          mountPath: /data
+          mountPath: /data/
           readOnly: false
         - name: config-volume
           mountPath: /code/entrypoints/

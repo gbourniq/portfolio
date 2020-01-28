@@ -67,16 +67,8 @@ spec:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: pg-local-storage
-  local:
+  hostPath:
     path: /data/pgdata
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - docker-desktop
 
 ---
 
@@ -110,6 +102,7 @@ spec:
     metadata:
       labels:
         app: postgres
+        role: db
     spec:
       volumes:
       - name: postgres-volume
@@ -161,7 +154,9 @@ spec:
         livenessProbe:
           exec:
             command:
-            - pg_isready -U postgre
+            - bin/sh
+            - -c
+            - pg_isready -U postgres
           initialDelaySeconds: 0
           periodSeconds: 10
           failureThreshold: 10
