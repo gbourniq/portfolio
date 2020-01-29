@@ -17,16 +17,16 @@ spec:
       volumes:
         - name: staticfiles
           hostPath:
-            path: /data/staticfiles
-            type: Directory
+            path: /data/staticfiles/
+            type: DirectoryOrCreate
         - name: mediafiles
           hostPath:
-            path: /data/mediafiles
-            type: Directory
+            path: /data/mediafiles/
+            type: DirectoryOrCreate
         - name: certs
           hostPath:
-            path: /data/certs
-            type: Directory
+            path: /data/certs/
+            type: DirectoryOrCreate
         - name: config-volume
           configMap:
             name: nginx-config
@@ -45,17 +45,17 @@ spec:
           mountPath: /www/mediafiles/
           readOnly: false
         - name: certs
-          mountPath: /etc/nginx/certs
+          mountPath: /etc/nginx/certs/
           readOnly: true
         - name: config-volume
-          mountPath: /etc/nginx/conf.d
+          mountPath: /etc/nginx/
         resources: {}
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 443
-          initialDelaySeconds: 5
-          periodSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /
+        #     port: 443
+        #   initialDelaySeconds: 5
+        #   periodSeconds: 10
         livenessProbe:
           exec:
             command:
@@ -91,7 +91,8 @@ metadata:
   name: nginx-config
 data:
   nginx.conf: |+
-    edirect all www to non-www
+    #
+    # redirect all www to non-www
     #
     server {
         server_name          gbournique.com;
