@@ -26,6 +26,12 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # DEBUG = os.getenv("DEBUG")
 DEBUG = False
 
+# Here we define where our redis service is running
+# REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
+# REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
+# REDIS_DJANGO_CACHE_DB = os.environ.get("REDIS_DJANGO_CACHE_DB", 5)
+# REDIS_CELERY_DB = os.environ.get("REDIS_CELERY_DB", 2)
+
 ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 
 TINYMCE_DEFAULT_CONFIG = {
@@ -138,7 +144,7 @@ CACHE_TTL = 5 * 1
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/1",
+        "LOCATION": f"redis://redis:6379/1",
         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
         "KEY_PREFIX": "example",
     }
@@ -150,11 +156,12 @@ CACHES = {
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DB_NAME"),
-        "USER": os.getenv("DB_USER"),
-        "PASSWORD": os.getenv("DB_PASSWORD"),
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT"),
+        "NAME": "myportfoliodb",
+        "USER": "postgres",
+        "PASSWORD": "postgres",
+        # "HOST": "locahost",
+        "HOST": "postgres",
+        "PORT": 5432,
     }
 }
 
@@ -163,7 +170,7 @@ DATABASES = {
 
 
 # Set Redis as Broker URL
-BROKER_URL = f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}/2"
+BROKER_URL = f"redis://redis:6379/2"
 
 # Set django-redis as celery result backend
 CELERY_RESULT_BACKEND = "django-db"

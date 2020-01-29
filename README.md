@@ -76,13 +76,17 @@ Note: The following services will not run (require docker containers)
 
 ### Local deployment with docker-compose (dev/test)
 ```
+$ cd app/
+$ source .env
 $ cd deployment/
 $ make rebuild-app-image
 $ make deploy-compose
 $ make services-health
 $ make login && make publish-app-image
+$ make services-down
 $ make clean-environment
 ```
+_Note: all the make commands above can be run with `make deploy-new-app-image`_
 
 Note: Travis CLI (.travis.yml) workflow performs automatically the steps describe above.
 For every push to master, the Docker-based continuous delivery workflow looks like this:
@@ -157,3 +161,8 @@ This assume the postgres container is up and running on the docker swarm manager
 $ cd cluster-management
 $ make swarm-backup-postgres
 ```
+
+## Potential improvement
+- Use conda to manage environment in app container
+- General clean up: comments etc.
+- 

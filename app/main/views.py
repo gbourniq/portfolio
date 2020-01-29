@@ -4,7 +4,9 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import HttpResponse, Http404
-from django.shortcuts import redirect, render, render_to_response
+from django.shortcuts import redirect, render
+
+# render_to_response
 from django.views.decorators.cache import cache_page
 from django.template import RequestContext
 
@@ -171,15 +173,23 @@ def goBackPage(request, code):
     )
 
 
-def handler404(request, exception, template_name="main/404.html"):
-    response = render_to_response("main/404.html")
-    response.status_code = 404
-    return response
+# def handler404(request, exception, template_name="main/404.html"):
+#     response = render_to_response("main/404.html")
+#     response.status_code = 404
+#     return response
 
 
-def handler500(request, *args, **argv):
-    response = render_to_response(
-        "main/500.html", {}, context_instance=RequestContext(request)
-    )
-    response.status_code = 500
-    return response
+# def handler500(request, *args, **argv):
+#     response = render_to_response(
+#         "main/500.html", {}, context_instance=RequestContext(request)
+#     )
+#     response.status_code = 500
+#     return response
+
+
+def handler404(request, exception):
+    return render(request, "main/404.html")
+
+
+def handler500(request):
+    return render(request, "main/500.html")
