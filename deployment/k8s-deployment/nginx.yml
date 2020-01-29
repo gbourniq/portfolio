@@ -50,12 +50,6 @@ spec:
         - name: config-volume
           mountPath: /etc/nginx/
         resources: {}
-        # readinessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: 443
-        #   initialDelaySeconds: 5
-        #   periodSeconds: 10
         livenessProbe:
           exec:
             command:
