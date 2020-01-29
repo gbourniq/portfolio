@@ -160,6 +160,10 @@ spec:
         - name: config-volume
           mountPath: /code/entrypoints/
           readOnly: false
+        # args:
+        # - sh
+        # - -c
+        # - sleep 3600
         command: ["sh"]
         args: ["/code/entrypoints/run_server.sh"]
         ports:
@@ -168,7 +172,7 @@ spec:
         livenessProbe:
           exec:
             command:
-            - bin/sh
+            - sh
             - -c
             - curl -f -s -S http://localhost:8080 || exit 1
           initialDelaySeconds: 20
@@ -253,22 +257,19 @@ spec:
         - name: config-volume
           mountPath: /code/entrypoints/
           readOnly: false
-        # command:
+        # args:
         # - sh
+        # - -c
         # - sleep 3600
-        args:
-        - sh
-        - -c
-        - sleep 3600
-        # command: ["sh"]
-        # args: ["/code/entrypoints/run_celery.sh"]
+        command: ["sh"]
+        args: ["/code/entrypoints/run_celery.sh"]
         ports:
         - containerPort: 8081
         resources: {}
         livenessProbe:
           exec:
             command:
-            - bin/sh
+            - sh
             - -c
             - ps | grep celery || exit 1
           initialDelaySeconds: 20

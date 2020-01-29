@@ -6,7 +6,8 @@ SHELL := /bin/bash
 include Makefile.settings
 
 # Executes a full workflow
-rebuild-app-image: remove-app-image clean-environment build-app-image
+deploy-new-app-image: rebuild-app-image deploy-compose services-health login publish-app-image services-down clean-environment
+rebuild-app-image: clean-environment build-app-image
 publish-app-image: tag/latest publish/latest
 deploy-compose: services-down clean-environment services-up
 swarm-all: services-down clean-environment stack-rm stack-deploy

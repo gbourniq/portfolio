@@ -45,14 +45,14 @@ ENV PYTHONUNBUFFERED=1
 
 # Environmnent variables for settings.py
 # PostgreSQL database connection details
-ENV DB_NAME=myportfoliodb
-ENV DB_USER=postgres
-ENV DB_PASSWORD=postgres
-ENV DB_HOST=postgres
-ENV DB_PORT=5432
+# ENV DB_NAME=myportfoliodb
+# ENV DB_USER=postgres
+# ENV DB_PASSWORD=postgres
+# ENV DB_HOST=postgres
+# ENV DB_PORT=5432
 # Redis for caching and message broker
-ENV REDIS_HOST=redis
-ENV REDIS_PORT=6379
+# ENV REDIS_HOST=redis
+# ENV REDIS_PORT=6379
 
 
 # Set working directory
