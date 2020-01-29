@@ -27,7 +27,6 @@ The application is composed of the following micro-services:
 - Celery for asynchronous tasks
 - Redis as a message broker and caching
 - Postgres to store web server data
-- (MongoDB to store image data?)
 
 In order to faciliate testing and deployment tasks, a full CI/CD workflow has been implemented using Travis CLI, Ansible, and Docker/Kubernetes.
 
@@ -115,12 +114,12 @@ $ make watch-containers (separate terminal)
 ```
 $ cd deployment/
 $ make stack-deploy
-$ make watch-containers (separatez terminal)
+$ make watch-containers (separate terminal)
 ```
 
 ### Ubuntu Deployment with Kubernetes (prod)
 ```
-Work in progress
+$ kubect apply -f deployment/k8s-deployment
 ```
 
 ## Automated Deployment Options
@@ -162,7 +161,7 @@ $ cd cluster-management
 $ make swarm-backup-postgres
 ```
 
-## Potential improvement
+
+##### Potential improvements
 - Use conda to manage environment in app container
-- General clean up: comments etc.
-- 
+- Use mongoDB to store image data
