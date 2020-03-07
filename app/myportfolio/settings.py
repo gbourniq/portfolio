@@ -23,8 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# NEED DEBUG = True when running locally (to display static files)
 # DEBUG = os.getenv("DEBUG")
-DEBUG = False
+DEBUG = True
 
 # Here we define where our redis service is running
 # REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
@@ -141,14 +142,14 @@ USE_TZ = True
 # Cache time to live is 15 mn.
 CACHE_TTL = 5 * 1
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://redis:6379/1",
-        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-        "KEY_PREFIX": "example",
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": f"redis://redis:6379/1",
+#         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+#         "KEY_PREFIX": "example",
+#     }
+# }
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -159,8 +160,7 @@ DATABASES = {
         "NAME": "myportfoliodb",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        # "HOST": "locahost",
-        "HOST": "postgres",
+        "HOST": os.getenv("DB_HOST"),
         "PORT": 5432,
     }
 }
@@ -170,7 +170,7 @@ DATABASES = {
 
 
 # Set Redis as Broker URL
-BROKER_URL = f"redis://redis:6379/2"
+# BROKER_URL = f"redis://redis:6379/2"
 
 # Set django-redis as celery result backend
 CELERY_RESULT_BACKEND = "django-db"
