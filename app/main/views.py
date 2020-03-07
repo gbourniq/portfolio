@@ -3,12 +3,11 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.http import HttpResponse, Http404
+from django.http import Http404
 from django.shortcuts import redirect, render
 
 # render_to_response
 from django.views.decorators.cache import cache_page
-from django.template import RequestContext
 
 from .forms import ContactForm
 from .models import Article, Category, SubCategory
@@ -16,10 +15,10 @@ from .services import (
     _get_articles_by_subcat_slug,
     _get_subcategories_by_cat_slug,
     _get_urls_for_subcategories,
-    _send_email,
+    _is_article_exist,
     _is_category_exist,
     _is_subcategory_exist,
-    _is_article_exist,
+    _send_email,
 )
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
@@ -171,20 +170,6 @@ def goBackPage(request, code):
     return render(
         request, "main/gobackpage.html", {"message": msg_mapping[code]}
     )
-
-
-# def handler404(request, exception, template_name="main/404.html"):
-#     response = render_to_response("main/404.html")
-#     response.status_code = 404
-#     return response
-
-
-# def handler500(request, *args, **argv):
-#     response = render_to_response(
-#         "main/500.html", {}, context_instance=RequestContext(request)
-#     )
-#     response.status_code = 500
-#     return response
 
 
 def handler404(request, exception):
