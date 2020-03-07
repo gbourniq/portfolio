@@ -1,7 +1,39 @@
-# https://ljvmiranda921.github.io/notebook/2018/06/21/precommits-using-black-and-flake8/
 repos:
--   repo: https://github.com/ambv/black
-    rev: stable
+  - repo: local
     hooks:
-    - id: black
-      language_version: python3.6
+      - id: autoflake
+        name: autoflake
+        stages: [commit]
+        language: system
+        entry: autoflake
+        args: ['--in-place', '--remove-all-unused-imports', '--remove-unused-variables']
+        types: [python]
+
+      - id: isort
+        name: isort
+        stages: [commit]
+        language: system
+        entry: isort
+        args: ["-m", "3", "-tc", "-w", "88"]
+        types: [python]
+
+      - id: black
+        name: black
+        stages: [commit]
+        language: system
+        entry: black
+        types: [python]
+
+      # - id: prepend-jira
+      #   name: prepend-jira
+      #   stages: [commit-msg]
+      #   language: system
+      #   entry: scripts/prepend_jira_id_to_commit_message.sh
+
+      - id: pytest
+        name: pytest
+        stages: [push]
+        language: system
+        entry: pytest
+        args: ["-qx", "-Wignore", "--testmon"]
+        types: [python]
