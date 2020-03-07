@@ -1,6 +1,7 @@
 # TEMP
 /app/tests/templates/*
 /documentation
+/package
 
 # Add any directories, files, or patterns you don't want to be tracked by version control
 app/mediafiles/
