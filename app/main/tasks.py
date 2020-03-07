@@ -1,8 +1,9 @@
-from celery import shared_task
-import time
-import socket
-from django.core.mail import send_mail
 import logging
+import socket
+import time
+
+from celery import shared_task
+from django.core.mail import send_mail
 
 logger = logging.getLogger(__name__)
 

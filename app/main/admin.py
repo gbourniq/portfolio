@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Article, SubCategory, Category
-from tinymce.widgets import TinyMCE
 from django.db import models
+from tinymce.widgets import TinyMCE
+
+from .models import Article, Category, SubCategory
 
 
 class ArticleAdmin(admin.ModelAdmin):

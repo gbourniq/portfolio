@@ -1,7 +1,6 @@
 # from unittest.mock import Mock
 import pytest
 
-
 # from main.models import Category, SubCategory, Article
 
 

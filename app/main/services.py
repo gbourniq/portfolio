@@ -1,8 +1,7 @@
 import logging
 from typing import Dict, List, Union
 
-from django.contrib import messages
-from django.core.mail import BadHeaderError, send_mail
+from django.core.mail import BadHeaderError
 
 from .forms import ContactForm
 from .models import Article, Category, SubCategory

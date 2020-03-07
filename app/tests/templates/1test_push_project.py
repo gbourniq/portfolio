@@ -6,7 +6,6 @@ from unittest.mock import Mock
 import pytest
 
 from moltres.client.entities.question import Question
-from moltres.data_objects import CheatSheet
 from tests.mocks import MockProjectClient
 
 
