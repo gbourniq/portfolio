@@ -146,7 +146,7 @@ python = ">=3.4"
 version = ">=1.20,<1.26"
 
 [[package]]
-category = "main"
+category = "dev"
 description = "Version-bump your software with a single command!"
 name = "bump2version"
 optional = false
@@ -770,7 +770,7 @@ python-versions = ">=3.6"
 version = "3.1.0"
 
 [metadata]
-content-hash = "494bb831e35549a5964e1388c0f7d1aeda7b67fc7f210eae6a3331c2af0ed4d9"
+content-hash = "fefbcf3aec86fcf11b75e9bf98a02cebc29512d9efe7e1dd713b626d3cc5d081"
 python-versions = "3.6.9"
 
 [metadata.hashes]
