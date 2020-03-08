@@ -65,6 +65,11 @@ FROM base_build as final_build
 # Copy $HOME directory and ignore the copy layer from installer_build
 COPY --from=installer_build $PORTFOLIO_HOME $PORTFOLIO_HOME
 
+# Install psycopg2 dependencies
+RUN apk update \
+    && apk add --no-cache libpq jpeg-dev zlib-dev \
+    && apk add --no-cache curl
+    
 # Copy dependencies built from previous stage build
 COPY --from=installer_build $PORTFOLIO_CODE/wheels /wheels
 RUN pip install --upgrade pip \

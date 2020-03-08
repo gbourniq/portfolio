@@ -29,3 +29,6 @@ cov_html/
 # ignore environment variables and logs 
 app/.env
 app/info.log
+
+# ignore sensitive information: certs, .env, etc.
+deployment/docker-deployment/nginx/certs/*

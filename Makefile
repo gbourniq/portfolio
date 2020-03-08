@@ -69,15 +69,13 @@ services-up:
 	@ $(call check_service_health,$(COMPOSE_ARGS),redis)
 	@ $(call check_service_health,$(COMPOSE_ARGS),app)
 	@ $(call check_service_health,$(COMPOSE_ARGS),worker)
-	@ $(call check_service_health,$(COMPOSE_ARGS),nginx)
 	${SUCCESS} "All services are healthy"
-	${SUCCESS} "Client REST endpoint is running with NGINX at http://$(DOCKER_HOST_IP):443"
 
 # Superuser to be created the first time the app is deployed via docker-compose (fresh PostgreSQL)
 .PHONY: create-superuser
 create-superuser:
 	${INFO} "Creating initial temporary superuser: username: admin, password: pass..."
-	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | docker exec -i app python manage.py shell
+	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | docker exec -i app python app/manage.py shell
 	${SUCCESS} "Superuser created"
 
 .PHONY: services-down
@@ -102,6 +100,11 @@ services-down:
 # 	${INFO} "Watch containers lifecycle..."
 # 	@ watch -n 2 'docker ps --format "table {{.ID}}\t {{.Image}}\t {{.Status}}"'
 
+
+
+
+
+###### FUNCTIONS ######
 
 # Service health functions
 # Syntax: $(call check_service_health,<docker-compose-environment>,<service-name>)
