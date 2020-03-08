@@ -26,7 +26,6 @@ __pycache__/
 coverage_html_report/
 cov_html/
 
-# ignore environment variables
+# ignore environment variables and logs 
 app/.env
-.env
 app/info.log

@@ -1,136 +1,136 @@
-version: "3.5"
+# version: "3.5"
 
-services:
-  nginx:
-    image: nginx:1.17-alpine
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 1
-    volumes: 
-        - ./nginx/conf.d:/etc/nginx/conf.d
-        - /data/staticfiles:/www/staticfiles/
-        - /data/mediafiles:/www/mediafiles/
-        - /data/certs:/etc/nginx/certs
-    healthcheck:
-      test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
-      interval: 60s
-      timeout: 10s
-      retries: 5
-    ports: 
-      - "80:80"
-      - "443:443"
-    networks:
-      - proxy
+# services:
+#   nginx:
+#     image: nginx:1.17-alpine
+#     deploy:
+#       replicas: 1
+#       update_config:
+#         parallelism: 1
+#     volumes: 
+#         - ./nginx/conf.d:/etc/nginx/conf.d
+#         - /data/staticfiles:/www/staticfiles/
+#         - /data/mediafiles:/www/mediafiles/
+#         - /data/certs:/etc/nginx/certs
+#     healthcheck:
+#       test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
+#       interval: 60s
+#       timeout: 10s
+#       retries: 5
+#     ports: 
+#       - "80:80"
+#       - "443:443"
+#     networks:
+#       - proxy
       
-  app:
-    image: docker.io/gbournique/myportfolio_app:latest
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 1
-    environment:
-      DEBUG: ${DEBUG}
-      ALLOWED_HOSTS: "*"
-      SECRET_KEY: ${SECRET_KEY}
-      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
-      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
-    volumes:
-      - ./app/:/code/entrypoints/
-      - /data/staticfiles:/code/staticfiles/
-      - /data/mediafiles:/code/mediafiles/
-      - /data/redisdata:/data
-    healthcheck:
-      test: curl -f -s -S http://localhost:8080 || exit 1
-      interval: 30s
-      timeout: 30s
-      retries: 5
-    expose: 
-      - 8080
-    networks:
-      - backend
-      - proxy
-    entrypoint:
-      - ./entrypoints/run_server.sh
+#   app:
+#     image: docker.io/gbournique/myportfolio_app:latest
+#     deploy:
+#       replicas: 1
+#       update_config:
+#         parallelism: 1
+#     environment:
+#       DEBUG: ${DEBUG}
+#       ALLOWED_HOSTS: "*"
+#       SECRET_KEY: ${SECRET_KEY}
+#       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+#       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+#     volumes:
+#       - ./app/:/code/entrypoints/
+#       - /data/staticfiles:/code/staticfiles/
+#       - /data/mediafiles:/code/mediafiles/
+#       - /data/redisdata:/data
+#     healthcheck:
+#       test: curl -f -s -S http://localhost:8080 || exit 1
+#       interval: 30s
+#       timeout: 30s
+#       retries: 5
+#     expose: 
+#       - 8080
+#     networks:
+#       - backend
+#       - proxy
+#     entrypoint:
+#       - ./entrypoints/run_server.sh
 
-  worker:
-    image: docker.io/gbournique/myportfolio_app:latest
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 1
-    environment:
-      DEBUG: ${DEBUG}
-      ALLOWED_HOSTS: "*"
-      SECRET_KEY: ${SECRET_KEY}
-      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
-      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
-    volumes:
-      - ./app/:/code/entrypoints/
-      - /data/staticfiles:/code/staticfiles/
-      - /data/mediafiles:/code/mediafiles/
-      - /data/redisdata:/data
-    healthcheck:
-      test: ps | grep celery || exit 1
-      interval: 60s
-      timeout: 30s
-      retries: 5
-    expose: 
-      - 8081
-    networks:
-      - backend
-      - proxy
-    entrypoint:
-      - ./entrypoints/run_celery.sh
+#   worker:
+#     image: docker.io/gbournique/myportfolio_app:latest
+#     deploy:
+#       replicas: 1
+#       update_config:
+#         parallelism: 1
+#     environment:
+#       DEBUG: ${DEBUG}
+#       ALLOWED_HOSTS: "*"
+#       SECRET_KEY: ${SECRET_KEY}
+#       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+#       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+#     volumes:
+#       - ./app/:/code/entrypoints/
+#       - /data/staticfiles:/code/staticfiles/
+#       - /data/mediafiles:/code/mediafiles/
+#       - /data/redisdata:/data
+#     healthcheck:
+#       test: ps | grep celery || exit 1
+#       interval: 60s
+#       timeout: 30s
+#       retries: 5
+#     expose: 
+#       - 8081
+#     networks:
+#       - backend
+#       - proxy
+#     entrypoint:
+#       - ./entrypoints/run_celery.sh
 
-  postgres:
-    image: postgres:12-alpine
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 1
-    environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "myportfoliodb"
-      POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
-    volumes:
-      - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
-      - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
-      - /data/pgdata:/var/lib/postgresql/data/ 
-      - /data/pglogs:/var/log/postgresql/
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    expose:
-      - 5432
-    networks:
-      - backend
+#   postgres:
+#     image: postgres:12-alpine
+#     deploy:
+#       replicas: 1
+#       update_config:
+#         parallelism: 1
+#     environment:
+#       POSTGRES_USER: "postgres"
+#       POSTGRES_PASSWORD: "postgres"
+#       POSTGRES_DB: "myportfoliodb"
+#       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
+#     volumes:
+#       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
+#       - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
+#       - /data/pgdata:/var/lib/postgresql/data/ 
+#       - /data/pglogs:/var/log/postgresql/
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U postgres"]
+#       interval: 10s
+#       timeout: 5s
+#       retries: 10
+#     expose:
+#       - 5432
+#     networks:
+#       - backend
 
-  redis:
-    image: redis:alpine
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 1
-    volumes:
-      - ./redis:/healthcheck/
-      - /data/redisdata:/data
-    healthcheck:
-      test: sh /healthcheck/redis_healthcheck.sh
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    expose:
-      - 6379
-    networks:
-      - backend
+#   redis:
+#     image: redis:alpine
+#     deploy:
+#       replicas: 1
+#       update_config:
+#         parallelism: 1
+#     volumes:
+#       - ./redis:/healthcheck/
+#       - /data/redisdata:/data
+#     healthcheck:
+#       test: sh /healthcheck/redis_healthcheck.sh
+#       interval: 10s
+#       timeout: 5s
+#       retries: 10
+#     expose:
+#       - 6379
+#     networks:
+#       - backend
 
 
-networks:
-  backend:
-    driver: overlay
-  proxy:
-    driver: overlay
+# networks:
+#   backend:
+#     driver: overlay
+#   proxy:
+#     driver: overlay

@@ -17,9 +17,14 @@ exclude = '''
 
 [tool.poetry]
 name = "portfolio"
-version = "1.0.0"
+version = "0.1.0"
 description = "Personal Portfolio Project"
 authors = ["Guillaume Bournique <gbournique@gmail.com>"]
+keywords = ["portfolio"]
+
+packages = [
+    { include = "portfolio", format = "wheel" }
+]
 
 [tool.poetry.dependencies]
 python = "3.6.9"
@@ -53,4 +58,5 @@ pytest-testmon = "^1.0"
 setuptools_scm = "^3.5"
 
 [build-system]
-requires = ["setuptools>=40.8.0", "wheel", "tomlkit", "poetry>=0.12.16", "cython"] # PEP 518
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

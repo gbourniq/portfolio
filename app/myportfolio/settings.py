@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+import static_settings
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,20 +22,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = static_settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # NEED DEBUG = True when running locally (to display static files)
-# DEBUG = os.getenv("DEBUG")
-DEBUG = True
+DEBUG = static_settings.DEBUG
 
-# Here we define where our redis service is running
-# REDIS_HOST = os.environ.get("REDIS_HOST", "redis")
-# REDIS_PORT = os.environ.get("REDIS_PORT", 6379)
-# REDIS_DJANGO_CACHE_DB = os.environ.get("REDIS_DJANGO_CACHE_DB", 5)
-# REDIS_CELERY_DB = os.environ.get("REDIS_CELERY_DB", 2)
-
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+ALLOWED_HOSTS = static_settings.ALLOWED_HOSTS
 
 TINYMCE_DEFAULT_CONFIG = {
     "height": 360,
@@ -139,17 +134,19 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Cache time to live is 15 mn.
-CACHE_TTL = 5 * 1
+# Cache configuration
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": f"redis://redis:6379/1",
-#         "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
-#         "KEY_PREFIX": "example",
-#     }
-# }
+# Cache time to live is 15 mn.
+if static_settings.REDIS_HOST:
+    CACHE_TTL = 5 * 1
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": f"redis://{static_settings.REDIS_HOST}:{static_settings.REDIS_PORT}/1",
+            "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+            "KEY_PREFIX": "example",
+        }
+    }
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -160,8 +157,8 @@ DATABASES = {
         "NAME": "myportfoliodb",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        "HOST": os.getenv("DB_HOST"),
-        "PORT": 5432,
+        "HOST": static_settings.DB_HOST,
+        "PORT": static_settings.DB_PORT,
     }
 }
 
@@ -169,8 +166,11 @@ DATABASES = {
 # https://blog.syncano.rocks/configuring-running-django-celery-docker-containers-pt-1/
 
 
-# Set Redis as Broker URL
-# BROKER_URL = f"redis://redis:6379/2"
+if static_settings.REDIS_HOST:
+    # Set Redis as Broker URL
+    BROKER_URL = (
+        f"redis://{static_settings.REDIS_HOST}:{static_settings.REDIS_PORT}/2"
+    )
 
 # Set django-redis as celery result backend
 CELERY_RESULT_BACKEND = "django-db"
@@ -212,12 +212,13 @@ STATICFILES_DIRS = (
 )
 
 
+# if EMAIL
 # Email parameters
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = static_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = static_settings.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 10
 

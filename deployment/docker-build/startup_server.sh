@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd /home/portfolio/app/
+
 python manage.py collectstatic --no-input -v 0
 python manage.py makemigrations
 python manage.py migrate
