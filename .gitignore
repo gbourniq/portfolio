@@ -14,7 +14,9 @@ __pycache__/
 .idea/
 *.DS_Store
 /logs/
+.vscode
 *.vscode
+app/.vscode/settings.json
 
 # ignore python compiled bytecode files
 *.pyc
@@ -32,3 +34,4 @@ app/info.log
 
 # ignore sensitive information: certs, .env, etc.
 deployment/docker-deployment/nginx/certs/*
+
