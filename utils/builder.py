@@ -45,7 +45,7 @@ EXCLUDE_MODULES = [
     "bin",
     "cluster-management",
     "deployment",
-    "helpers",
+    "utils",
     "__pycache__",
     ".git",
     ".idea",

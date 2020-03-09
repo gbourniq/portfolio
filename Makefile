@@ -48,7 +48,7 @@ env-activate-docker:
 .PHONY: portfolio
 portfolio:
 	${INFO} "Building portfolio package"
-	python helpers/builder.py --name ${ENVIRONMENT_NAME}
+	python utils/builder.py --name ${ENVIRONMENT_NAME}
 
 ### DOCKER ###
 .PHONY: latest
