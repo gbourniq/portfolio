@@ -75,7 +75,7 @@ services:
       - backend
       - proxy
     entrypoint:
-      - /home/portfolio/app/startup_worker.sh
+      - /home/portfolio/app/startup_celery.sh
 
   postgres:
     image: postgres:12-alpine

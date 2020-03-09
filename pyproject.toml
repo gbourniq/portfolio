@@ -17,14 +17,13 @@ exclude = '''
 
 [tool.poetry]
 name = "portfolio"
-version = "0.1.0"
+version = "1.0.0"
 description = "Personal Portfolio Project"
 authors = ["Guillaume Bournique <gbournique@gmail.com>"]
+repository = "https://github.com/gbourniq/portfolio"
+readme = "README.md"
 keywords = ["portfolio"]
 
-packages = [
-    { include = "portfolio", format = "wheel" }
-]
 
 [tool.poetry.dependencies]
 python = "3.6.9"

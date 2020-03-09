@@ -7,15 +7,15 @@ YELLOW := "\e[1;33m"
 GREEN := "\033[32m"
 NC := "\e[0m"
 INFO := @bash -c 'printf $(YELLOW); echo "[INFO] $$1"; printf $(NC)' MESSAGE
-INSTRUCTION := @bash -c 'printf $(NC); echo "   $$1"; printf $(NC)' MESSAGE
+MESSAGE := @bash -c 'printf $(NC); echo "$$1"; printf $(NC)' MESSAGE
 SUCCESS := @bash -c 'printf $(GREEN); echo "[SUCCESS] $$1"; printf $(NC)' MESSAGE
 WARNING := @bash -c 'printf $(RED); echo "[WARNING] $$1"; printf $(NC)' MESSAGE
 
 IMAGE=docker.io/gbournique/myportfolio_app
 ENVIRONMENT_NAME=portfolio
-PROJECT_NAME=portfolio
 PORTFOLIO_DOCKERFILE=deployment/docker-build/app.Dockerfile
-COMPOSE_FILE=deployment/docker-deployment/docker-compose.yml
+PROJECT_NAME=portfolio
+COMPOSE_FILE=docker-compose.yml
 COMPOSE_ARGS = -p $(PROJECT_NAME) -f $(COMPOSE_FILE)
 
 ### REPO ###
@@ -62,13 +62,17 @@ latest:
 .PHONY: services-up
 services-up:
 	${INFO} "Starting docker-compose services..."
-	@ docker-compose $(COMPOSE_ARGS) up -d
+	@ cd deployment/docker-deployment && docker-compose $(COMPOSE_ARGS) up -d
 	${SUCCESS} "Services started successfully"
 	${INFO} "Checking services health..."
-	@ $(call check_service_health,$(COMPOSE_ARGS),postgres)
-	@ $(call check_service_health,$(COMPOSE_ARGS),redis)
-	@ $(call check_service_health,$(COMPOSE_ARGS),app)
-	@ $(call check_service_health,$(COMPOSE_ARGS),worker)
+	@ cd deployment/docker-deployment && $(call check_service_health,$(COMPOSE_ARGS),postgres)
+	${MESSAGE} "POSTGRES OK."
+	@ cd deployment/docker-deployment && $(call check_service_health,$(COMPOSE_ARGS),redis)
+	${MESSAGE} "REDIS OK."
+	@ cd deployment/docker-deployment && $(call check_service_health,$(COMPOSE_ARGS),app)
+	${MESSAGE} "WEB SERVER OK."
+	@ cd deployment/docker-deployment && $(call check_service_health,$(COMPOSE_ARGS),worker)
+	${MESSAGE} "CELERY WORKER OK."
 	${SUCCESS} "All services are healthy"
 
 # Superuser to be created the first time the app is deployed via docker-compose (fresh PostgreSQL)
@@ -81,7 +85,7 @@ create-superuser:
 .PHONY: services-down
 services-down:
 	${INFO} "Stopping and removing docker-compose services..."
-	@ docker-compose $(COMPOSE_ARGS) down --remove-orphans
+	@ cd deployment/docker-deployment && docker-compose $(COMPOSE_ARGS) down --remove-orphans
 	${SUCCESS} "Services removed successfully"
 
 
