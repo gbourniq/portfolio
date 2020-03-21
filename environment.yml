@@ -4,3 +4,4 @@ channels:
   - conda-forge
 dependencies:
   - python=3.6.9
+  - poetry=1.0.5

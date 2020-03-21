@@ -165,3 +165,4 @@ $ make swarm-backup-postgres
 ##### Potential improvements
 - Use conda to manage environment in app container
 - Use mongoDB to store image data
+- poetry psy 2.7.1

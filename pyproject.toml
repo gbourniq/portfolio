@@ -27,21 +27,19 @@ keywords = ["portfolio"]
 
 [tool.poetry.dependencies]
 python = "3.6.9"
-ansible = "2.9.2"
-awscli = "1.16.309"
-boto = "2.49.0"
-botocore = "1.13.45"
-celery = "4.4.0"
-django = "2.2.6"
-django-celery-results = "1.1.2"
-django-redis = "4.11.0"
-django-tinymce4-lite = "1.7.5"
-Pillow = "6.2.1"
-psycopg2 = "2.7.1"
+django = { version = "^2.2.6", extras = [ "celery" ] }
+django-celery-results = "^1.1.2"
+django-redis = "^4.11.0"
+django-tinymce4-lite = "^1.7.5"
+Pillow = "^6.2.1"
 
 
 [tool.poetry.dev-dependencies]
 autoflake = "^1.3"
+ansible = "2.9.2"
+awscli = "1.16.309"
+boto = "2.49.0"
+botocore = "1.13.45"
 black = "^19.3b0"
 bump2version = "0.5.11"
 cython = "^0.29"                                # Apache
@@ -57,5 +55,4 @@ pytest-testmon = "^1.0"
 setuptools_scm = "^3.5"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry>=1.0.0"]
