@@ -51,7 +51,7 @@ $ conda env activate portfolio-env
 |`EMAIL_HOST_USER`             | Email addr. for users to send messages (contact page) (optional) |
 |`EMAIL_HOST_PASSWORD`         | Email address password (optional)                                |
 
-3. Create a local Postgres database `myportfoliodb`
+3. Create a local Postgres database `portfoliodb`
 
 ### Running the app locally (dev/test)
 Running the server locally without external docker services

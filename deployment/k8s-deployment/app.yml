@@ -35,7 +35,7 @@ data:
     python manage.py collectstatic --no-input -v 0
     python manage.py makemigrations
     python manage.py migrate
-    gunicorn myportfolio.wsgi:application --bind 0.0.0.0:8080
+    gunicorn portfolio.wsgi:application --bind 0.0.0.0:8080
 
 ---
 
@@ -48,7 +48,7 @@ data:
   run_celery.sh: |
     #!/bin/sh
     cd /code/
-    celery --app=myportfolio.celeryconf worker --loglevel=info --concurrency=10 -n worker1.%h
+    celery --app=portfolio.celeryconf worker --loglevel=info --concurrency=10 -n worker1.%h
 
 ---
 
@@ -119,7 +119,7 @@ spec:
           type: DirectoryOrCreate
       containers:
       - name: app
-        image: docker.io/gbournique/myportfolio_app:latest
+        image: docker.io/gbournique/portfolio_app:latest
         imagePullPolicy: IfNotPresent
         env:
         - name: DEBUG
@@ -216,7 +216,7 @@ spec:
           type: DirectoryOrCreate
       containers:
       - name: worker
-        image: docker.io/gbournique/myportfolio_app:latest
+        image: docker.io/gbournique/portfolio_app:latest
         imagePullPolicy: IfNotPresent
         env:
         - name: DEBUG

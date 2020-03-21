@@ -5,7 +5,7 @@ metadata:
   creationTimestamp: null
   name: postgres-env
 data:
-  POSTGRES_DB: myportfoliodb
+  POSTGRES_DB: portfoliodb
   POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
   POSTGRES_PASSWORD: postgres
   POSTGRES_USER: postgres

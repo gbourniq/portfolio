@@ -24,7 +24,7 @@ services:
       - proxy
       
   app:
-    image: docker.io/gbournique/myportfolio_app:latest
+    image: docker.io/gbournique/portfolio_app:latest
     deploy:
       replicas: 1
       update_config:
@@ -49,7 +49,7 @@ services:
       - /home/portfolio/app/startup_server.sh
 
   worker:
-    image: docker.io/gbournique/myportfolio_app:latest
+    image: docker.io/gbournique/portfolio_app:latest
     deploy:
       replicas: 1
       update_config:
@@ -86,7 +86,7 @@ services:
     environment:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "postgres"
-      POSTGRES_DB: "myportfoliodb"
+      POSTGRES_DB: "portfoliodb"
       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
     volumes:
       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro

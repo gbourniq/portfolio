@@ -25,7 +25,7 @@ services:
       - app
       
   app:
-    image: docker.io/gbournique/myportfolio_app:latest
+    image: docker.io/gbournique/portfolio_app:latest
     container_name: app
     restart: "no"
     env_file:
@@ -54,7 +54,7 @@ services:
       - redis
 
   worker:
-    image: docker.io/gbournique/myportfolio_app:latest
+    image: docker.io/gbournique/portfolio_app:latest
     container_name: worker
     restart: "no"
     env_file:
@@ -83,7 +83,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: myportfoliodb
+      POSTGRES_DB: portfoliodb
       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
     volumes:
       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro

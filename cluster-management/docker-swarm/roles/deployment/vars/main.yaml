@@ -8,7 +8,7 @@ DOCKER_GROUP: docker
 DOCKER_COMPOSE_VERSION: 1.24.1
 
 # Variables for app deployment 
-REPO_LOCAL_PATH: /home/ubuntu/myportfolio
+REPO_LOCAL_PATH: /home/ubuntu/portfolio
 DOCKER_REGISTRY: docker.io
 DOCKER_USER: gbournique
 DOCKER_PASSWORD: !vault |
@@ -27,7 +27,7 @@ GITHUB_PASSWORD: !vault |
             3435363830393133650a666262363264343965636664353331363831313664353365613066353166
             3066
 GITHUB_REPO_NAME: portfolio
-STACK_NAME: myportfolio
+STACK_NAME: portfolio
 
 DEBUG: False
 

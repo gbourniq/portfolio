@@ -11,7 +11,7 @@ MESSAGE := @bash -c 'printf $(NC); echo "$$1"; printf $(NC)' MESSAGE
 SUCCESS := @bash -c 'printf $(GREEN); echo "[SUCCESS] $$1"; printf $(NC)' MESSAGE
 WARNING := @bash -c 'printf $(RED); echo "[WARNING] $$1"; printf $(NC)' MESSAGE
 
-IMAGE=docker.io/gbournique/myportfolio_app
+IMAGE=docker.io/gbournique/portfolio_app
 ENVIRONMENT_NAME=portfolio
 PORTFOLIO_DOCKERFILE=deployment/docker-build/app.Dockerfile
 PROJECT_NAME=portfolio
@@ -92,12 +92,12 @@ services-down:
 ### DOCKER STACK ###
 # stack-deploy:
 # 	${INFO} "Deploying stack..."
-# 	@ docker stack deploy -c docker-deployment/stack.yml myportfolio
+# 	@ docker stack deploy -c docker-deployment/stack.yml portfolio
 # 	${SUCCESS} "Stack deployment complete..."
 
 # stack-rm:
 # 	${INFO} "Removing stack..."
-# 	@ docker stack rm myportfolio || true 
+# 	@ docker stack rm portfolio || true 
 # 	${SUCCESS} "Stack remove complete..."
 
 # watch-containers:

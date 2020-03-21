@@ -2,7 +2,7 @@
 # This playbook contains all actions that will be run on "local" host.
 
 - name: Running postgres backup script
-  shell: cd {{ REPO_LOCAL_PATH }}/cluster-management/utils && bash backup-postgres.sh myportfolio_postgres myportfoliodb
+  shell: cd {{ REPO_LOCAL_PATH }}/cluster-management/utils && bash backup-postgres.sh portfoliodb_postgres portfoliodb
   register: cmdln
   ignore_errors: yes
   tags:

@@ -16,7 +16,7 @@ database_name=$2
 date=$(date +%Y-%m-%d"_"%H_%M_%S)
 backup_filename="${database_name}_${date}.sql"
 backup_filename_zipped="${backup_filename}.gz"
-s3_location="s3://guillaume.bournique/myportfolio-postgres-backup/"
+s3_location="s3://guillaume.bournique/portfolio-postgres-backup/"
 
 container_id=$(docker ps | grep $service_name | awk '{print $1}')
 

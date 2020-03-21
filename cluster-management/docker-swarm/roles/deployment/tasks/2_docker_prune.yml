@@ -1,13 +1,13 @@
 # This playbook contains docker actions that will be run on "remote" host.
 
 - name: Running postgres backup script
-  shell: cd {{ REPO_LOCAL_PATH }}/cluster-management/utils && bash backup-postgres.sh myportfolio_postgres myportfoliodb
+  shell: cd {{ REPO_LOCAL_PATH }}/cluster-management/utils && bash backup-postgres.sh portfoliodb_postgres portfoliodb
   register: cmdln
   ignore_errors: yes
   tags:
     - docker-prune
 
-- name: Remove running myportfolio stack
+- name: Remove running portfolio stack
   shell: docker stack rm {{ STACK_NAME }} 2>/dev/null
   register: cmdln
   failed_when: "cmdln.rc == 2"
