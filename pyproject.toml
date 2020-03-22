@@ -24,23 +24,30 @@ repository = "https://github.com/gbourniq/portfolio"
 readme = "README.md"
 keywords = ["portfolio"]
 
-
 [tool.poetry.dependencies]
-python = "3.6.9"
-django = { version = "^2.2.6", extras = [ "celery" ] }
-django-celery-results = "^1.1.2"
-django-redis = "^4.11.0"
-django-tinymce4-lite = "^1.7.5"
-Pillow = "^6.2.1"
-
+python = "^3.8"
+setuptools = "*"
+requests = "*"
+celery = "^4"
+django = "^3"
+django-celery-results = "1.0.4"
+django-redis = "^4.10"
+django-redis-cache = "2.1.0"
+django-tinymce4-lite = "1.7.5"
+gunicorn = "^19.9"
+jsonschema = "*"
+redis = "^3"
+pillow = "^7.0.0"
+psycopg2 = "^2.8.4"
+isort = "4.3.4"
 
 [tool.poetry.dev-dependencies]
-autoflake = "^1.3"
 ansible = "2.9.2"
 awscli = "1.16.309"
+autoflake = "^1.3"
+black = "^19.3b0"
 boto = "2.49.0"
 botocore = "1.13.45"
-black = "^19.3b0"
 bump2version = "0.5.11"
 cython = "^0.29"                                # Apache
 isort = "^4.3.4"
@@ -56,3 +63,4 @@ setuptools_scm = "^3.5"
 
 [build-system]
 requires = ["poetry>=1.0.0"]
+build-backend = "poetry.masonry.api"

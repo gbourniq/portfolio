@@ -2,9 +2,14 @@
 
 cd /home/portfolio/app/
 
+echo "Collecting static files"
 python manage.py collectstatic --no-input -v 0
-python manage.py makemigrations
+
+echo "Running migrations"
+python manage.py makemigrations main
 python manage.py migrate
+
+echo "Starting webserver"
 # python manage.py runserver 0.0.0.0:8080 #dev
 gunicorn portfolio.wsgi:application --bind 0.0.0.0:8080 # prod
 

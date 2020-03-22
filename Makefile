@@ -11,12 +11,12 @@ MESSAGE := @bash -c 'printf $(NC); echo "$$1"; printf $(NC)' MESSAGE
 SUCCESS := @bash -c 'printf $(GREEN); echo "[SUCCESS] $$1"; printf $(NC)' MESSAGE
 WARNING := @bash -c 'printf $(RED); echo "[WARNING] $$1"; printf $(NC)' MESSAGE
 
-IMAGE=docker.io/gbournique/portfolio_app
 ENVIRONMENT_NAME=portfolio
 PORTFOLIO_DOCKERFILE=deployment/docker-build/app.Dockerfile
 PROJECT_NAME=portfolio
 COMPOSE_FILE=docker-compose.yml
 COMPOSE_ARGS = -p $(PROJECT_NAME) -f $(COMPOSE_FILE)
+POETRY_VERSION=1.0.5
 
 ### REPO ###
 .PHONY: pre-commit
@@ -34,16 +34,6 @@ env-create:
 	@poetry install
 	${SUCCESS} "Success"
 
-.PHONY: env-activate-local
-env-activate-local:
-	@source app/.env
-	${SUCCESS} "Sourced environment variables for local development"
-
-.PHONY: env-activate-docker
-env-activate-docker:
-	@source deployment/docker-deployment/.env
-	${SUCCESS} "Sourced environment variables for docker deployment"
-
 ### PACKAGE ###
 .PHONY: portfolio
 portfolio:
@@ -53,10 +43,17 @@ portfolio:
 ### DOCKER ###
 .PHONY: latest
 latest:
-	${INFO} "Building docker image ${IMAGE}:latest"
-	@docker build -f $(PORTFOLIO_DOCKERFILE) -t ${IMAGE} --build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz .
+	${INFO} "Building docker image ${PORTFOLIO_IMAGE}:latest"
+	@ docker build -f $(PORTFOLIO_DOCKERFILE) -t ${PORTFOLIO_IMAGE} \
+		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
+		--build-arg POETRY_VERSION=$(POETRY_VERSION) \
+		--build-arg POETRY_LOCK_FILE=./poetry.lock \
+		--build-arg PYPROJECT_FILE=./pyproject.toml \
+		--build-arg CELERY_STARTUP=./deployment/docker-build/startup_celery.sh \
+		--build-arg SERVER_STARTUP=./deployment/docker-build/startup_server.sh
+
 	# @echo 'y' | docker image prune
-	${SUCCESS} "${IMAGE}:latest built successfully"
+	${SUCCESS} "${PORTFOLIO_IMAGE}:latest built successfully"
 
 ### DOCKER COMPOSE ###
 .PHONY: services-up
@@ -87,23 +84,6 @@ services-down:
 	${INFO} "Stopping and removing docker-compose services..."
 	@ cd deployment/docker-deployment && docker-compose $(COMPOSE_ARGS) down --remove-orphans
 	${SUCCESS} "Services removed successfully"
-
-
-### DOCKER STACK ###
-# stack-deploy:
-# 	${INFO} "Deploying stack..."
-# 	@ docker stack deploy -c docker-deployment/stack.yml portfolio
-# 	${SUCCESS} "Stack deployment complete..."
-
-# stack-rm:
-# 	${INFO} "Removing stack..."
-# 	@ docker stack rm portfolio || true 
-# 	${SUCCESS} "Stack remove complete..."
-
-# watch-containers:
-# 	${INFO} "Watch containers lifecycle..."
-# 	@ watch -n 2 'docker ps --format "table {{.ID}}\t {{.Image}}\t {{.Status}}"'
-
 
 
 

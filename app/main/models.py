@@ -26,7 +26,10 @@ class SubCategory(models.Model):
     image = models.ImageField(upload_to=UPLOADS_FOLDER_PATH)
     subcategory_slug = models.CharField(max_length=200, default=1)
     category_name = models.ForeignKey(
-        Category, default=1, verbose_name="Category", on_delete="SET_DEFAULT"
+        Category,
+        default=1,
+        verbose_name="Category",
+        on_delete=models.SET_DEFAULT,
     )
 
     class Meta:
@@ -49,7 +52,7 @@ class Article(models.Model):
         SubCategory,
         default=1,
         verbose_name="SubCategory",
-        on_delete="SET_DEFAULT",
+        on_delete=models.SET_DEFAULT,
     )
 
     class Meta:

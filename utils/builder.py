@@ -4,15 +4,10 @@ import sys
 import tarfile
 from argparse import ArgumentParser
 from pathlib import Path
+from tarfile import TarInfo
+from typing import Union
 
-import colours
-
-# These modules will be excluded from the build
-# import bin
-# import cluster-management
-# import deployment
-# import package
-# import scripts
+from utils.colours import blueit, greenit
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_TARGET_DIR = ROOT_DIR / "bin"
@@ -29,12 +24,19 @@ GIT_IGNORED = [
     )
 ]
 
-WHITELIST_FILES = ["Makefile", "static_settings.py"]
+print(
+    "/Users/guillaume.bournique/Library/Mobile Documents/com~apple~CloudDocs/Projects/Apps/portfolio/app/portfolio"
+    in GIT_IGNORED
+)
+
+WHITELIST_FILES = [
+    "static_settings.py",
+]
 
 # EXCLUDE NON-DIRECTORY FILES
 # Exclude all non directory files in root and docker .env
 EXCLUDE_FILES = [
-    file
+    str(file)
     for file in ROOT_DIR.iterdir()
     if not file.is_dir() and file.name not in WHITELIST_FILES
 ]
@@ -50,31 +52,43 @@ EXCLUDE_MODULES = [
     ".git",
     ".idea",
     ".pytest_cache",
+    "app/tests",
 ]
 
 
-def exclude(filename):
-    filepath = Path(filename)
-    if filename in GIT_IGNORED:
-        return True
-    if filepath.is_dir():
-        return filepath.name in EXCLUDE_MODULES
+def exclude(tarinfo) -> Union[None, TarInfo]:
+    chars_count = len("portfolio/")
+    remove_portfolio_prefix = tarinfo.name[chars_count:]
+    rel_filepath = Path(remove_portfolio_prefix)
+    abs_filepath = rel_filepath.absolute()
+    import pdb
+
+    pdb.set_trace()
+    if tarinfo.isdir() and str(rel_filepath) in EXCLUDE_MODULES:
+        print(f"DIR IGNORED:  {str(rel_filepath)}")
+        return None
+    elif str(abs_filepath) in EXCLUDE_FILES:
+        print(f"FILE IGNORED: {str(abs_filepath)}")
+        return None
+    elif str(abs_filepath) in GIT_IGNORED:
+        print(f"GIT IGNORED:  {str(abs_filepath)}")
+        return None
     else:
-        return filepath in EXCLUDE_FILES
+        return tarinfo
 
 
 def build(args):
     print(
         f"Executing build function...\n\n"
-        f"{colours.blueit('[ROOT_DIR]')} \n{ROOT_DIR}\n\n"
-        f"{colours.blueit('[TARGET_DIR]')} \n{args.output}\n\n"
-        f"{colours.blueit('[OUTPUT FILE]')} \n{args.name}.tar.gz\n\n"
+        f"{blueit('[ROOT_DIR]')} \n{ROOT_DIR}\n\n"
+        f"{blueit('[TARGET_DIR]')} \n{args.output}\n\n"
+        f"{blueit('[OUTPUT FILE]')} \n{args.name}.tar.gz\n\n"
     )
     Path(args.output).mkdir(exist_ok=True)
     with tarfile.open(f"{args.output}/{args.name}.tar.gz", "w:gz") as tar:
-        tar.add(ROOT_DIR, arcname=args.name, exclude=exclude)
+        tar.add(ROOT_DIR, arcname=args.name, filter=exclude)
 
-    print(colours.greenit("Completed build execution!"))
+    print(greenit("Completed build execution!"))
 
 
 if __name__ == "__main__":

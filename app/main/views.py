@@ -2,11 +2,8 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import Http404
 from django.shortcuts import redirect, render
-
-# render_to_response
 from django.views.decorators.cache import cache_page
 
 from .forms import ContactForm
@@ -21,13 +18,11 @@ from .services import (
     _send_email,
 )
 
-CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
-
 # This retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
 
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def homepage(request):
     """View for /homepage url"""
     categories = Category.objects.all
@@ -35,7 +30,7 @@ def homepage(request):
     return render(request, "main/categories.html", {"categories": categories})
 
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def viewSubCategories(request, cat_slug: str) -> None:
     """
     View for a /<category> url
@@ -64,7 +59,7 @@ def viewSubCategories(request, cat_slug: str) -> None:
     )
 
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def viewArticles(request, cat_slug: str, subcat_slug: str) -> None:
     """
     If user manually goes to /<category>/<sub-category>/ url
@@ -92,7 +87,7 @@ def viewArticles(request, cat_slug: str, subcat_slug: str) -> None:
     )
 
 
-@cache_page(CACHE_TTL)
+@cache_page(settings.CACHE_TTL)
 def viewArticle(request, cat_slug, subcat_slug, article_slug) -> None:
     """
     View for a /<category>/<sub-category>/<article-name> url
