@@ -2,26 +2,30 @@ FROM python:3.8-slim-buster as base_build
 
 LABEL author="Guillaume Bournique <gbournique@gmail.com>"
 
-# ARG USERNAME="app_user"
-
 ENV HOME="/home" \
     PORTFOLIO_HOME="/home/portfolio" \
     APP_CODE="/home/portfolio/app" \
     PYTHONPATH=${PORTFOLIO_HOME}
 
-# Set work directory
-WORKDIR ${PORTFOLIO_HOME}
-
 # Add additional basic packages.
 # * gcc libpq-dev python3-dev: psycopg2 source dependencies
 # * curl: to healthcheck services with http response
 # * vim: Because it's awesome?
+# * procps: useful utilities such as ps, top, vmstat, pgrep,...
 # Clean the apt cache
-# Create non-root user
 RUN apt-get update \
-    && apt-get install -yq --no-install-recommends gcc libpq-dev python3-dev curl vim \
+    && apt-get install -yq --no-install-recommends gcc libpq-dev python3-dev curl vim procps \
     && rm -rf /var/lib/apt/lists/*
-    # && adduser --disabled-password --gecos "" $USERNAME
+
+# Create non-root user
+ARG USERNAME="app_user"
+RUN adduser --disabled-password --gecos "" $USERNAME \ 
+    && usermod -o -u 0 $USERNAME
+# Sets default user for docker containers
+USER $USERNAME
+
+# Set work directory
+WORKDIR ${PORTFOLIO_HOME}
 
 # Copy dependencies files
 ARG POETRY_LOCK_FILE
@@ -43,9 +47,6 @@ ARG CELERY_STARTUP
 ARG SERVER_STARTUP
 COPY $CELERY_STARTUP $SERVER_STARTUP ${APP_CODE}/
 RUN chmod +x ${APP_CODE}/startup_celery.sh ${APP_CODE}/startup_server.sh
-
-# Sets default user for docker containers
-# USER $USERNAME app_userapp_user
 
 # Informs Docker that the container listens on 8000 at runtime
 EXPOSE 8080

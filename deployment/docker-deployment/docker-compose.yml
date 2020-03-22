@@ -53,28 +53,28 @@ services:
       - postgres
       - redis
 
-  # worker:
-  #   image: ${PORTFOLIO_IMAGE}:latest
-  #   container_name: worker
-  #   restart: "no"
-  #   env_file:
-  #     app/.env
-  #   volumes:
-  #     - staticfiles:/home/portfolio/app/staticfiles/
-  #     - mediafiles:/home/portfolio/app/mediafiles/
-  #     - redisdata:/data
-  #   healthcheck:
-  #     test: ps | grep celery || exit 1
-  #     interval: 10s
-  #     timeout: 30s
-  #     retries: 5
-  #   expose: 
-  #     - 8081
-  #   networks:
-  #     - backend
-  #     - proxy
-  #   entrypoint:
-  #     - /home/portfolio/app/startup_celery.sh
+  worker:
+    image: ${PORTFOLIO_IMAGE}:latest
+    container_name: worker
+    restart: "no"
+    env_file:
+      app/.env
+    volumes:
+      - staticfiles:/home/portfolio/app/staticfiles/
+      - mediafiles:/home/portfolio/app/mediafiles/
+      - redisdata:/data
+    healthcheck:
+      test: ps | grep celery || exit 1
+      interval: 10s
+      timeout: 30s
+      retries: 5
+    expose: 
+      - 8081
+    networks:
+      - backend
+      - proxy
+    entrypoint:
+      - /home/portfolio/app/startup_celery.sh
 
   postgres:
     image: postgres:12-alpine

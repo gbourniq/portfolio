@@ -24,11 +24,6 @@ GIT_IGNORED = [
     )
 ]
 
-print(
-    "/Users/guillaume.bournique/Library/Mobile Documents/com~apple~CloudDocs/Projects/Apps/portfolio/app/portfolio"
-    in GIT_IGNORED
-)
-
 WHITELIST_FILES = [
     "static_settings.py",
 ]
@@ -61,9 +56,7 @@ def exclude(tarinfo) -> Union[None, TarInfo]:
     remove_portfolio_prefix = tarinfo.name[chars_count:]
     rel_filepath = Path(remove_portfolio_prefix)
     abs_filepath = rel_filepath.absolute()
-    import pdb
 
-    pdb.set_trace()
     if tarinfo.isdir() and str(rel_filepath) in EXCLUDE_MODULES:
         print(f"DIR IGNORED:  {str(rel_filepath)}")
         return None
