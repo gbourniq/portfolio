@@ -17,7 +17,6 @@ import static_settings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -197,20 +196,23 @@ CELERY_TASK_RESULT_EXPIRES = 600
 # )
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
+# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-# image url on localhost
-STATIC_URL = "/staticfiles/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Where Django will also look for static files
+# Specify static directory for each Django app
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "main/static"),)
+
+# URL to access STATIC_ROOT folder
+STATIC_URL = "/static/"
+# Directory from which you’d like to serve these files.
+# This is where files are copied to, after python manage.py collectstatic
+STATIC_ROOT = os.path.join(
+    BASE_DIR, "staticfiles/"
+)  # portfolio/app/staticfiles/
+print(f"Static files served at:\n{STATIC_ROOT}")
 
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "main/static"),
-    # os.path.join(BASE_DIR, 'static'),
-    # "/usr/local/lib/python3.7/site-packages/django/contrib/admin/static",
-)
 
 
 # Email parameters
