@@ -39,7 +39,7 @@ Before building and running the application locally, your system must meet the f
 1. Install dependencies
 ```
 $ conda env create -f environment.yml
-$ conda env activate portfolio-env
+$ conda env activate portfolio
 ```
 
 2. Set the following environment variables
@@ -51,73 +51,68 @@ $ conda env activate portfolio-env
 |`EMAIL_HOST_USER`             | Email addr. for users to send messages (contact page) (optional) |
 |`EMAIL_HOST_PASSWORD`         | Email address password (optional)                                |
 
+
 3. Create a local Postgres database `portfoliodb`
 
 ### Running the app locally (dev/test)
 Running the server locally without external docker services
 ```
-$ cd app/
+$ make env-create
 $ source .env
-$ make create-superuser
-$ make tests-run
-$ make tests-coverage
-$ make run
-$ make logs-show
+$ cd app
+$ python manage.py makemigrations
+$ python manage.py migrate
+$ python manage.py runserver
 ```
 
-Note: The following services will not run (require docker containers)
+Note: The following services will not available during development (docker only)
 - Celery
 - Redis
 - Nginx 
 
 
+## Create Portfolio app image
+
+### Create image
+```
+$ make portfolio
+$ make latest
+$ make up
+$ make create-superuser
+$ make down
+```
+Note: A Travis CLI workflow performs automatically the steps describe above, for every push to master.
+- Test app source code with unit-tests
+- Package app source code into a tarball (portfolio.tar.gz file)
+- Build app image with latest tag
+- Start services with docker-compose (App, Nginx, Celery, Redis, and Postgres)
+- Check that all services are up and healthy
+- Stop and remove services
+- Publish image with latest tag to Dockerhub
+- TO-DO: Front-end/integration tests
+
+### Publish release image to Dockerhub
+Prerequisites:
+- Unit tests are passing
+- A Docker image `${PORTFOLIO_IMAGE}:latest` has been create from `make latest`
+- `make services-up` shows all services up and healthy 
+- The following environment variables are set: `DOCKER_REGISTRY` (default to docker.io), `DOCKER_USER` and `DOCKER_PASSWORD`
+To publish the portfolio image to a docker registry, run `make publish-latest` or `make publish-tagged`.
+
+
+
 ## Manual Deployment Options
 
-### Local deployment with docker-compose (dev/test)
-```
-$ cd app/
-$ source .env
-$ cd deployment/
-$ make rebuild-app-image
-$ make deploy-compose
-$ make services-health
-$ make login && make publish-app-image
-$ make services-down
-$ make clean-environment
-```
-_Note: all the make commands above can be run with `make deploy-new-app-image`_
+### Deployment with docker-compose (dev/test)
 
-Note: Travis CLI (.travis.yml) workflow performs automatically the steps describe above.
-For every push to master, the Docker-based continuous delivery workflow looks like this:
-- Test app source code
-- Package app source code into a docker container
-- Create all services with docker-compose (Nginx, Django server, Celery, Redis, and Postgres)
-- Check that all services are up and healthy
-
-### Publishing release image
-The final stage is to publish the release images for the django app. This assumes that all services are up locally and healthy and a satisfactory image `portfolio_app` has been created from the previous step.
-```
-$ make publish-app-image
-```
-
-Note: To be able to publish your release images, you will need to specify a Docker registry that you have write access to.
-This can be achieved by editing the `PROJECT VARIABLES` in [`Makefile.settings`](./deployment/Makefile.settings) and configuring the `DOCKER_USER` and `DOCKER_REGISTRY` settings.
-
-### Ubuntu Deployment with docker-compose (dev/test)
-```
-$ cd deployment/
-$ docker-compose -f docker-deployment/docker-compose.yml up
-$ make watch-containers (separate terminal)
-```
-
-### Ubuntu Deployment with Docker Swarm (prod)
+### Deployment with Docker Swarm (prod)
 ```
 $ cd deployment/
 $ make stack-deploy
 $ make watch-containers (separate terminal)
 ```
 
-### Ubuntu Deployment with Kubernetes (prod)
+### Deployment with Kubernetes (prod)
 ```
 $ kubect apply -f deployment/k8s-deployment
 ```
@@ -163,6 +158,4 @@ $ make swarm-backup-postgres
 
 
 ##### Potential improvements
-- Use conda to manage environment in app container
 - Use mongoDB to store image data
-- poetry psy 2.7.1
