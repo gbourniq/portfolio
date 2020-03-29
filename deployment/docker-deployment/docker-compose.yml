@@ -25,7 +25,7 @@ services:
       - app
       
   app:
-    image: ${PORTFOLIO_IMAGE}:latest
+    image: ${IMAGE_REPOSITORY}:latest
     container_name: app
     restart: "no"
     env_file:
@@ -54,7 +54,7 @@ services:
       - redis
 
   worker:
-    image: ${PORTFOLIO_IMAGE}:latest
+    image: ${IMAGE_REPOSITORY}:latest
     container_name: worker
     restart: "no"
     env_file:

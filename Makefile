@@ -20,8 +20,6 @@ PORTFOLIO_DOCKERFILE=deployment/docker-build/app.Dockerfile
 PROJECT_NAME=portfolio
 COMPOSE_FILE=docker-compose.yml
 COMPOSE_ARGS="-p ${PROJECT_NAME} -f ${COMPOSE_FILE}"
-IMAGE_REPOSITORY=gbournique/portfolio_app
-IMAGE_TAG=$$(poetry version | awk '{print $$NF}')
 POETRY_VERSION=1.0.5
 
 ### INSTALL DEPENDENCIES ###
