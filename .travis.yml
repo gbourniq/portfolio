@@ -1,27 +1,41 @@
 ---
 sudo: required
 
+language: python
+python:
+  - "3.8"
+
 services:
   - docker
 
 env:
   DOCKER_COMPOSE_VERSION: 1.23.2
 
-before_install:
+install:
+  # Install docker-compose
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+  # Install conda
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - source "$HOME/miniconda/etc/profile.d/conda.sh"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
 
 script:
+  - make env
+  - conda activate portfolio && source .env
   - make unit-tests
   - make portfolio
   - make latest
-  # - make login
-  - make services-up
-  - make create-superuser
-  # - make frontend-tests
-  - make services-down
+  - make up
+  - make down
+  - make docker-login
+  - make publish-latest
 
 after_script:
-  - echo "Successfully run tests and checked services health"
+  - echo "Success"

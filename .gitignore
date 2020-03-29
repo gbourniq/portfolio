@@ -13,7 +13,6 @@ __pycache__/
 .pytest_cache
 .idea/
 *.DS_Store
-/logs/
 .vscode
 *.vscode
 app/.vscode/settings.json
@@ -29,7 +28,6 @@ coverage_html_report/
 cov_html/
 
 # ignore environment variables and logs 
-app/.env
 app/info.log
 
 # ignore sensitive information: certs, .env, etc.
