@@ -75,8 +75,8 @@ services-up:
 # Superuser to be created the first time the app is deployed via docker-compose (fresh PostgreSQL)
 .PHONY: create-superuser
 create-superuser:
-	${INFO} "Creating initial temporary superuser: username: admin, password: pass..."
-	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | docker exec -i app python app/manage.py shell
+	${INFO} "Creating initial temporary superuser: username: admin, password: admin..."
+	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | docker exec -i app python app/manage.py shell
 	${SUCCESS} "Superuser created"
 
 .PHONY: services-down
