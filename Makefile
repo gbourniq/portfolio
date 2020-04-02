@@ -148,7 +148,7 @@ playbook-docker: check-ANSIBLE_SSH_PASSWORD
 	@ cd ansible/ && ansible-playbook \
 					-i inventories \
 					--vault-id ansible-vault-pw \
-					docker_deployment.yml -vvv
+					docker_deployment.yml -vv
 
 run-playbook-docker: before-playbook playbook-docker after-playbook
 
