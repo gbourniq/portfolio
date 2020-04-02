@@ -1,7 +1,0 @@
-
-- name: "Running backup script..."
-  shell: cd {{ REPO_LOCAL_PATH }}/cluster-management/utils && bash backup-postgres.sh portfoliodb_postgres portfoliodb
-  register: cmdln
-  failed_when: "cmdln.rc == 2"
-  tags:
-    - backup-postgres

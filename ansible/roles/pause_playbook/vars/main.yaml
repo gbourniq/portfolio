@@ -1,0 +1,1 @@
+QA_INSTANCE_TIME_MINUTES: "{{ lookup('env','QA_INSTANCE_TIME_MINUTES') }}"

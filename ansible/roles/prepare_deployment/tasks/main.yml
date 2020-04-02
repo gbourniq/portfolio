@@ -1,0 +1,55 @@
+# Docker prune
+
+- name: Stop running containers
+  shell: docker stop $(docker ps -a -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+
+- name: Remove all stopped containers
+  shell: docker rm $(docker ps -a -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+
+- name: Docker prune all
+  shell: docker system prune -a -f
+
+- name: Remove volumes
+  shell: docker volume rm $(docker volume ls -q) 2>/dev/null
+  register: cmdln
+  failed_when: "cmdln.rc == 2"
+  tags:
+    - remove-volume
+  
+
+# Delete repository root dir
+
+- name: Deleting repo folder if exists
+  become: yes
+  file:
+    path: "{{ PORTFOLIO_ROOT_DIR }}"
+    state: absent
+
+
+# Clone repository
+
+- name: Create a docker_deployment directory if it does not exist
+  file:
+    path: "{{ PORTFOLIO_ROOT_DIR }}"
+    state: directory
+    mode: '0755'
+
+- name: Recursively change ownership of a directory
+  file:
+    path: "{{ PORTFOLIO_ROOT_DIR }}"
+    state: directory
+    recurse: yes
+    owner: ubuntu
+    group: ubuntu
+
+- name: Clone github repo
+  become: no
+  git:
+    repo: https://{{ GITHUB_USER }}:{{ GITHUB_PASSWORD }}@github.com/{{ GITHUB_USER }}/{{ GITHUB_REPO_NAME }}.git
+    version: master
+    dest: "{{ PORTFOLIO_ROOT_DIR }}"
+    update: yes

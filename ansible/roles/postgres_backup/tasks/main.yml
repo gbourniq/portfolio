@@ -1,0 +1,4 @@
+- name: Running postgres backup script
+  shell: bash {{ PORTFOLIO_ROOT_DIR }}/utils/backup-postgres.sh {{ POSTGRES_CONTAINER_NAME }} {{ POSTGRES_DB_NAME }}
+  register: cmdln
+  ignore_errors: yes

@@ -43,7 +43,7 @@ EXCLUDE_FILES = [
 # EXCLUDE DIRECTORY FILES
 EXCLUDE_MODULES = [
     "bin",
-    "cluster-management",
+    "ansible",
     "deployment",
     "utils",
     "__pycache__",

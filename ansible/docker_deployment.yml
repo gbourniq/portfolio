@@ -1,0 +1,50 @@
+### Playbook for a fresh (not an upgrade) docker deployment
+
+# - name: Start AWS instance
+#   hosts: localhost
+#   gather_facts: true
+#   roles:
+#     - start_instance
+
+- name: Deployment steps
+  hosts: docker_qa
+  remote_user: ubuntu
+  become: yes
+  roles:
+    # - setup_instance
+    # - docker_compose_down
+    # - prepare_deployment
+    - docker_compose_up
+#     - pause_playbook
+#     - docker_compose_down
+
+# - name: Stop AWS instance
+#   hosts: localhost
+#   gather_facts: true
+#   roles:
+#     - stop_instance
+
+
+# - name: Start AWS instance
+#   hosts: localhost
+#   gather_facts: true
+#   roles:
+#     - start_instance
+
+# - hosts: docker_qa
+#   remote_user: ubuntu
+#   become: yes
+#   roles:
+#     - setup_instance
+#     - docker_compose_down
+#     - prepare_deployment
+#     - build_image
+#     - docker_compose_up
+#     - pause_playbook
+#     - docker_compose_down
+
+# - name: Stop AWS instance
+#   hosts: localhost
+#   gather_facts: true
+#   roles:
+#     - stop_instance

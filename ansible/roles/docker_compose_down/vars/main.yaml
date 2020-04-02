@@ -1,0 +1,1 @@
+DOCKER_COMPOSE_DIR: "{{ lookup('env','DOCKER_COMPOSE_DIR') }}"

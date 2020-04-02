@@ -22,6 +22,7 @@ COMPOSE_FILE=docker-compose.yml
 COMPOSE_ARGS="-p ${PROJECT_NAME} -f ${COMPOSE_FILE}"
 POETRY_VERSION=1.0.5
 
+
 ### INSTALL DEPENDENCIES ###
 .PHONY: env
 env:
@@ -94,6 +95,7 @@ up:
 	${MESSAGE} "CELERY WORKER OK."
 	${SUCCESS} "All services are healthy"
 
+
 .PHONY: down
 down:
 	${INFO} "Removing docker-compose services..."
@@ -131,7 +133,42 @@ create-superuser:
 	${SUCCESS} "Superuser created"
 
 
-###### FUNCTIONS ######
+
+###### ANSIBLE ######
+
+.PHONY: before-playbook after-playbook playbook-all playbook-docker playbook-kubernetes run-playbook-all run-playbook-docker run-playbook-kubernetes
+
+before-playbook: check-ANSIBLE_VAULT_PASSWORD check-ANSIBLE_SSH_PASSWORD
+	@ echo "${ANSIBLE_VAULT_PASSWORD}" > ansible/ansible-vault-pw
+
+after-playbook:
+	@ rm -rf ansible/ansible-vault-pw
+
+playbook-docker: check-ANSIBLE_SSH_PASSWORD
+	@ cd ansible/ && ansible-playbook \
+					-i inventories \
+					--vault-id ansible-vault-pw \
+					docker_deployment.yml -vvv
+
+run-playbook-docker: before-playbook playbook-docker after-playbook
+
+
+# playbook-all: 
+# 	@ ansible-playbook -i inventories site.yml
+# run-playbook-all: before-playbook playbook-all after-playbook
+# playbook-kubernetes: check-ANSIBLE_SSH_PASSWORD
+# 	@ ansible-playbook -i inventories site.yml
+# run-playbook-kubernetes: before-playbook playbook-kubernetes after-playbook
+
+
+###### UTILS ######
+
+# Ensure environment variable is set
+check-%:
+	@ if [ "${${*}}" = "" ]; then \
+        echo "Environment variable $* not set"; \
+        exit 1; \
+    fi
 
 # Service health functions
 # Syntax: $(call check_service_health,<docker-compose-environment>,<service-name>)

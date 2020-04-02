@@ -1,0 +1,10 @@
+- name: Sending an e-mail notification using Gmail SMTP servers
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "{{ ANSIBLE_NOTIFICATION_EMAIL_USER }}"
+    password: "{{ ANSIBLE_NOTIFICATION_EMAIL_PASSWORD }}"
+    to: "{{ EMAIL_USER_NOTIFICATION }}"
+    subject: Ansible News
+    body: App is up for {{ QA_INSTANCE_TIME_MINUTES }} minutes on EC2 instance tagged <{{ INSTANCE_TAG }}>.
+  delegate_to: localhost

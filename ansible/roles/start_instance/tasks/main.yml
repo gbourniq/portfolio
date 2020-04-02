@@ -1,0 +1,9 @@
+- name: Start instance(s)
+  ec2:
+    instance_ids:
+      - "{{ ANSIBLE_INSTANCE_ID }}"
+    region: "{{ AWS_DEFAULT_REGION }}"
+    state: running
+    wait: True
+    # vpc_subnet_id: subnet-29e63245
+    assign_public_ip: yes

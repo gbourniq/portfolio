@@ -11,6 +11,11 @@ services:
 env:
   DOCKER_COMPOSE_VERSION: 1.23.2
 
+before_install:
+  # Check required environment variables are set
+  - source .env
+  - ./utils/build_steps_environment.sh
+
 install:
   # Install docker-compose
   - sudo rm /usr/local/bin/docker-compose
@@ -25,10 +30,13 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
+  # sshpass for Ansible to use ssh password authentication
+  # macOS: brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
+  - sudo apt-get install sshpass
 
 script:
   - make env
-  - conda activate portfolio && source .env
+  - conda activate portfolio
   - make unit-tests
   - make portfolio
   - make latest
@@ -36,6 +44,7 @@ script:
   - make down
   - make docker-login
   - make publish-latest
+  # - make run-playbook-docker
 
 after_script:
   - echo "Success"

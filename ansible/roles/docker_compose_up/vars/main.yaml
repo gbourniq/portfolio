@@ -1,0 +1,3 @@
+IMAGE_REPOSITORY: "{{ lookup('env','IMAGE_REPOSITORY') }}"
+PORTFOLIO_ROOT_DIR: "{{ lookup('env','PORTFOLIO_ROOT_DIR') }}"
+DOCKER_COMPOSE_DIR: "{{ lookup('env','DOCKER_COMPOSE_DIR') }}"
