@@ -31,5 +31,6 @@ cov_html/
 app/info.log
 
 # ignore sensitive information: certs, .env, etc.
-deployment/docker-deployment/nginx/certs/*
-
+deployment/docker-deployment/nginx/certs/cert_chain.crt
+deployment/docker-deployment/nginx/certs/www_gbournique_com.key
+password
