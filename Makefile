@@ -51,7 +51,7 @@ unit-tests:
 .PHONY: portfolio
 portfolio:
 	${INFO} "Building portfolio package"
-	python utils/builder.py --name ${PROJECT_NAME}
+	python utils/package_builder.py --name ${PROJECT_NAME}
 
 ### DOCKER BUILD ###
 .PHONY: tagged-image
@@ -132,7 +132,11 @@ create-superuser:
 	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | docker exec -i app python app/manage.py shell
 	${SUCCESS} "Superuser created"
 
-
+### BUILD DOCKER DEPLOY TARBALL ###
+.PHONY: docker-tarball
+docker-tarball:
+	${INFO} "Packaging artefacts for docker-compose deployment"
+	python utils/build_docker_deploy_tarball.py
 
 ###### ANSIBLE ######
 
