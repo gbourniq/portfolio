@@ -6,12 +6,12 @@ if [[ -z $DOCKER_PASSWORD ]]; then
     echo "DOCKER_PASSWORD environment variable required to run"
     exit 1
 fi
-if [[ -z $AWS_ACCESS_KEY_ID ]]; then
-    echo "AWS_ACCESS_KEY_ID environment variable required to run"
+if [[ -z $AWS_ACCESS_KEY ]]; then
+    echo "AWS_ACCESS_KEY environment variable required to run"
     exit 1
 fi
-if [[ -z $AWS_SECRET_ACCESS_KEY ]]; then
-    echo "AWS_SECRET_ACCESS_KEY environment variable required to run"
+if [[ -z $AWS_SECRET_KEY ]]; then
+    echo "AWS_SECRET_KEY environment variable required to run"
     exit 1
 fi
 if [[ -z $ANSIBLE_VAULT_PASSWORD ]]; then
