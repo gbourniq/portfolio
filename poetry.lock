@@ -134,7 +134,7 @@ typed-ast = ">=1.4.0"
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Amazon Web Services Library"
 name = "boto"
 optional = false
@@ -924,7 +924,7 @@ python-versions = "*"
 version = "1.11.2"
 
 [metadata]
-content-hash = "3c29a100a3bb2216ce65761582b5c4ebc232e63fe7d959d129c31e65ac4a616e"
+content-hash = "0f2997031e4820c3522ab97cdf7a5082b79e4c5955632a1df9c39ae2e235d86d"
 python-versions = "^3.8"
 
 [metadata.files]
