@@ -26,6 +26,8 @@
     name:
       - docker
       - docker-compose
+      - boto3
+      - botocore
 
 
 # Install Docker

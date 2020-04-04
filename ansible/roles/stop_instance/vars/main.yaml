@@ -1,2 +1,2 @@
 ANSIBLE_INSTANCE_ID: "{{ lookup('env','ANSIBLE_INSTANCE_ID') }}"
-AWS_DEFAULT_REGION: "{{ lookup('env','AWS_DEFAULT_REGION') }}"
+AWS_DEFAULT_REGION: eu-west-2

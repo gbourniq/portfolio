@@ -16,10 +16,10 @@ CONDA_ENV_NAME=portfolio
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh; conda activate ${CONDA_ENV_NAME}
 
 # Docker
-PORTFOLIO_DOCKERFILE=deployment/docker-build/app.Dockerfile
+COMPOSE_FILE=${BUILD}.docker-compose.yml
 PROJECT_NAME=portfolio
-COMPOSE_FILE=docker-compose.yml
-COMPOSE_ARGS="-p ${PROJECT_NAME} -f ${COMPOSE_FILE}"
+COMPOSE_ARGS=-p ${PROJECT_NAME} -f ${COMPOSE_FILE}
+PORTFOLIO_DOCKERFILE=deployment/docker-build/app.Dockerfile
 POETRY_VERSION=1.0.5
 
 
@@ -51,7 +51,7 @@ unit-tests:
 .PHONY: portfolio
 portfolio:
 	${INFO} "Building portfolio package"
-	python utils/package_builder.py --name ${PROJECT_NAME}
+	@ python utils/package_builder.py --name ${PROJECT_NAME}
 
 ### DOCKER BUILD ###
 .PHONY: tagged-image
@@ -81,7 +81,7 @@ latest:
 ### DOCKER COMPOSE ###
 .PHONY: up
 up:
-	${INFO} "Starting docker-compose services using ${IMAGE_REPOSITORY}:latest..."
+	${INFO} "[BUILD=${BUILD}] Starting docker-compose services using ${IMAGE_REPOSITORY}:latest..."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} up -d
 	${SUCCESS} "Services started successfully"
 	${INFO} "Checking services health..."
@@ -95,16 +95,15 @@ up:
 	${MESSAGE} "CELERY WORKER OK."
 	${SUCCESS} "All services are healthy"
 
-
 .PHONY: down
 down:
-	${INFO} "Removing docker-compose services..."
+	${INFO} "[BUILD=${BUILD}] Removing docker-compose services..."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} down --remove-orphans
 	${SUCCESS} "Services removed successfully"
 
 .PHONY: stop
 stop:
-	${INFO} "Stopping docker-compose services..."
+	${INFO} "[BUILD=${BUILD}] Stopping docker-compose services..."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} stop
 	${SUCCESS} "Services stopped successfully"
 
@@ -132,23 +131,25 @@ create-superuser:
 	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | docker exec -i app python app/manage.py shell
 	${SUCCESS} "Superuser created"
 
-### BUILD DOCKER DEPLOY TARBALL ###
+### BUILD AND UPLOAD DOCKER_DEPLOY TARBALL TO AWS S3 ###
 .PHONY: docker-tarball
 docker-tarball:
-	${INFO} "Packaging artefacts for docker-compose deployment"
-	python utils/build_docker_deploy_tarball.py
+	${INFO} "Build and upload docker_deploy.tar.gz to AWS S3 "
+	@ python utils/build_docker_deploy_tarball.py
+	@ aws s3 cp ./bin/docker_deploy.tar.gz s3://guillaume.bournique/portfolio_docker_deploy/
+	${SUCCESS} "docker_deploy.tar.gz built and uploaded successfully to S3."
 
 ###### ANSIBLE ######
 
-.PHONY: before-playbook after-playbook playbook-all playbook-docker playbook-kubernetes run-playbook-all run-playbook-docker run-playbook-kubernetes
+.PHONY: run-playbook-docker run-playbook-kubernetes
 
-before-playbook: check-ANSIBLE_VAULT_PASSWORD check-ANSIBLE_SSH_PASSWORD
+before-playbook: env-vars-check
 	@ echo "${ANSIBLE_VAULT_PASSWORD}" > ansible/ansible-vault-pw
 
 after-playbook:
 	@ rm -rf ansible/ansible-vault-pw
 
-playbook-docker: check-ANSIBLE_SSH_PASSWORD
+playbook-docker:
 	@ cd ansible/ && ansible-playbook \
 					-i inventories \
 					--vault-id ansible-vault-pw \
@@ -166,6 +167,13 @@ run-playbook-docker: before-playbook playbook-docker after-playbook
 
 
 ###### UTILS ######
+
+# Ensure all environment variables are set
+.PHONY: env-vars-check
+env-vars-check:
+	${INFO} "Checking if required environment variables are set..."
+	@ ./utils/env_vars_check.sh
+	${SUCCESS} "All good!"
 
 # Ensure environment variable is set
 check-%:

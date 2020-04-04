@@ -4,7 +4,8 @@
     port: 587
     username: "{{ ANSIBLE_NOTIFICATION_EMAIL_USER }}"
     password: "{{ ANSIBLE_NOTIFICATION_EMAIL_PASSWORD }}"
-    to: "{{ EMAIL_USER_NOTIFICATION }}"
-    subject: Ansible News
-    body: App is up for {{ QA_INSTANCE_TIME_MINUTES }} minutes on EC2 instance tagged <{{ INSTANCE_TAG }}>.
+    to: "{{ ANSIBLE_NOTIFICATION_EMAIL_USER }}"
+    subject: 🚀💫 App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn! 💫🚀
+    body: Application available at http://{{ ANSIBLE_HOST }}:{{ ANSIBLE_APP_PORT }}
+    charset: utf8
   delegate_to: localhost

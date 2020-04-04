@@ -21,7 +21,7 @@
     - remove-volume
   
 
-# Delete repository root dir
+# Clean up repository root dir
 
 - name: Deleting repo folder if exists
   become: yes
@@ -29,16 +29,32 @@
     path: "{{ PORTFOLIO_ROOT_DIR }}"
     state: absent
 
+# Download docker compose files as tarball
 
-# Clone repository
+- name: Download compose files from AWS S3
+  become: yes
+  aws_s3:
+    bucket: "{{ DOCKER_DEPLOY_BUCKET }}"
+    object: "/{{ DOCKER_DEPLOY_BUCKET_FOLDER }}/{{ DOCKER_DEPLOY_ARTEFACT }}"
+    dest: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
+    mode: get
+    aws_access_key: '{{AWS_ACCESS_KEY}}'
+    aws_secret_key: '{{AWS_SECRET_KEY}}'
+    region: '{{AWS_REGION}}'
 
-- name: Create a docker_deployment directory if it does not exist
-  file:
-    path: "{{ PORTFOLIO_ROOT_DIR }}"
-    state: directory
-    mode: '0755'
+# Untar files and set up project root directory
 
-- name: Recursively change ownership of a directory
+- name: Unarchive docker_deploy.tar.gz
+  become: yes
+  unarchive:
+    src: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
+    dest: /home/ubuntu/
+    remote_src: yes
+
+- name: Rename root directory
+  command: mv /home/ubuntu/docker_deploy/ {{ PORTFOLIO_ROOT_DIR }}
+
+- name: Recursively change ownership of root directory
   file:
     path: "{{ PORTFOLIO_ROOT_DIR }}"
     state: directory
@@ -46,10 +62,8 @@
     owner: ubuntu
     group: ubuntu
 
-- name: Clone github repo
-  become: no
-  git:
-    repo: https://{{ GITHUB_USER }}:{{ GITHUB_PASSWORD }}@github.com/{{ GITHUB_USER }}/{{ GITHUB_REPO_NAME }}.git
-    version: master
-    dest: "{{ PORTFOLIO_ROOT_DIR }}"
-    update: yes
+- name: Delete temporary tarball file
+  become: yes
+  file:
+    path: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
+    state: absent

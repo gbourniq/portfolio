@@ -14,7 +14,7 @@ env:
 before_install:
   # Check required environment variables are set
   - source .env
-  - ./utils/build_steps_environment.sh
+  - make env-vars-check
 
 install:
   # Install docker-compose

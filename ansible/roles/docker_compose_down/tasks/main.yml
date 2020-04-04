@@ -1,15 +1,5 @@
-- name: docker-compose down
-  register: result
-  retries: 2
-  delay: 5
-  until: result is not failed
-  docker_compose:
-    project_src: "{{ DOCKER_COMPOSE_DIR }}"
-    state: absent
-  ignore_errors: yes
 
-- name: remove images
-  docker_compose:
-    project_src: "{{ DOCKER_COMPOSE_DIR }}"
-    remove_images: all
-  ignore_errors: yes
+- name: docker-compose down
+  shell: . {{ PORTFOLIO_ROOT_DIR }}/.env && \
+         cd {{ PORTFOLIO_ROOT_DIR }} && \
+         make down

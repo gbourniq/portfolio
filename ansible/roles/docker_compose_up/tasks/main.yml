@@ -1,11 +1,5 @@
 
-- name: Set IMAGE_REPOSITORY variable and docker-compose up
-  shell: export IMAGE_REPOSITORY={{ IMAGE_REPOSITORY }} && \
-         cd {{ DOCKER_COMPOSE_DIR }} && \
-         docker-compose up
-
-# - name: docker-compose up
-#   docker_compose:
-#     project_src: "{{ DOCKER_COMPOSE_DIR }}"
-#     pull: yes
-#     state: present
+- name: docker-compose up
+  shell: . {{ PORTFOLIO_ROOT_DIR }}/.env && \
+         cd {{ PORTFOLIO_ROOT_DIR }} && \
+         make up

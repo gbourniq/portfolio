@@ -14,7 +14,7 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 DEFAULT_TARGET_DIR = ROOT_DIR / "bin"
 
 # Path of the artefacts actually ignored from the build command
-IGNORED_ARTEFACTS = {"DIRS": [], "FILES": [], "GIT": []}
+IGNORED_ARTEFACTS = {"DIR": [], "FILE": [], "GIT": []}
 
 GIT_IGNORED = []
 
@@ -58,17 +58,14 @@ EXCLUDE_MODULES_PATHS = [
 
 
 def exclude(tarinfo) -> Union[None, TarInfo]:
-    chars_count = len("portfolio/")
-    remove_portfolio_prefix = tarinfo.name[chars_count:]
-    abs_filepath = Path(remove_portfolio_prefix).absolute()
+    removed_prefix = "/".join(tarinfo.name.split("/")[1:])
+    abs_filepath = Path(removed_prefix).absolute()
 
     if tarinfo.isdir() and abs_filepath in EXCLUDE_MODULES_PATHS:
-        IGNORED_ARTEFACTS["DIRS"].append(
-            os.path.relpath(abs_filepath, ROOT_DIR)
-        )
+        IGNORED_ARTEFACTS["DIR"].append(os.path.relpath(abs_filepath, ROOT_DIR))
         return None
     elif abs_filepath in EXCLUDE_FILES:
-        IGNORED_ARTEFACTS["FILES"].append(
+        IGNORED_ARTEFACTS["FILE"].append(
             os.path.relpath(abs_filepath, ROOT_DIR)
         )
         return None
