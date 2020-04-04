@@ -11,5 +11,5 @@
   wait_for:
     host: "{{ ANSIBLE_HOST_PUBLIC_DNS }}"
     port: 22
-    delay: 10
+    delay: 0
     timeout: 300

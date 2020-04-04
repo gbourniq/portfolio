@@ -12,7 +12,6 @@
   become: yes
   roles:
     - setup_instance
-    - docker_compose_down
     - prepare_deployment
     - docker_compose_up
 
