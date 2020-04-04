@@ -33,11 +33,11 @@ install:
 script:
   - make env
   - conda activate portfolio
-  # - make unit-tests
-  # - make portfolio
-  # - make latest
-  # - make up
-  # - make down
-  # - make docker-login
-  # - make publish-latest
+  - make unit-tests
+  - make portfolio
+  - make latest
+  - make up
+  - make down
+  - make docker-login
+  - make publish-latest
   - make docker-deployment-playbook
