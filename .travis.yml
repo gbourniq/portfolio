@@ -8,9 +8,11 @@ env:
   DOCKER_COMPOSE_VERSION: 1.23.2
 
 before_install:
-  # Check required environment variables are set
+  # Set required environment variables and awscli configuration
   - source .env
-  - make env-vars-check
+  - ./utils/env_vars_check.sh
+  - ./utils/create_aws_credentials.sh
+  - cat ~/.aws/credentials
 
 install:
   # Install docker-compose
@@ -33,14 +35,11 @@ install:
 script:
   - make env
   - conda activate portfolio
-  - make unit-tests
-  - make portfolio
-  - make latest
-  - make up
-  - make down
-  - make docker-login
-  - make publish-latest
+  # - make unit-tests
+  # - make portfolio
+  # - make latest
+  # - make up
+  # - make down
+  # - make docker-login
+  # - make publish-latest
   - make docker-deployment-playbook
-
-after_script:
-  - echo "CI/CD pipeline succeeded!"
