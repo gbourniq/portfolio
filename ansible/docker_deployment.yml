@@ -15,11 +15,11 @@
     - prepare_deployment
     - docker_compose_up
 
-# - name: Send notification
-#   hosts: localhost
-#   gather_facts: true
-#   roles:
-#     - send_email_notification
+- name: Send notification
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - send_email_notification
 
 - name: Deployment steps - 2/2
   hosts: docker_qa
@@ -29,9 +29,9 @@
     - pause_playbook
     - docker_compose_down
 
-# - name: Stop AWS instance
-#   hosts: localhost
-#   gather_facts: true
-#   roles:
-#     - stop_instance
+- name: Stop AWS instance
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - stop_instance
 

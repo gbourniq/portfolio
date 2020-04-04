@@ -22,7 +22,3 @@ if [[ -z $ANSIBLE_SSH_PASSWORD ]]; then
     echo "ANSIBLE_SSH_PASSWORD environment variable required to run"
     exit 1
 fi
-if [[ -z $ANSIBLE_NOTIFICATION_EMAIL_PASSWORD ]]; then
-    echo "ANSIBLE_NOTIFICATION_EMAIL_PASSWORD environment variable required to run"
-    exit 1
-fi

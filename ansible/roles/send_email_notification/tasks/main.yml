@@ -1,11 +1,5 @@
-- name: Sending an e-mail notification using Gmail SMTP servers
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: "{{ ANSIBLE_NOTIFICATION_EMAIL_USER }}"
-    password: "{{ ANSIBLE_NOTIFICATION_EMAIL_PASSWORD }}"
-    to: "{{ ANSIBLE_NOTIFICATION_EMAIL_USER }}"
-    subject: 🚀💫 App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn! 💫🚀
-    body: Application available at http://{{ ANSIBLE_HOST }}:{{ ANSIBLE_APP_PORT }}
-    charset: utf8
+- name: Send Slack notification
+  slack:
+    token: '{{ SLACK_TOKEN }}'
+    msg: '🚀💫 App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn! (http://{{ ANSIBLE_HOST }}:{{ ANSIBLE_APP_PORT }}) 💫🚀'
   delegate_to: localhost

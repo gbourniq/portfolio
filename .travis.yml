@@ -29,8 +29,6 @@ install:
   # sshpass for Ansible to use ssh password authentication
   # macOS: brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
   - sudo apt-get install sshpass
-  # For long running command without any output for < 60 minutes
-  - travis_wait 60 mvn install
 
 script:
   - make env
