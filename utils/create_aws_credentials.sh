@@ -4,8 +4,8 @@ mkdir -p ~/.aws
 
 cat > ~/.aws/credentials << EOL
 [default]
-aws_access_key_id = AKIAVIFROS5RZ4VHRCYS
-aws_secret_access_key = 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
+aws_access_key_id = ${AWS_ACCESS_KEY_ID}
+aws_secret_access_key = ${AWS_SECRET_ACCESS_KEY}
 EOL
 
 cat > ~/.aws/config << EOL
