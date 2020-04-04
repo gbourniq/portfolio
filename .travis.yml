@@ -44,7 +44,7 @@ script:
   - make down
   - make docker-login
   - make publish-latest
-  # - make run-playbook-docker
+  - make docker-deployment-playbook
 
 after_script:
   - echo "Success"

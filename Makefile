@@ -141,7 +141,7 @@ docker-tarball:
 
 ###### ANSIBLE ######
 
-.PHONY: run-playbook-docker run-playbook-kubernetes
+.PHONY: docker-deployment-playbook
 
 before-playbook: env-vars-check
 	@ echo "${ANSIBLE_VAULT_PASSWORD}" > ansible/ansible-vault-pw
@@ -149,21 +149,14 @@ before-playbook: env-vars-check
 after-playbook:
 	@ rm -rf ansible/ansible-vault-pw
 
-playbook-docker:
+docker-playbook:
 	@ cd ansible/ && ansible-playbook \
 					-i inventories \
 					--vault-id ansible-vault-pw \
 					docker_deployment.yml -vv
 
-run-playbook-docker: before-playbook playbook-docker after-playbook
+docker-deployment-playbook: before-playbook docker-playbook after-playbook
 
-
-# playbook-all: 
-# 	@ ansible-playbook -i inventories site.yml
-# run-playbook-all: before-playbook playbook-all after-playbook
-# playbook-kubernetes: check-ANSIBLE_SSH_PASSWORD
-# 	@ ansible-playbook -i inventories site.yml
-# run-playbook-kubernetes: before-playbook playbook-kubernetes after-playbook
 
 
 ###### UTILS ######
