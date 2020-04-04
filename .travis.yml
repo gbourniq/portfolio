@@ -1,10 +1,6 @@
 ---
 sudo: required
 
-# language: python
-# python:
-#   - "3.8"
-
 services:
   - docker
 
@@ -37,7 +33,6 @@ install:
 script:
   - make env
   - conda activate portfolio
-  - make docker-deployment-playbook
   - make unit-tests
   - make portfolio
   - make latest
@@ -45,6 +40,7 @@ script:
   - make down
   - make docker-login
   - make publish-latest
+  - make docker-deployment-playbook
 
 after_script:
-  - echo "Success"
+  - echo "CI/CD pipeline succeeded!"
