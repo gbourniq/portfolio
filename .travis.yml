@@ -11,8 +11,6 @@ before_install:
   # Set required environment variables and awscli configuration
   - source .env
   - ./utils/env_vars_check.sh
-  - ./utils/create_aws_credentials.sh
-  - cat ~/.aws/credentials
 
 install:
   # Install docker-compose
@@ -35,8 +33,6 @@ install:
 script:
   - make env
   - conda activate portfolio
-  - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-  - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
   # - make unit-tests
   # - make portfolio
   # - make latest
