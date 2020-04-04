@@ -150,6 +150,9 @@ after-playbook:
 	@ rm -rf ansible/ansible-vault-pw
 
 docker-playbook:
+	@ echo "which python is $(which python)"
+	@ echo "conda list $(conda list)"
+	@ echo "pip list $(pip list)"
 	@ cd ansible/ && ansible-playbook \
 					-i inventories \
 					--vault-id ansible-vault-pw \
