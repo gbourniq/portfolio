@@ -19,7 +19,7 @@
   hosts: localhost
   gather_facts: true
   roles:
-    - send_email_notification
+    - send_slack_notification
 
 - name: Deployment steps - 2/2
   hosts: docker_qa
@@ -29,9 +29,9 @@
     - pause_playbook
     - docker_compose_down
 
-- name: Stop AWS instance
-  hosts: localhost
-  gather_facts: true
-  roles:
-    - stop_instance
+# - name: Stop AWS instance
+#   hosts: localhost
+#   gather_facts: true
+#   roles:
+#     - stop_instance
 

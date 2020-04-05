@@ -153,7 +153,7 @@ docker-playbook:
 	@ cd ansible/ && ansible-playbook \
 					-i inventories \
 					--vault-id ansible-vault-pw \
-					docker_deployment.yml -vvvv
+					docker_deployment.yml -vv
 
 docker-deployment-playbook: before-playbook docker-playbook after-playbook
 
