@@ -144,15 +144,15 @@ docker-tarball:
 .PHONY: docker-deployment-playbook
 
 before-playbook: env-vars-check
-	@ echo "${ANSIBLE_VAULT_PASSWORD}" > ansible/ansible-vault-pw
+	@ echo "${ANSIBLE_VAULT_PASSWORD}" > /tmp/ansible-vault-pw
 
 after-playbook:
-	@ rm -rf ansible/ansible-vault-pw
+	@ rm -rf /tmp/ansible-vault-pw
 
 docker-playbook:
 	@ cd ansible/ && ansible-playbook \
 					-i inventories \
-					--vault-id ansible-vault-pw \
+					--vault-id /tmp/ansible-vault-pw \
 					docker_deployment.yml -vv
 
 docker-deployment-playbook: before-playbook docker-playbook after-playbook
