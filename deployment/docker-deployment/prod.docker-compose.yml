@@ -7,10 +7,10 @@ services:
     container_name: nginx
     restart: always
     volumes: 
-        - ./nginx/conf.d:/etc/nginx/conf.d
-        - staticfiles:/www/staticfiles/
-        - mediafiles:/www/mediafiles/
-        - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/conf.d/${BUILD}.nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - staticfiles:/www/staticfiles/
+      - mediafiles:/www/mediafiles/
+      - ./nginx/certs:/etc/nginx/certs
     healthcheck:
       test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
       interval: 60s

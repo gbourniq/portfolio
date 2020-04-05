@@ -2,27 +2,27 @@ version: "3.5"
 
 services:
 
-  # nginx:
-  #   image: nginx:1.17-alpine
-  #   container_name: nginx
-  #   restart: always
-  #   volumes: 
-  #       - ./nginx/conf.d:/etc/nginx/conf.d
-  #       - staticfiles:/www/staticfiles/
-  #       - mediafiles:/www/mediafiles/
-  #       - ./nginx/certs:/etc/nginx/certs
-  #   healthcheck:
-  #     test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
-  #     interval: 60s
-  #     timeout: 10s
-  #     retries: 5
-  #   ports: 
-  #     - "80:80"
-  #     - "443:443"
-  #   networks:
-  #     - proxy
-  #   depends_on:
-  #     - app
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: nginx
+    restart: always
+    volumes: 
+      - ./nginx/conf.d/${BUILD}.nginx.conf:/etc/nginx/conf.d/nginx.conf
+      - staticfiles:/www/staticfiles/
+      - mediafiles:/www/mediafiles/
+      - ./nginx/certs:/etc/nginx/certs
+    healthcheck:
+      test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
+      interval: 60s
+      timeout: 10s
+      retries: 5
+    ports: 
+      - "80:80"
+      - "443:443"
+    networks:
+      - proxy
+    depends_on:
+      - app
       
   app:
     image: ${IMAGE_REPOSITORY}:latest

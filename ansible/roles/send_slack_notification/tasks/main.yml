@@ -1,5 +1,5 @@
 - name: Send Slack notification
   slack:
     token: '{{ SLACK_TOKEN }}'
-    msg: '🚀💫 App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn! (http://{{ ANSIBLE_HOST }}:{{ ANSIBLE_APP_PORT }}) 💫🚀'
+    msg: '🚀💫 App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn! (http://{{ ANSIBLE_DEV_HOSTNAME }}:{{ ANSIBLE_APP_PORT }}) 💫🚀'
   delegate_to: localhost
