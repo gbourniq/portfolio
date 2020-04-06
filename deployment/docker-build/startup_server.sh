@@ -2,6 +2,9 @@
 
 cd /home/portfolio/app/
 
+echo "Creating default Django superuser for development build"
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('${DJANGO_SUPERUSER_USER}', '${DJANGO_SUPERUSER_EMAIL}', '${DJANGO_SUPERUSER_PASSWORD}')" | python manage.py shell 2>/dev/null || true
+
 echo "Collecting static files"
 python manage.py collectstatic --no-input -v 0
 
