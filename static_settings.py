@@ -14,11 +14,11 @@ DEBUG = os.getenv("DEBUG")
 ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 
 # Postgres
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", 5432)
-DB_NAME = os.getenv("DB_NAME", "portfoliodb")
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
+POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
+POSTGRES_PORT = os.getenv("POSTGRES_PORT", 5432)
+POSTGRES_DB = os.getenv("POSTGRES_DB", "portfoliodb")
+POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
 
 # Optional - Redis as Message Broker
 REDIS_HOST = os.getenv("REDIS_HOST")
@@ -47,11 +47,11 @@ ENV_VARS = [
     "SECRET_KEY",
     "DEBUG",
     "ALLOWED_HOSTS",
-    "DB_HOST",
-    "DB_PORT",
-    "DB_NAME",
-    "DB_USER",
-    "DB_PASSWORD",
+    "POSTGRES_HOST",
+    "POSTGRES_PORT",
+    "POSTGRES_DB",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
     "EMAIL_HOST_USER",
     "EMAIL_HOST_PASSWORD",
 ]

@@ -6,10 +6,28 @@ services:
     image: ${IMAGE_REPOSITORY}:latest
     container_name: app
     restart: "no"
-    env_file:
-      app/.env
     environment:
-      DEBUG: "True"
+      # Settings.py
+      - PYTHONPATH: /home/portfolio/
+      - DEBUG: ${DEBUG:?.env not set up correctly}
+      - ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
+      - SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
+      # Postgres
+      - POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
+      - POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env not set up correctly}
+      - POSTGRES_HOST: ${POSTGRES_HOST:?.env not set up correctly}
+      - POSTGRES_PORT: ${POSTGRES_PORT:?.env not set up correctly}
+      # Redis
+      - REDIS_HOST: ${REDIS_HOST:?.env not set up correctly}
+      - REDIS_PORT: ${REDIS_PORT:?.env not set up correctly}
+      # Email Contact page
+      - EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
+      - EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
+      # Django superuser
+      - DJANGO_SUPERUSER_USER: ${DJANGO_SUPERUSER_USER:?.env not set up correctly}
+      - DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:?.env not set up correctly}
+      - DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL:?.env not set up correctly}
     volumes:
       - staticfiles:/home/portfolio/app/staticfiles/
       - mediafiles:/home/portfolio/app/mediafiles/
@@ -37,10 +55,24 @@ services:
     image: ${IMAGE_REPOSITORY}:latest
     container_name: worker
     restart: "no"
-    env_file:
-      app/.env
     environment:
-      DEBUG: "True"
+      # Settings.py
+      - PYTHONPATH: /home/portfolio/
+      - DEBUG: ${DEBUG:?.env not set up correctly}
+      - ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
+      - SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
+      # Postgres
+      - POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
+      - POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env not set up correctly}
+      - POSTGRES_HOST: ${POSTGRES_HOST:?.env not set up correctly}
+      - POSTGRES_PORT: ${POSTGRES_PORT:?.env not set up correctly}
+      # Redis
+      - REDIS_HOST: ${REDIS_HOST:?.env not set up correctly}
+      - REDIS_PORT: ${REDIS_PORT:?.env not set up correctly}
+      # Email Contact page
+      - EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
+      - EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
     volumes:
       - staticfiles:/home/portfolio/app/staticfiles/
       - mediafiles:/home/portfolio/app/mediafiles/
@@ -63,15 +95,15 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: portfoliodb
+      POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env not set up correctly}
+      POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
     volumes:
       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
       - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
       - pgdata:/var/lib/postgresql/data/ 
-      # - /data/pglogs:/var/log/postgresql/
+      - /data/pglogs:/var/lib/postgresql/pglogs/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -89,7 +121,7 @@ services:
     volumes:
       - ./redis:/healthcheck/
       - redisdata:/data
-      # - /data/redisdata:/data
+      - /data/redisdata:/data
     healthcheck:
       test: sh /healthcheck/redis_healthcheck.sh
       interval: 5s

@@ -154,11 +154,11 @@ if static_settings.REDIS_HOST:
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": static_settings.DB_NAME,
-        "USER": static_settings.DB_USER,
-        "PASSWORD": static_settings.DB_PASSWORD,
-        "HOST": static_settings.DB_HOST,
-        "PORT": static_settings.DB_PORT,
+        "NAME": static_settings.POSTGRES_DB,
+        "USER": static_settings.POSTGRES_USER,
+        "PASSWORD": static_settings.POSTGRES_PASSWORD,
+        "HOST": static_settings.POSTGRES_HOST,
+        "PORT": static_settings.POSTGRES_PORT,
     }
 }
 
