@@ -124,12 +124,6 @@ publish-latest: docker-login
 	@ docker push ${IMAGE_REPOSITORY}:latest
 	${SUCCESS} "Image published successfully"
 
-### CREATE DJANGO SUPERUSER ###
-.PHONY: create-superuser
-create-superuser:
-	${INFO} "Creating initial temporary superuser: username: admin, password: admin..."
-	@ echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | docker exec -i app python app/manage.py shell
-	${SUCCESS} "Superuser created"
 
 ### BUILD AND UPLOAD DOCKER_DEPLOY TARBALL TO AWS S3 ###
 .PHONY: docker-tarball
@@ -139,25 +133,6 @@ docker-tarball:
 	@ aws s3 cp ./bin/docker_deploy.tar.gz s3://guillaume.bournique/portfolio_docker_deploy/
 	${SUCCESS} "docker_deploy.tar.gz built and uploaded successfully to S3."
 
-###### ANSIBLE ######
-
-.PHONY: docker-deployment-playbook
-
-before-playbook: env-vars-check
-	@ echo "${ANSIBLE_VAULT_PASSWORD}" > /tmp/ansible-vault-pw
-
-after-playbook:
-	@ rm -rf /tmp/ansible-vault-pw
-
-docker-playbook:
-	@ cd ansible/ && ansible-playbook \
-					-i inventories \
-					--vault-id /tmp/ansible-vault-pw \
-					docker_deployment.yml -vv
-
-docker-deployment-playbook: before-playbook docker-playbook after-playbook
-
-
 
 ###### UTILS ######
 
@@ -165,7 +140,7 @@ docker-deployment-playbook: before-playbook docker-playbook after-playbook
 .PHONY: env-vars-check
 env-vars-check:
 	${INFO} "Checking if required environment variables are set..."
-	@ ./utils/env_vars_check.sh
+	@ ./scripts/env_vars_check.sh
 	${SUCCESS} "All good!"
 
 # Ensure environment variable is set

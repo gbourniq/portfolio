@@ -28,6 +28,7 @@ services:
       - backend
       - proxy
     entrypoint:
+      - python /home/portfolio/app/django_createsuperuser.py
       - /home/portfolio/app/startup_server.sh
     depends_on:
       - postgres
