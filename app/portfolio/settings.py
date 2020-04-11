@@ -137,7 +137,7 @@ USE_TZ = True
 
 # Cache time to live is 15 mn.
 CACHE_TTL = 5 * 1
-if static_settings.REDIS_HOST:
+if static_settings.ENABLE_CELERY:
     print("Loading Redis Cache settings")
     CACHES = {
         "default": {
@@ -166,7 +166,7 @@ DATABASES = {
 # https://blog.syncano.rocks/configuring-running-django-celery-docker-containers-pt-1/
 
 
-if static_settings.REDIS_HOST:
+if static_settings.ENABLE_CELERY:
     # Set Redis as Broker URL
     BROKER_URL = (
         f"redis://{static_settings.REDIS_HOST}:{static_settings.REDIS_PORT}/2"

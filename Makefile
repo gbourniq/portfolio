@@ -58,6 +58,8 @@ portfolio:
 tagged-image:
 	${INFO} "Building docker image ${IMAGE_REPOSITORY}:${IMAGE_TAG}"
 	@ docker build -f ${PORTFOLIO_DOCKERFILE} -t ${IMAGE_REPOSITORY}:${IMAGE_TAG} \
+		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
+		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
 		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
@@ -70,6 +72,8 @@ tagged-image:
 latest:
 	${INFO} "Building docker image ${IMAGE_REPOSITORY}:latest"
 	@ docker build -f ${PORTFOLIO_DOCKERFILE} -t ${IMAGE_REPOSITORY}:latest \
+		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
+		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
 		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
@@ -81,7 +85,7 @@ latest:
 ### DOCKER COMPOSE ###
 .PHONY: up
 up:
-	${INFO} "[BUILD=${BUILD}] Starting docker-compose services using ${IMAGE_REPOSITORY}:latest..."
+	${INFO} "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} up -d
 	${SUCCESS} "Services started successfully"
 	${INFO} "Checking services health..."

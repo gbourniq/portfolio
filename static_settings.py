@@ -20,7 +20,8 @@ POSTGRES_DB = os.getenv("POSTGRES_DB", "portfoliodb")
 POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
 
-# Optional - Redis as Message Broker
+# Optional - Message Broker for Celery workers
+ENABLE_CELERY = os.getenv("ENABLE_CELERY")
 REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = os.getenv("REDIS_PORT", 6379)
 

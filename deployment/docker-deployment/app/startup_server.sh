@@ -1,11 +1,11 @@
 #!/bin/sh
 
-cd ${DOCKER_PORTFOLIO_APP_DIR}/
+cd /home/portfolio/app
 
 if [[ $CREATE_DEFAULT_SUPERUSER == "True" ]]; then
-    echo "Creating default Django superuser for development build"
-    echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('${DJANGO_SUPERUSER_USER}', '${DJANGO_SUPERUSER_EMAIL}', '${DJANGO_SUPERUSER_PASSWORD}')" | python manage.py shell || true
-else;
+    echo "[DEV BUILD] Creating default Django superuser admin/admin."
+    echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'gbournique@gmail.com', 'admin')" | python manage.py shell || true
+else
     echo "Django superuser must be create manually with python manage.py createsuperuser"
 fi
 

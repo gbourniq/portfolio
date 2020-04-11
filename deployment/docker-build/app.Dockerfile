@@ -2,9 +2,11 @@ FROM python:3.8-slim-buster as base_build
 
 LABEL author="Guillaume Bournique <gbournique@gmail.com>"
 
+ARG DOCKER_PORTFOLIO_HOME
+ARG DOCKER_APP_CODE
 ENV HOME="/home" \
-    PORTFOLIO_HOME="/home/portfolio" \
-    APP_CODE="${DOCKER_PORTFOLIO_APP_DIR}" \
+    PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
+    APP_CODE=${DOCKER_APP_CODE} \
     PYTHONPATH=${PORTFOLIO_HOME}
 
 # Add additional basic packages.
@@ -41,12 +43,6 @@ RUN poetry config virtualenvs.create false \
 # Add project source code
 ARG PORTFOLIO_TARBALL
 ADD $PORTFOLIO_TARBALL ${HOME}
-
-# Add image entrypoints
-ARG CELERY_STARTUP
-ARG SERVER_STARTUP
-COPY $CELERY_STARTUP $SERVER_STARTUP ${APP_CODE}/
-RUN chmod +x ${APP_CODE}/startup_celery.sh ${APP_CODE}/startup_server.sh
 
 # Informs Docker that the container listens on 8000 at runtime
 EXPOSE 8080

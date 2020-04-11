@@ -32,8 +32,8 @@ services:
     env_file:
       app/.env
     volumes:
-      - staticfiles:${DOCKER_PORTFOLIO_APP_DIR}/staticfiles/
-      - mediafiles:${DOCKER_PORTFOLIO_APP_DIR}/mediafiles/
+      - staticfiles:${DOCKER_APP_CODE}/staticfiles/
+      - mediafiles:${DOCKER_APP_CODE}/mediafiles/
       - redisdata:/data
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
@@ -46,7 +46,7 @@ services:
       - backend
       - proxy
     entrypoint:
-      - ${DOCKER_PORTFOLIO_APP_DIR}/startup_server.sh
+      - ${DOCKER_APP_CODE}/startup_server.sh
 
   worker:
     image: docker.io/gbournique/portfolio_app:latest
@@ -61,8 +61,8 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
-      - staticfiles:${DOCKER_PORTFOLIO_APP_DIR}/staticfiles/
-      - mediafiles:${DOCKER_PORTFOLIO_APP_DIR}/mediafiles/
+      - staticfiles:${DOCKER_APP_CODE}/staticfiles/
+      - mediafiles:${DOCKER_APP_CODE}/mediafiles/
       - redisdata:/data
     healthcheck:
       test: ps | grep celery || exit 1
@@ -75,7 +75,7 @@ services:
       - backend
       - proxy
     entrypoint:
-      - ${DOCKER_PORTFOLIO_APP_DIR}/startup_celery.sh
+      - ${DOCKER_APP_CODE}/startup_celery.sh
 
   postgres:
     image: postgres:12-alpine
