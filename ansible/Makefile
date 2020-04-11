@@ -14,7 +14,7 @@ WARNING := @bash -c 'printf ${RED}; echo "[WARNING] $$1"; printf ${NC}' MESSAGE
 
 ###### ANSIBLE ######
 
-.PHONY: docker-deployment-playbook
+.PHONY: run-docker-deploy-playbook run-docker-qa-playbook
 
 before-playbook: env-vars-check
 	@ echo "${ANSIBLE_VAULT_PASSWORD}" > /tmp/ansible-vault-pw
@@ -22,14 +22,23 @@ before-playbook: env-vars-check
 after-playbook:
 	@ rm -rf /tmp/ansible-vault-pw
 
-docker-playbook:
-	@ cd ansible/ && ansible-playbook \
-					-i inventories \
-					--vault-id /tmp/ansible-vault-pw \
-					docker_deployment.yml -vv
+docker-deploy-playbook:
+	@ ansible-playbook \
+		-i inventories \
+		--vault-id /tmp/ansible-vault-pw \
+		docker_deployment.yml \
+		--skip-tags="compose-down,stop-instance" \
+		-vv
 
-docker-deployment-playbook: before-playbook docker-playbook after-playbook
+docker-qa-playbook:
+	@ ansible-playbook \
+		-i inventories \
+		--vault-id /tmp/ansible-vault-pw \
+		docker_deployment.yml \
+		-vv
 
+run-docker-deploy-playbook: before-playbook docker-deploy-playbook after-playbook
+run-docker-qa-playbook: before-playbook docker-qa-playbook after-playbook
 
 
 ###### UTILS ######
@@ -38,5 +47,5 @@ docker-deployment-playbook: before-playbook docker-playbook after-playbook
 .PHONY: env-vars-check
 env-vars-check:
 	${INFO} "Checking if required environment variables are set..."
-	@ ./utils/env_vars_check.sh
+	@ ../scripts/env_vars_check.sh
 	${SUCCESS} "All good!"

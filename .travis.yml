@@ -40,4 +40,5 @@ script:
   - make down
   - make docker-login
   - make publish-latest
-  - cd ansible/ && make docker-deployment-playbook
+  - make upload-docker-deploy-tarball
+  - cd ansible/ && make run-docker-qa-playbook

@@ -126,8 +126,8 @@ publish-latest: docker-login
 
 
 ### BUILD AND UPLOAD DOCKER_DEPLOY TARBALL TO AWS S3 ###
-.PHONY: docker-tarball
-docker-tarball:
+.PHONY: upload-docker-deploy-tarball
+upload-docker-deploy-tarball:
 	${INFO} "Build and upload docker_deploy.tar.gz to AWS S3 "
 	@ python utils/build_docker_deploy_tarball.py
 	@ aws s3 cp ./bin/docker_deploy.tar.gz s3://guillaume.bournique/portfolio_docker_deploy/
