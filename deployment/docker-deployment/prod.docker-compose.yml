@@ -25,12 +25,12 @@ services:
       - app
       
   app:
-    image: ${IMAGE_REPOSITORY}:latest
+    image: ${IMAGE_REPOSITORY:?.env not set up correctly}:latest
     container_name: app
     restart: "no"
     environment:
       # Settings.py
-      - PYTHONPATH: /home/portfolio/
+      - PYTHONPATH: ${DOCKER_PORTFOLIO_ROOT_DIR:?.env not set up correctly}/
       - DEBUG: ${DEBUG:?.env not set up correctly}
       - ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
       - SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
@@ -51,8 +51,8 @@ services:
       - DJANGO_SUPERUSER_PASSWORD: ${DJANGO_SUPERUSER_PASSWORD:?.env not set up correctly}
       - DJANGO_SUPERUSER_EMAIL: ${DJANGO_SUPERUSER_EMAIL:?.env not set up correctly}
     volumes:
-      - staticfiles:/home/portfolio/app/staticfiles/
-      - mediafiles:/home/portfolio/app/mediafiles/
+      - staticfiles:${DOCKER_PORTFOLIO_APP_DIR:?.env not set up correctly}/staticfiles/
+      - mediafiles:${DOCKER_PORTFOLIO_APP_DIR:?.env not set up correctly}/mediafiles/
       - redisdata:/data
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
@@ -68,18 +68,18 @@ services:
       - backend
       - proxy
     entrypoint:
-      - /home/portfolio/app/startup_server.sh
+      - ${DOCKER_PORTFOLIO_APP_DIR:?.env not set up correctly}/startup_server.sh
     depends_on:
       - postgres
       - redis
 
   worker:
-    image: ${IMAGE_REPOSITORY}:latest
+    image: ${IMAGE_REPOSITORY:?.env not set up correctly}:latest
     container_name: worker
     restart: "no"
     environment:
       # Settings.py
-      - PYTHONPATH: /home/portfolio/
+      - PYTHONPATH: ${DOCKER_PORTFOLIO_ROOT_DIR:?.env not set up correctly}/
       - DEBUG: ${DEBUG:?.env not set up correctly}
       - ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
       - SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
@@ -96,8 +96,8 @@ services:
       - EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
       - EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
     volumes:
-      - staticfiles:/home/portfolio/app/staticfiles/
-      - mediafiles:/home/portfolio/app/mediafiles/
+      - staticfiles:${DOCKER_PORTFOLIO_APP_DIR:?.env not set up correctly}/staticfiles/
+      - mediafiles:${DOCKER_PORTFOLIO_APP_DIR:?.env not set up correctly}/mediafiles/
       - redisdata:/data
     healthcheck:
       test: ps | grep celery || exit 1
@@ -110,7 +110,7 @@ services:
       - backend
       - proxy
     entrypoint:
-      - /home/portfolio/app/startup_celery.sh
+      - ${DOCKER_PORTFOLIO_APP_DIR:?.env not set up correctly}/startup_celery.sh
 
   postgres:
     image: postgres:12-alpine

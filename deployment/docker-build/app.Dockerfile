@@ -4,7 +4,7 @@ LABEL author="Guillaume Bournique <gbournique@gmail.com>"
 
 ENV HOME="/home" \
     PORTFOLIO_HOME="/home/portfolio" \
-    APP_CODE="/home/portfolio/app" \
+    APP_CODE="${DOCKER_PORTFOLIO_APP_DIR}" \
     PYTHONPATH=${PORTFOLIO_HOME}
 
 # Add additional basic packages.
