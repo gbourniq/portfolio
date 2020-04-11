@@ -64,8 +64,6 @@ tagged-image:
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
 		--build-arg PYPROJECT_FILE=./pyproject.toml \
-		--build-arg CELERY_STARTUP=./deployment/docker-build/startup_celery.sh \
-		--build-arg SERVER_STARTUP=./deployment/docker-build/startup_server.sh
 	${SUCCESS} "${IMAGE_REPOSITORY}:${IMAGE_TAG} built successfully"
 
 .PHONY: latest
@@ -78,8 +76,6 @@ latest:
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
 		--build-arg PYPROJECT_FILE=./pyproject.toml \
-		--build-arg CELERY_STARTUP=./deployment/docker-build/startup_celery.sh \
-		--build-arg SERVER_STARTUP=./deployment/docker-build/startup_server.sh
 	${SUCCESS} "${IMAGE_REPOSITORY}:latest built successfully"
 
 ### DOCKER COMPOSE ###

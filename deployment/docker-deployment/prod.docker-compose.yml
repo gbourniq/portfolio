@@ -1,15 +1,14 @@
 version: "3.5"
 
 services:
-
   nginx:
     image: nginx:1.17-alpine
     container_name: nginx
     restart: always
     volumes: 
-        - ./nginx/conf.d:/etc/nginx/conf.d
         - staticfiles:/www/staticfiles/
         - mediafiles:/www/mediafiles/
+        - ./nginx/conf.d:/etc/nginx/conf.d
         - ./nginx/certs:/etc/nginx/certs
     healthcheck:
       test: stat /etc/nginx/conf.d/nginx.conf && nginx -t || exit 1
@@ -23,7 +22,7 @@ services:
       - proxy
     depends_on:
       - app
-      
+
   app:
     image: ${IMAGE_REPOSITORY:?.env not set up correctly}:latest
     container_name: app
@@ -50,6 +49,7 @@ services:
       - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
+      - ./app/startup_server.sh:${DOCKER_APP_CODE}/startup_server.sh
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
       interval: 10s
@@ -95,6 +95,7 @@ services:
       - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
+      - ./app/startup_celery.sh:${DOCKER_APP_CODE}/startup_celery.sh
     healthcheck:
       test: ps | grep celery || exit 1
       interval: 10s
@@ -113,15 +114,15 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: portfoliodb
+      POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env not set up correctly}
+      POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
     volumes:
       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
       - ./postgres/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d/
       - pgdata:/var/lib/postgresql/data/ 
-      - /data/pglogs:/var/lib/postgresql/pglogs/
+      - pglogs:/var/lib/postgresql/pglogs/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -139,7 +140,6 @@ services:
     volumes:
       - ./redis:/healthcheck/
       - redisdata:/data
-      - /data/redisdata:/data
     healthcheck:
       test: sh /healthcheck/redis_healthcheck.sh
       interval: 5s
@@ -156,6 +156,7 @@ volumes:
   mediafiles:
   redisdata:
   pgdata:
+  pglogs:
 
 networks:
   backend:

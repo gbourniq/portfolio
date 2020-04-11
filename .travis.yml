@@ -36,8 +36,8 @@ script:
   - make unit-tests
   - make portfolio
   - make latest
-  - make up
-  - make down
+  - export BUILD=dev && make up && make down
+  - export BUILD=prod && make up && make down
   - make docker-login
   - make publish-latest
   - make upload-docker-deploy-tarball
