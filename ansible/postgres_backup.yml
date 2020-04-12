@@ -1,8 +1,19 @@
 ### Playbook for a fresh (not an upgrade) docker deployment
 
-- name: Running postgres_backup playbook
+- name: Create and upload Postgres dump to S3
   hosts: docker_qa
   remote_user: ubuntu
   become: yes
   roles:
-    - postgres_backup
+    - postgres_create_backup
+  tags:
+    - create-backup
+
+- name: Load latest Postgres dump from S3
+  hosts: docker_qa
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - postgres_import_latest_backup
+  tags:
+    - load-backup

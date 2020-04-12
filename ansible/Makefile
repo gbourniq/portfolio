@@ -38,16 +38,27 @@ docker-qa-playbook:
 		--skip-tags="slack-notification-dev" \
 		-vv
 
-postgres-backup-playbook:
+postgres-create-backup-playbook:
 	@ ansible-playbook \
 		-i inventories \
 		--vault-id /tmp/ansible-vault-pw \
 		postgres_backup.yml \
+		--tags="create-backup" \
+		-vv
+
+postgres-load-backup-playbook:
+	@ ansible-playbook \
+		-i inventories \
+		--vault-id /tmp/ansible-vault-pw \
+		postgres_backup.yml \
+		--tags="load-backup" \
 		-vv
 
 run-docker-deploy-playbook: before-playbook docker-deploy-playbook after-playbook
 run-docker-qa-playbook: before-playbook docker-qa-playbook after-playbook
-run-postgres-backup-playbook: before-playbook postgres-backup-playbook after-playbook
+run-postgres-create-backup-playbook: before-playbook postgres-create-backup-playbook after-playbook
+run-postgres-load-backup-playbook: before-playbook postgres-load-backup-playbook after-playbook
+
 
 ###### UTILS ######
 
