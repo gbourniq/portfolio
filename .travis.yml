@@ -41,4 +41,5 @@ script:
   - make docker-login
   - make publish-latest
   - make upload-docker-deploy-tarball
-  - cd ansible/ && make run-docker-qa-playbook
+  # Run Ansible for QA deployment on ec2
+  # - cd ansible/ && make run-docker-qa-playbook

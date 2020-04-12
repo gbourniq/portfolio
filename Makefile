@@ -63,7 +63,7 @@ tagged-image:
 		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
-		--build-arg PYPROJECT_FILE=./pyproject.toml \
+		--build-arg PYPROJECT_FILE=./pyproject.toml
 	${SUCCESS} "${IMAGE_REPOSITORY}:${IMAGE_TAG} built successfully"
 
 .PHONY: latest
@@ -75,7 +75,7 @@ latest:
 		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
-		--build-arg PYPROJECT_FILE=./pyproject.toml \
+		--build-arg PYPROJECT_FILE=./pyproject.toml
 	${SUCCESS} "${IMAGE_REPOSITORY}:latest built successfully"
 
 ### DOCKER COMPOSE ###
