@@ -1,4 +1,7 @@
-- name: Running postgres backup script
-  shell: bash {{ PORTFOLIO_ROOT_DIR }}/utils/backup-postgres.sh {{ POSTGRES_CONTAINER_NAME }} {{ POSTGRES_POSTGRES_DB }}
+- name: Create and upload postgres backup to AWS S3
+  shell: "cd {{ PORTFOLIO_ROOT_DIR }} && \
+          bash ./script/postgres_backup.sh \
+            {{ POSTGRES_CONTAINER_NAME }} \
+            {{ POSTGRES_DB }} \
+            {{ S3_BASE_LOCATION_POSTGRES_BACKUP }}"
   register: cmdln
-  ignore_errors: yes

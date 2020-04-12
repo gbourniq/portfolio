@@ -134,6 +134,14 @@ upload-docker-deploy-tarball:
 	${SUCCESS} "docker_deploy.tar.gz built and uploaded successfully to S3."
 
 
+### CREATE POSTGRES BACKUP AND UPLOAD TO S3 ###
+.PHONY: upload-postgres-backup
+upload-postgres-backup:
+	${INFO} "Create and upload postgres backup to AWS S3"
+	@ ./scripts/postgres_backup.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_BASE_LOCATION_POSTGRES_BACKUP}
+	${SUCCESS} "Postgres backup successfully uploaded to S3."
+
+
 ###### UTILS ######
 
 # Ensure all environment variables are set

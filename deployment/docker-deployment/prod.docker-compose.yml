@@ -111,7 +111,7 @@ services:
 
   postgres:
     image: postgres:12-alpine
-    container_name: postgres
+    container_name: ${POSTGRES_CONTAINER_NAME:?.env not set up correctly}
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
