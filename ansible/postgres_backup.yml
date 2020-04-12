@@ -1,0 +1,16 @@
+### Playbook for a fresh (not an upgrade) docker deployment
+
+- name: Running postgres_backup playbook
+  hosts: docker_qa
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - postgres_backup
+
+- name: Send notification
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - send_slack_notification
+  tags:
+    - postgres-backup-notification

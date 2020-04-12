@@ -37,9 +37,16 @@ docker-qa-playbook:
 		docker_deployment.yml \
 		-vv
 
+postgres-backup-playbook:
+	@ ansible-playbook \
+		-i inventories \
+		--vault-id /tmp/ansible-vault-pw \
+		postgres_backup.yml \
+		-vv
+
 run-docker-deploy-playbook: before-playbook docker-deploy-playbook after-playbook
 run-docker-qa-playbook: before-playbook docker-qa-playbook after-playbook
-
+run-postgres-backup-playbook: before-playbook postgres-backup-playbook after-playbook
 
 ###### UTILS ######
 

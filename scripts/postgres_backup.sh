@@ -28,6 +28,11 @@ s3_postgres_all=${s3_location_base}/all/
 # Get Postgres container id
 container_id=$(docker ps | grep $service_name | awk '{print $1}')
 
+if [[ -z $container_id ]]; then
+    echo "No container found with the name $service_name. Aborting database back up script."
+    exit 1
+fi
+
 # Create pg backup file inside the container"
 docker exec ${container_id} pg_dump -U postgres -f /tmp/${postgres_backup} ${database_name}
 
