@@ -104,8 +104,8 @@ services:
       - pglogs:/var/lib/postgresql/pglogs/
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
+      interval: 20s
+      timeout: 20s
       retries: 10
     expose:
       - 5432
@@ -121,8 +121,8 @@ services:
       - redisdata:/data
     healthcheck:
       test: sh /healthcheck/redis_healthcheck.sh
-      interval: 5s
-      timeout: 5s
+      interval: 20s
+      timeout: 20s
       retries: 10
     expose:
       - 6379
