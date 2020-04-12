@@ -34,7 +34,7 @@ docker-qa-playbook:
 	@ ansible-playbook \
 		-i inventories \
 		--vault-id /tmp/ansible-vault-pw \
-		docker_qa_deployment.yml \
+		docker_deployment.yml \
 		--skip-tags="slack-notification-dev" \
 		-vv
 
