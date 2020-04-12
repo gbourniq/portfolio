@@ -49,7 +49,7 @@ services:
       - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
-      - ./app/startup_server.sh:${DOCKER_APP_CODE}/startup_server.sh
+      - ./app/prod.startup_server.sh:${DOCKER_APP_CODE}/prod.startup_server.sh
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
       interval: 10s
@@ -64,7 +64,7 @@ services:
       - backend
       - proxy
     entrypoint:
-      - ${DOCKER_APP_CODE:?.env not set up correctly}/startup_server.sh
+      - ${DOCKER_APP_CODE:?.env not set up correctly}/prod.startup_server.sh
     depends_on:
       - postgres
       - redis

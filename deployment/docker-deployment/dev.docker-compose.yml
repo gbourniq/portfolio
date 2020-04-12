@@ -24,13 +24,11 @@ services:
       # Email Contact page
       EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
-      # Create dummy superuser for dev build
-      CREATE_DEFAULT_SUPERUSER: ${CREATE_DEFAULT_SUPERUSER:?.env not set up correctly}
     volumes:
       - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
-      - ./app/startup_server.sh:${DOCKER_APP_CODE}/startup_server.sh
+      - ./app/dev.startup_server.sh:${DOCKER_APP_CODE}/dev.startup_server.sh
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
       interval: 10s
@@ -45,7 +43,7 @@ services:
       - backend
       - proxy
     entrypoint:
-      - ${DOCKER_APP_CODE:?.env not set up correctly}/startup_server.sh
+      - ${DOCKER_APP_CODE:?.env not set up correctly}/dev.startup_server.sh
     depends_on:
       - postgres
       - redis
