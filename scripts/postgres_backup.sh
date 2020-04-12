@@ -7,10 +7,6 @@ then
     exit 1
 fi
 
-# set -euxo pipefail
-
-# export PATH=/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin
-
 # Retrieve arguments
 service_name=$1
 database_name=$2

@@ -1,6 +1,10 @@
 - name: Create and upload postgres backup to AWS S3
-  shell: "cd {{ PORTFOLIO_ROOT_DIR }} && \
-          bash ./script/postgres_backup.sh \
+  environment:
+    AWS_REGION: "{{ AWS_REGION }}"
+    AWS_ACCESS_KEY_ID: "{{ AWS_ACCESS_KEY_ID }}"
+    AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
+  shell:  "cd {{ PORTFOLIO_ROOT_DIR }} && \
+          bash ./scripts/postgres_backup.sh \
             {{ POSTGRES_CONTAINER_NAME }} \
             {{ POSTGRES_DB }} \
             {{ S3_BASE_LOCATION_POSTGRES_BACKUP }}"

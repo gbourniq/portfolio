@@ -139,7 +139,6 @@ upload-docker-deploy-tarball:
 upload-postgres-backup:
 	${INFO} "Create and upload postgres backup to AWS S3"
 	@ ./scripts/postgres_backup.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_BASE_LOCATION_POSTGRES_BACKUP}
-	${SUCCESS} "Postgres backup successfully uploaded to S3."
 
 
 ###### UTILS ######
