@@ -5,15 +5,15 @@
   remote_user: ubuntu
   become: yes
   roles:
-    - postgres_create_backup
+    - postgres_dump_to_s3
   tags:
-    - create-backup
+    - postgres-dump
 
 - name: Load latest Postgres dump from S3
   hosts: docker_qa
   remote_user: ubuntu
   become: yes
   roles:
-    - postgres_import_latest_backup
+    - postgres_restore_from_s3
   tags:
-    - load-backup
+    - postgres-restore
