@@ -24,6 +24,8 @@ services:
       # Email Contact page
       EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
+      # Create dummy superuser for dev build
+      CREATE_DEFAULT_SUPERUSER: ${CREATE_DEFAULT_SUPERUSER:?.env not set up correctly}
     volumes:
       - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
