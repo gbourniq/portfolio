@@ -30,20 +30,17 @@ if [[ -z $container_id ]]; then
     exit 1
 fi
 
-# Create pg backup file inside the container"
+echo "Create pg backup file inside the container"
 docker exec ${container_id} /bin/sh -c "pg_dump -U ${db_user} -F t ${database_name} > /tmp/${postgres_backup}"
 
-# copy file inside container to host
+echo "Copy file from inside the container to host"
 docker cp ${container_id}:/tmp/${postgres_backup} .
-
-# remove file in container
-docker exec ${container_id} rm /tmp/${postgres_backup}
 
 # create two copies of backup on host
 cp ${postgres_backup} ${postgres_backup_latest}
 cp ${postgres_backup} ${postgres_backup_dated}
 
-# upload copies to s3
+echo "Upload postgres dump to s3"
 aws s3 cp ${postgres_backup_latest} ${s3_postgres_latest}
 aws s3 cp ${postgres_backup_dated} ${s3_postgres_all}
 
@@ -51,3 +48,4 @@ aws s3 cp ${postgres_backup_dated} ${s3_postgres_all}
 rm ${postgres_backup}
 rm ${postgres_backup_latest}
 rm ${postgres_backup_dated}
+docker exec ${container_id} rm /tmp/${postgres_backup}

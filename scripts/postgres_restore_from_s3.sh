@@ -24,13 +24,13 @@ if [[ -z $container_id ]]; then
     exit 1
 fi
 
-# Download postgres dump from S3 to host
+echo "Download postgres dump from S3 to host"
 aws s3 cp ${s3_path_postgres_dump_latest} .
 
-# Copy postgres dump to container
+echo "Copy postgres dump to container"
 docker cp ${postgres_backup} ${container_id}:/tmp/
 
-# Restore postgres data using dump
+echo "Restore postgres data using dump"
 docker exec ${container_id} /bin/sh -c "pg_restore -d ${database_name} /tmp/${postgres_backup} -c -U ${db_user}"
 
 # cleanup
