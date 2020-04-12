@@ -27,14 +27,15 @@ docker-deploy-playbook:
 		-i inventories \
 		--vault-id /tmp/ansible-vault-pw \
 		docker_deployment.yml \
-		--skip-tags="compose-down,stop-instance" \
+		--skip-tags="slack-notification-qa,compose-down,stop-instance" \
 		-vv
 
 docker-qa-playbook:
 	@ ansible-playbook \
 		-i inventories \
 		--vault-id /tmp/ansible-vault-pw \
-		docker_deployment.yml \
+		docker_qa_deployment.yml \
+		--skip-tags="slack-notification-dev" \
 		-vv
 
 postgres-backup-playbook:
