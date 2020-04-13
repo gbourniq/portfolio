@@ -14,6 +14,10 @@ if [[ -z $AWS_SECRET_ACCESS_KEY ]]; then
     echo "AWS_SECRET_ACCESS_KEY environment variable required to run"
     exit 1
 fi
+if [[ -z $AWS_STORAGE_BUCKET_NAME ]]; then
+    echo "AWS_STORAGE_BUCKET_NAME environment variable required to run"
+    exit 1
+fi
 if [[ -z $ANSIBLE_VAULT_PASSWORD ]]; then
     echo "ANSIBLE_VAULT_PASSWORD environment variable required to run"
     exit 1

@@ -40,6 +40,7 @@ DOCKER_PASSWORD = os.getenv("DOCKER_PASSWORD")
 
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 
 
 # ======================= CHECK ENV VARIABLES ARE SET =========================

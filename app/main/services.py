@@ -5,7 +5,7 @@ from django.core.mail import BadHeaderError
 
 from .forms import ContactForm
 from .models import Article, Category, SubCategory
-from .tasks import celery_function_test, send_email_celery
+from .tasks import send_email_celery
 
 # This retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
@@ -42,10 +42,9 @@ def _get_subcategories_by_cat_slug(
     Retrieves a list of SubCategory objects for a given category name.
     Filtering all SubCategory objects by cat_slug.
     """
-    _ = celery_function_test.delay()
+    # _ = celery_function_test.delay()
 
     logger.info(f"Filtering SubCategory objects by cat_slug={cat_slug}")
-    # logger.info(f"Filtering SubCategory objects by cat_slug={cat_slug} -- {heya}")
 
     matching_sub_categories = SubCategory.objects.filter(
         category_name__category_slug=cat_slug

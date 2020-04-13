@@ -190,13 +190,10 @@ CELERY_SEND_TASK_ERROR_EMAILS = False
 CELERY_TASK_RESULT_EXPIRES = 600
 
 # configure queues, currently we have only one
-# CELERY_DEFAULT_QUEUE = 'default'
+CELERY_DEFAULT_QUEUE = "default"
 # CELERY_QUEUES = (
 #     Queue('default', Exchange('default'), routing_key='default'),
 # )
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 
 # FILE STORAGE
@@ -206,14 +203,11 @@ USE_S3 = False
 
 if USE_S3:
     # aws settings
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_ACCESS_KEY_ID = static_settings.AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = static_settings.AWS_SECRET_ACCESS_KEY
     AWS_DEFAULT_REGION = "eu-west-3"
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
     AWS_DEFAULT_ACL = None
-    AWS_S3_CUSTOM_DOMAIN = (
-        f"s3.{AWS_DEFAULT_REGION}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}"
-    )
+    AWS_S3_CUSTOM_DOMAIN = f"s3.{AWS_DEFAULT_REGION}.amazonaws.com/{static_settings.AWS_STORAGE_BUCKET_NAME}"
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
     # s3 static settings
     STATIC_LOCATION = "static"
@@ -228,10 +222,6 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
     MEDIA_URL = "/mediafiles/"
     MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
-    # STATIC_URL = "/static/"
-    # STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
-    # MEDIA_URL = "/mediafiles/"
-    # MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
