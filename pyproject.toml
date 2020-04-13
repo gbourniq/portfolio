@@ -39,6 +39,7 @@ jsonschema = "*"
 redis = "^3"
 pillow = "^7.0.0"
 psycopg2 = "^2.8.4"
+django-storages = "^1.9.1"
 
 [tool.poetry.dev-dependencies]
 ansible = "^2.9.2"

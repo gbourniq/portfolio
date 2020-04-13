@@ -21,7 +21,6 @@ POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
 
 # Optional - Message Broker for Celery workers
-ENABLE_CELERY = os.getenv("ENABLE_CELERY")
 REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = os.getenv("REDIS_PORT", 6379)
 
@@ -29,12 +28,18 @@ REDIS_PORT = os.getenv("REDIS_PORT", 6379)
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-# ==================== ANSIBLE VARIABLES ======================
+# ==================== ANSIBLE ======================
 
 # Docker
 DOCKER_REGISTRY = os.getenv("DOCKER_REGISTRY")
 DOCKER_USER = os.getenv("DOCKER_USER")
 DOCKER_PASSWORD = os.getenv("DOCKER_PASSWORD")
+
+
+# ==================== AWS ======================
+
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
 
 # ======================= CHECK ENV VARIABLES ARE SET =========================

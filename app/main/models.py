@@ -14,6 +14,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
+        app_label = "main"
 
     def __str__(self):
         return self.category_name
@@ -34,6 +35,7 @@ class SubCategory(models.Model):
 
     class Meta:
         verbose_name_plural = "Sub Categories"
+        app_label = "main"
 
     def __str__(self):
         return self.subcategory_name
@@ -57,6 +59,7 @@ class Article(models.Model):
 
     class Meta:
         verbose_name_plural = "Articles"
+        app_label = "main"
 
     def __str__(self):
         return self.article_name

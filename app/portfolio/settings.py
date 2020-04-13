@@ -137,7 +137,7 @@ USE_TZ = True
 
 # Cache time to live is 15 mn.
 CACHE_TTL = 5 * 1
-if static_settings.ENABLE_CELERY:
+if static_settings.REDIS_HOST:
     print("Loading Redis Cache settings")
     CACHES = {
         "default": {
@@ -166,7 +166,7 @@ DATABASES = {
 # https://blog.syncano.rocks/configuring-running-django-celery-docker-containers-pt-1/
 
 
-if static_settings.ENABLE_CELERY:
+if static_settings.REDIS_HOST:
     # Set Redis as Broker URL
     BROKER_URL = (
         f"redis://{static_settings.REDIS_HOST}:{static_settings.REDIS_PORT}/2"
@@ -211,8 +211,28 @@ STATIC_ROOT = os.path.join(
 )  # portfolio/app/staticfiles/
 print(f"Static files served at:\n{STATIC_ROOT}")
 
-MEDIA_URL = "/mediafiles/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+# File storage
+if (
+    static_settings.S3_STORAGE_ENABLED
+    and static_settings.AWS_ACCESS_KEY_ID
+    and static_settings.AWS_SECRET_ACCESS_KEY
+):
+    # Use S3 to store image files
+    AWS_ACCESS_KEY_ID = static_settings.AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = static_settings.AWS_SECRET_ACCESS_KEY
+
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_S3_REGION_NAME = "eu-west-2"
+    AWS_STORAGE_BUCKET_NAME = "portfolio-file-storage"
+    AWS_LOCATION = "dynamic_datetime_here"
+
+
+else:
+    # Use Media root on local storage
+    MEDIA_URL = "/mediafiles/"
+    MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
+# AWS VARIABLES FOR S3
 
 
 # Email parameters
