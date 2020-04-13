@@ -41,9 +41,10 @@ DOCKER_PASSWORD = os.getenv("DOCKER_PASSWORD")
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-
+S3_STORAGE_ENABLED = os.getenv("S3_STORAGE_ENABLED") == "True"
 
 # ======================= CHECK ENV VARIABLES ARE SET =========================
+
 
 ENV_VARS = [
     "SECRET_KEY",
@@ -57,6 +58,14 @@ ENV_VARS = [
     "EMAIL_HOST_USER",
     "EMAIL_HOST_PASSWORD",
 ]
+
+if S3_STORAGE_ENABLED:
+    ENV_VARS += [
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_STORAGE_BUCKET_NAME",
+    ]
+
 
 for ENV_VAR in ENV_VARS:
     if not locals().get(ENV_VAR):
