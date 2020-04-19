@@ -7,5 +7,5 @@
           bash ./scripts/postgres_dump_to_s3.sh \
             {{ POSTGRES_CONTAINER_NAME }} \
             {{ POSTGRES_DB }} \
-            {{ S3_BASE_LOCATION_POSTGRES_BACKUP }}"
+            {{ S3_POSTGRES_BACKUP_URI }}"
   register: cmdln

@@ -1,7 +1,7 @@
 PORTFOLIO_ROOT_DIR: "{{ lookup('env','PORTFOLIO_ROOT_DIR') }}"
 POSTGRES_CONTAINER_NAME: "{{ lookup('env','POSTGRES_CONTAINER_NAME') }}"
 POSTGRES_DB: "{{ lookup('env','POSTGRES_DB') }}"
-S3_BASE_LOCATION_POSTGRES_BACKUP: "{{ lookup('env','S3_BASE_LOCATION_POSTGRES_BACKUP') }}"
+S3_POSTGRES_BACKUP_URI: "{{ lookup('env','S3_POSTGRES_BACKUP_URI') }}"
 AWS_REGION: eu-west-2
 AWS_ACCESS_KEY_ID: !vault |
                     $ANSIBLE_VAULT;1.2;AES256;user

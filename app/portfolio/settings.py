@@ -24,7 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = static_settings.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# NEED DEBUG = True when running locally (to display static files)
 DEBUG = static_settings.DEBUG
 
 ALLOWED_HOSTS = static_settings.ALLOWED_HOSTS
@@ -121,20 +120,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
-
 LANGUAGE_CODE = "en-us"
-
 TIME_ZONE = "UTC"
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
 # Cache configuration
-
 # Cache time to live is 15 mn.
 CACHE_TTL = 5 * 1
 if static_settings.REDIS_HOST:
@@ -150,7 +143,6 @@ if static_settings.REDIS_HOST:
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -162,60 +154,52 @@ DATABASES = {
     }
 }
 
-# Celery configuration
+# CELERY CONFIGURATION
 # https://blog.syncano.rocks/configuring-running-django-celery-docker-containers-pt-1/
-
-
 if static_settings.REDIS_HOST:
     # Set Redis as Broker URL
     BROKER_URL = (
         f"redis://{static_settings.REDIS_HOST}:{static_settings.REDIS_PORT}/2"
     )
 
-# Set django-redis as celery result backend
-CELERY_RESULT_BACKEND = "django-db"
-CELERY_REDIS_MAX_CONNECTIONS = 1
+    # Set django-redis as celery result backend
+    CELERY_RESULT_BACKEND = "django-db"
+    CELERY_REDIS_MAX_CONNECTIONS = 1
 
-# Sensible settings for celery
-CELERY_ALWAYS_EAGER = False
-CELERY_ACKS_LATE = True
-CELERY_TASK_PUBLISH_RETRY = True
-CELERY_DISABLE_RATE_LIMITS = False
+    # Sensible settings for celery
+    CELERY_ALWAYS_EAGER = False
+    CELERY_ACKS_LATE = True
+    CELERY_TASK_PUBLISH_RETRY = True
+    CELERY_DISABLE_RATE_LIMITS = False
 
-# By default we will ignore result
-# If you want to see results and try out tasks interactively, change it to False
-# Or change this setting on tasks level
-CELERY_IGNORE_RESULT = False
-CELERY_SEND_TASK_ERROR_EMAILS = False
-CELERY_TASK_RESULT_EXPIRES = 600
+    # By default we will ignore result
+    # If you want to see results and try out tasks interactively, change it to False
+    # Or change this setting on tasks level
+    CELERY_IGNORE_RESULT = False
+    CELERY_SEND_TASK_ERROR_EMAILS = False
+    CELERY_TASK_RESULT_EXPIRES = 600
 
-# configure queues, currently we have only one
-CELERY_DEFAULT_QUEUE = "default"
-# CELERY_QUEUES = (
-#     Queue('default', Exchange('default'), routing_key='default'),
-# )
+    # configure queues, currently we have only one
+    CELERY_DEFAULT_QUEUE = "default"
+    # CELERY_QUEUES = (
+    #     Queue('default', Exchange('default'), routing_key='default'),
+    # )
 
 
 # FILE STORAGE
-
 if static_settings.S3_STORAGE_ENABLED:
-    # aws settings
+    # aws credentials
     AWS_ACCESS_KEY_ID = static_settings.AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY = static_settings.AWS_SECRET_ACCESS_KEY
-    AWS_DEFAULT_REGION = "eu-west-3"
-    AWS_STORAGE_BUCKET_NAME = static_settings.AWS_STORAGE_BUCKET_NAME
+    # s3 settings
     AWS_DEFAULT_ACL = None
-    AWS_S3_CUSTOM_DOMAIN = (
-        f"s3.{AWS_DEFAULT_REGION}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}"
-    )
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+    S3_APP_FILES_URL = static_settings.S3_APP_FILES_URL
     # s3 static settings
-    STATIC_LOCATION = "static"
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
+    STATIC_URL = f"{S3_APP_FILES_URL}/static/"
     STATICFILES_STORAGE = "main.storage_backends.StaticStorage"
     # s3 public media settings
-    PUBLIC_MEDIA_LOCATION = "media"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
+    MEDIA_URL = f"{S3_APP_FILES_URL}/media/"
     DEFAULT_FILE_STORAGE = "main.storage_backends.PublicMediaStorage"
 else:
     STATIC_URL = "/staticfiles/"
@@ -227,33 +211,35 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 
 # Email parameters
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = static_settings.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = static_settings.EMAIL_HOST_PASSWORD
-EMAIL_USE_TLS = True
-EMAIL_TIMEOUT = 10
+if static_settings.EMAIL_ENABLED:
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.gmail.com"
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = static_settings.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = static_settings.EMAIL_HOST_PASSWORD
+    EMAIL_USE_TLS = True
+    EMAIL_TIMEOUT = 10
 
 
 # Configuration which writes all logging from the django logger to a local file
-LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "standard": {
-            "format": "%(asctime)s %(levelname)s %(name)s %(message)s"
+if static_settings.LOGGING_ENABLED:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "standard": {
+                "format": "%(asctime)s %(levelname)s %(name)s %(message)s"
+            },
         },
-    },
-    "handlers": {
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": "info.log",
-            "formatter": "standard",
+        "handlers": {
+            "file": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "info.log",
+                "formatter": "standard",
+            },
         },
-    },
-    "loggers": {
-        "": {"handlers": ["file"], "level": "INFO", "propagate": True},
-    },
-}
+        "loggers": {
+            "": {"handlers": ["file"], "level": "INFO", "propagate": True},
+        },
+    }

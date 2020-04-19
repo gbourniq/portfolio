@@ -25,8 +25,12 @@ REDIS_HOST = os.getenv("REDIS_HOST")
 REDIS_PORT = os.getenv("REDIS_PORT", 6379)
 
 # Email details for contact page
+EMAIL_ENABLED = os.getenv("EMAIL_ENABLED") == "True"
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+# Save logs to log.info
+LOGGING_ENABLED = os.getenv("LOGGING_ENABLED") == "True"
 
 # ==================== ANSIBLE ======================
 
@@ -40,8 +44,8 @@ DOCKER_PASSWORD = os.getenv("DOCKER_PASSWORD")
 
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 S3_STORAGE_ENABLED = os.getenv("S3_STORAGE_ENABLED") == "True"
+S3_APP_FILES_URL = os.getenv("S3_APP_FILES_URL")
 
 # ======================= CHECK ENV VARIABLES ARE SET =========================
 
@@ -63,7 +67,7 @@ if S3_STORAGE_ENABLED:
     ENV_VARS += [
         "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY",
-        "AWS_STORAGE_BUCKET_NAME",
+        "S3_APP_FILES_URL",
     ]
 
 

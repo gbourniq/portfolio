@@ -138,14 +138,14 @@ upload-docker-deploy-tarball:
 .PHONY: postgres-dump-to-s3
 postgres-dump-to-s3:
 	${INFO} "Create and upload postgres backup to AWS S3"
-	@ ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_BASE_LOCATION_POSTGRES_BACKUP}
+	@ ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
 	${SUCCESS} "Postgres dump uploaded to S3"
 
 ### DOWNLOAD POSTGRES DUMP FROM S3 AND RESTORE DATABASE  ###
 .PHONY: postgres-restore-from-s3
 postgres-restore-from-s3:
 	${INFO} "Download postgres dump from S3 and restore database"
-	@ ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_BASE_LOCATION_POSTGRES_BACKUP}
+	@ ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
 	${SUCCESS} "Postgres successfully restored from backup"
 
 

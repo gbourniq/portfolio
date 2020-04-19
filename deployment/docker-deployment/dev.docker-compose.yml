@@ -30,8 +30,8 @@ services:
       AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?.env not set up correctly}
       S3_STORAGE_ENABLED: ${S3_STORAGE_ENABLED:?.env not set up correctly}
     volumes:
-      - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
-      - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
+      # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
+      # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
       - ./app/dev.startup_server.sh:${DOCKER_APP_CODE}/dev.startup_server.sh
     healthcheck:
@@ -76,8 +76,8 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
     volumes:
-      - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
-      - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
+      # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
+      # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
       - ./app/startup_celery.sh:${DOCKER_APP_CODE}/startup_celery.sh
     healthcheck:
@@ -136,8 +136,8 @@ services:
 
 
 volumes:
-  staticfiles:
-  mediafiles:
+  # staticfiles:
+  # mediafiles:
   redisdata:
   pgdata:
   pglogs:
