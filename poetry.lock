@@ -349,6 +349,19 @@ six = "*"
 
 [[package]]
 category = "main"
+description = "Django Standarized Image Field"
+name = "django-stdimage"
+optional = false
+python-versions = "*"
+version = "5.1.1"
+
+[package.dependencies]
+Django = ">=1.11"
+pillow = ">=2.5"
+progressbar2 = ">=3.0.0"
+
+[[package]]
+category = "main"
 description = "Support for many storage backends in Django"
 name = "django-storages"
 optional = false
@@ -612,6 +625,22 @@ virtualenv = ">=15.2"
 
 [[package]]
 category = "main"
+description = "A Python Progressbar library to provide visual (yet text based) progress to long running operations."
+name = "progressbar2"
+optional = false
+python-versions = "*"
+version = "3.51.0"
+
+[package.dependencies]
+python-utils = ">=2.3.0"
+six = "*"
+
+[package.extras]
+docs = ["sphinx (>=1.7.4)"]
+tests = ["flake8 (>=3.7.7)", "pytest (>=4.3.1)", "pytest-cov (>=2.6.1)", "pytest-flakes (>=4.0.0)", "pytest-pep8 (>=1.0.6)", "freezegun (>=0.3.11)", "sphinx (>=1.8.5)"]
+
+[[package]]
+category = "main"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
 name = "psycopg2"
 optional = false
@@ -783,6 +812,17 @@ version = "2.8.1"
 
 [package.dependencies]
 six = ">=1.5"
+
+[[package]]
+category = "main"
+description = "Python Utils is a module with some convenient utilities not included with the standard Python install"
+name = "python-utils"
+optional = false
+python-versions = "*"
+version = "2.4.0"
+
+[package.dependencies]
+six = "*"
 
 [[package]]
 category = "main"
@@ -958,7 +998,7 @@ python-versions = "*"
 version = "1.11.2"
 
 [metadata]
-content-hash = "27f86dd5a37888a4ac7b1d9985ff7014bbfa5313b3527fa410bdaa96e2ea670b"
+content-hash = "cb18f269e9fa51c0b115020eadc45b7ba52bbaf2ca630c6d989e5aad92192fbf"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1130,6 +1170,10 @@ django-redis-cache = [
     {file = "django-redis-cache-2.1.0.tar.gz", hash = "sha256:5c581743de5994e6b15abfd5b3dbcb8bf00e42d97658c96b7218bcb6a63f863b"},
     {file = "django_redis_cache-2.1.0-py3-none-any.whl", hash = "sha256:bc0eaf20d275708e0437cbea28f9965e1922c15291f6206edbef3966c029836b"},
 ]
+django-stdimage = [
+    {file = "django-stdimage-5.1.1.tar.gz", hash = "sha256:d5bdda5abcb66b489952d04361fea9b2ec9839d21b94d3fdc6b6585fc2e44c14"},
+    {file = "django_stdimage-5.1.1-py2.py3-none-any.whl", hash = "sha256:c299ca8cbd686b3072d16c1d67b8782af239e4d4b0d46e09296be8fa68db66ff"},
+]
 django-storages = [
     {file = "django-storages-1.9.1.tar.gz", hash = "sha256:a59e9923cbce7068792f75344ed7727021ee4ac20f227cf17297d0d03d141e91"},
     {file = "django_storages-1.9.1-py2.py3-none-any.whl", hash = "sha256:3103991c2ee8cef8a2ff096709973ffe7106183d211a79f22cf855f33533d924"},
@@ -1292,6 +1336,10 @@ pre-commit = [
     {file = "pre_commit-2.2.0-py2.py3-none-any.whl", hash = "sha256:487c675916e6f99d355ec5595ad77b325689d423ef4839db1ed2f02f639c9522"},
     {file = "pre_commit-2.2.0.tar.gz", hash = "sha256:c0aa11bce04a7b46c5544723aedf4e81a4d5f64ad1205a30a9ea12d5e81969e1"},
 ]
+progressbar2 = [
+    {file = "progressbar2-3.51.0-py2.py3-none-any.whl", hash = "sha256:f2892f08628aa9b488b08d5caa1dbe84b45978054a305f6d1924495d76a2e721"},
+    {file = "progressbar2-3.51.0.tar.gz", hash = "sha256:fb71a37a8430f9a52a7ab8dc3d20f63afa3449da533043395f60d0c80c66dab1"},
+]
 psycopg2 = [
     {file = "psycopg2-2.8.5-cp27-cp27m-win32.whl", hash = "sha256:a0984ff49e176062fcdc8a5a2a670c9bb1704a2f69548bce8f8a7bad41c661bf"},
     {file = "psycopg2-2.8.5-cp27-cp27m-win_amd64.whl", hash = "sha256:acf56d564e443e3dea152efe972b1434058244298a94348fc518d6dd6a9fb0bb"},
@@ -1372,6 +1420,10 @@ pytest-testmon = [
 python-dateutil = [
     {file = "python-dateutil-2.8.1.tar.gz", hash = "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c"},
     {file = "python_dateutil-2.8.1-py2.py3-none-any.whl", hash = "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"},
+]
+python-utils = [
+    {file = "python-utils-2.4.0.tar.gz", hash = "sha256:f21fc09ff58ea5ebd1fd2e8ef7f63e39d456336900f26bdc9334a03a3f7d8089"},
+    {file = "python_utils-2.4.0-py2.py3-none-any.whl", hash = "sha256:ebaadab29d0cb9dca0a82eab9c405f5be5125dbbff35b8f32cc433fa498dbaa7"},
 ]
 pytz = [
     {file = "pytz-2019.3-py2.py3-none-any.whl", hash = "sha256:1c557d7d0e871de1f5ccd5833f60fb2550652da6be2693c1e02300743d21500d"},

@@ -188,19 +188,21 @@ if static_settings.REDIS_HOST:
 
 # FILE STORAGE
 if static_settings.S3_STORAGE_ENABLED:
-    # aws variables
+    # aws s3 settings for django
     AWS_ACCESS_KEY_ID = static_settings.AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY = static_settings.AWS_SECRET_ACCESS_KEY
     AWS_STORAGE_BUCKET_NAME = static_settings.AWS_STORAGE_BUCKET_NAME
-    # s3 settings
+    AWS_DEFAULT_REGION = static_settings.AWS_DEFAULT_REGION
     AWS_DEFAULT_ACL = None
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
-    S3_APP_FILES_URL = static_settings.S3_APP_FILES_URL
+    AWS_S3_CUSTOM_DOMAIN = (
+        f"s3.{AWS_DEFAULT_REGION}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}"
+    )
     # s3 static settings
-    STATIC_URL = f"{S3_APP_FILES_URL}/static/"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
     STATICFILES_STORAGE = "main.storage_backends.StaticStorage"
     # s3 public media settings
-    MEDIA_URL = f"{S3_APP_FILES_URL}/media/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
     DEFAULT_FILE_STORAGE = "main.storage_backends.PublicMediaStorage"
 else:
     STATIC_URL = "/staticfiles/"

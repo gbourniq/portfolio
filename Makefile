@@ -53,6 +53,12 @@ portfolio:
 	${INFO} "Building portfolio package"
 	@ python utils/package_builder.py --name ${PROJECT_NAME}
 
+### DUMMY DJANGO SUPERUSER FOR LOCAL DEVELOPMENT ###
+.PHONY: django-superuser
+django-superuser:
+	${INFO} "Create django superuser through django shell"
+	@ cd app && echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'gbournique@gmail.com', 'admin')" | python manage.py shell || true
+
 ### DOCKER BUILD ###
 .PHONY: tagged-image
 tagged-image:
@@ -130,7 +136,7 @@ publish-latest: docker-login
 upload-docker-deploy-tarball:
 	${INFO} "Build and upload docker_deploy.tar.gz to AWS S3 "
 	@ python utils/build_docker_deploy_tarball.py
-	@ aws s3 cp ./bin/docker_deploy.tar.gz s3://guillaume.bournique/portfolio_docker_deploy/
+	@ aws s3 cp ./bin/docker_deploy.tar.gz ${S3_DOCKER_DEPLOY_URI}
 	${SUCCESS} "docker_deploy.tar.gz built and uploaded successfully to S3."
 
 
