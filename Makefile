@@ -1,18 +1,7 @@
 # Set shell
 SHELL=/bin/bash -e -o pipefail
 
-# Cosmetics
-RED := "\e[1;31m"
-YELLOW := "\e[1;33m"
-GREEN := "\033[32m"
-NC := "\e[0m"
-INFO := @bash -c 'printf ${YELLOW}; echo "[INFO] $$1"; printf ${NC}' MESSAGE
-MESSAGE := @bash -c 'printf ${NC}; echo "$$1"; printf ${NC}' MESSAGE
-SUCCESS := @bash -c 'printf ${GREEN}; echo "[SUCCESS] $$1"; printf ${NC}' MESSAGE
-WARNING := @bash -c 'printf ${RED}; echo "[WARNING] $$1"; printf ${NC}' MESSAGE
-
 # Conda environment
-CONDA_ENV_NAME=portfolio
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh; conda activate ${CONDA_ENV_NAME}
 
 # Docker
@@ -26,43 +15,43 @@ POETRY_VERSION=1.0.5
 ### INSTALL DEPENDENCIES ###
 .PHONY: env
 env:
-	${INFO} "Creating conda environment and installing poetry packages"
+	@ INFO "Creating conda environment and installing poetry packages"
 	@ conda env create
-	${SUCCESS} "${CONDA_ENV_NAMEm} conda environment has been created!"
+	@ SUCCESS "${CONDA_ENV_NAME} conda environment has been created!"
 	@ ($(CONDA_ACTIVATE); poetry install)
-	${SUCCESS} "Dependencies installed with Poetry!"
-	${MESSAGE} "Please activate the conda environment and source your environment variables:"
-	${MESSAGE} "- conda activate ${CONDA_ENV_NAME}"
-	${MESSAGE} "- source .env"
+	@ SUCCESS "Dependencies installed with Poetry!"
+	@ MESSAGE "Please activate the conda environment and source your environment variables:"
+	@ MESSAGE "- conda activate ${CONDA_ENV_NAME}"
+	@ MESSAGE "- source .env"
 
 ### SET PRE-COMMIT ###
 .PHONY: pre-commit
 pre-commit:
 	@ pre-commit install -t pre-commit -t commit-msg
-	${SUCCESS} "pre-commit set up"
+	@ SUCCESS "pre-commit set up"
 
 ### UNIT TESTS ###
 .PHONY: unit-tests
 unit-tests: 
-	${INFO} "Running unit tests"
+	@ INFO "Running unit tests"
 	@ cd app; pytest .
 	
 ### PACKAGE APPLICATION ###
 .PHONY: portfolio
 portfolio:
-	${INFO} "Building portfolio package"
+	@ INFO "Building portfolio package"
 	@ python utils/package_builder.py --name ${PROJECT_NAME}
 
 ### DUMMY DJANGO SUPERUSER FOR LOCAL DEVELOPMENT ###
-.PHONY: django-superuser
-django-superuser:
-	${INFO} "Create django superuser through django shell"
-	@ cd app && echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'gbournique@gmail.com', 'admin')" | python manage.py shell || true
+.PHONY: recreatedb
+recreatedb:
+	@ INFO "Re-create postgres, migrations and dummy superuser"
+	@ . ./scripts/reset_all.sh
 
 ### DOCKER BUILD ###
 .PHONY: tagged-image
 tagged-image:
-	${INFO} "Building docker image ${IMAGE_REPOSITORY}:${IMAGE_TAG}"
+	@ INFO "Building docker image ${IMAGE_REPOSITORY}:${IMAGE_TAG}"
 	@ docker build -f ${PORTFOLIO_DOCKERFILE} -t ${IMAGE_REPOSITORY}:${IMAGE_TAG} \
 		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
 		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
@@ -70,11 +59,11 @@ tagged-image:
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
 		--build-arg PYPROJECT_FILE=./pyproject.toml
-	${SUCCESS} "${IMAGE_REPOSITORY}:${IMAGE_TAG} built successfully"
+	@ SUCCESS "${IMAGE_REPOSITORY}:${IMAGE_TAG} built successfully"
 
 .PHONY: latest
 latest:
-	${INFO} "Building docker image ${IMAGE_REPOSITORY}:latest"
+	@ INFO "Building docker image ${IMAGE_REPOSITORY}:latest"
 	@ docker build -f ${PORTFOLIO_DOCKERFILE} -t ${IMAGE_REPOSITORY}:latest \
 		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
 		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
@@ -82,36 +71,36 @@ latest:
 		--build-arg POETRY_VERSION=${POETRY_VERSION} \
 		--build-arg POETRY_LOCK_FILE=./poetry.lock \
 		--build-arg PYPROJECT_FILE=./pyproject.toml
-	${SUCCESS} "${IMAGE_REPOSITORY}:latest built successfully"
+	@ SUCCESS "${IMAGE_REPOSITORY}:latest built successfully"
 
 ### DOCKER COMPOSE ###
 .PHONY: up
 up:
-	${INFO} "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
+	@ INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} up -d
-	${SUCCESS} "Services started successfully"
-	${INFO} "Checking services health..."
+	@ SUCCESS "Services started successfully"
+	@ INFO "Checking services health..."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},postgres)
-	${MESSAGE} "POSTGRES OK."
+	@ MESSAGE "POSTGRES OK."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},redis)
-	${MESSAGE} "REDIS OK."
+	@ MESSAGE "REDIS OK."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},app)
-	${MESSAGE} "WEB SERVER OK."
+	@ MESSAGE "WEB SERVER OK."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},worker)
-	${MESSAGE} "CELERY WORKER OK."
-	${SUCCESS} "All services are healthy"
+	@ MESSAGE "CELERY WORKER OK."
+	@ SUCCESS "All services are healthy"
 
 .PHONY: down
 down:
-	${INFO} "[BUILD=${BUILD}] Removing docker-compose services..."
+	@ INFO "[BUILD=${BUILD}] Removing docker-compose services..."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} down --remove-orphans
-	${SUCCESS} "Services removed successfully"
+	@ SUCCESS "Services removed successfully"
 
 .PHONY: stop
 stop:
-	${INFO} "[BUILD=${BUILD}] Stopping docker-compose services..."
+	@ INFO "[BUILD=${BUILD}] Stopping docker-compose services..."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} stop
-	${SUCCESS} "Services stopped successfully"
+	@ SUCCESS "Services stopped successfully"
 
 ### PUBLISH IMAGE ###
 .PHONY: docker-login
@@ -120,39 +109,37 @@ docker-login:
 
 .PHONY: publish-tagged
 publish-tagged: docker-login
-	${INFO} "Publishing ${IMAGE_REPOSITORY}:${IMAGE_TAG} image to Dockerhub..."
+	@ INFO "Publishing ${IMAGE_REPOSITORY}:${IMAGE_TAG} image to Dockerhub..."
 	@ docker push ${IMAGE_REPOSITORY}:${IMAGE_TAG}
-	${SUCCESS} "Image published successfully"
+	@ SUCCESS "Image published successfully"
 
 .PHONY: publish-latest
 publish-latest: docker-login
-	${INFO} "Publishing ${IMAGE_REPOSITORY}:latest image to ${DOCKER_REGISTRY:-docker.io}..."
+	@ INFO "Publishing ${IMAGE_REPOSITORY}:latest image to ${DOCKER_REGISTRY:-docker.io}..."
 	@ docker push ${IMAGE_REPOSITORY}:latest
-	${SUCCESS} "Image published successfully"
-
+	@ SUCCESS "Image published successfully"
 
 ### BUILD AND UPLOAD DOCKER_DEPLOY TARBALL TO AWS S3 ###
 .PHONY: upload-docker-deploy-tarball
 upload-docker-deploy-tarball:
-	${INFO} "Build and upload docker_deploy.tar.gz to AWS S3 "
+	@ INFO "Build and upload docker_deploy.tar.gz to AWS S3 "
 	@ python utils/build_docker_deploy_tarball.py
 	@ aws s3 cp ./bin/docker_deploy.tar.gz ${S3_DOCKER_DEPLOY_URI}
-	${SUCCESS} "docker_deploy.tar.gz built and uploaded successfully to S3."
-
+	@ SUCCESS "docker_deploy.tar.gz built and uploaded successfully to S3."
 
 ### CREATE POSTGRES DUMP AND UPLOAD TO S3 ###
 .PHONY: postgres-dump-to-s3
 postgres-dump-to-s3:
-	${INFO} "Create and upload postgres backup to AWS S3"
+	@ INFO "Create and upload postgres backup to AWS S3"
 	@ ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
-	${SUCCESS} "Postgres dump uploaded to S3"
+	@ SUCCESS "Postgres dump uploaded to S3"
 
 ### DOWNLOAD POSTGRES DUMP FROM S3 AND RESTORE DATABASE  ###
 .PHONY: postgres-restore-from-s3
 postgres-restore-from-s3:
-	${INFO} "Download postgres dump from S3 and restore database"
+	@ INFO "Download postgres dump from S3 and restore database"
 	@ ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
-	${SUCCESS} "Postgres successfully restored from backup"
+	@ SUCCESS "Postgres successfully restored from backup"
 
 
 
@@ -161,9 +148,9 @@ postgres-restore-from-s3:
 # Ensure all environment variables are set
 .PHONY: env-vars-check
 env-vars-check:
-	${INFO} "Checking if required environment variables are set..."
+	@ INFO "Checking if required environment variables are set..."
 	@ ./scripts/env_vars_check.sh
-	${SUCCESS} "All good!"
+	@ SUCCESS "All good!"
 
 # Ensure environment variable is set
 check-%:

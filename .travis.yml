@@ -31,15 +31,11 @@ install:
   - sudo apt-get install sshpass
 
 script:
-  - make env
-  - conda activate portfolio
-  - make unit-tests
-  - make portfolio
-  - make latest
-  - export BUILD=dev && make up && make down
-  - export BUILD=prod && make up && make down
-  - make docker-login
-  - make publish-latest
-  - make upload-docker-deploy-tarball
-  # Run Ansible for QA deployment on ec2
-  # - cd ansible/ && make run-docker-qa-playbook
+  - ./build_steps/run_ci_pipeline.sh
+  - ./build_steps/run_cd_pipeline.sh
+  # - ./build_steps/run_k8s_pipeline.sh
+
+
+
+
+

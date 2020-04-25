@@ -6,7 +6,11 @@ repos:
         stages: [commit]
         language: system
         entry: autoflake
-        args: ['--in-place', '--remove-all-unused-imports', '--remove-unused-variables']
+        args: 
+          - "--in-place"
+          - "--remove-all-unused-imports"
+          - "--remove-unused-variables"
+          - "--ignore-init-module-imports"
         types: [python]
 
       - id: isort
@@ -14,7 +18,13 @@ repos:
         stages: [commit]
         language: system
         entry: isort
-        args: ["-m", "3", "-tc", "-w", "88"]
+        args: 
+          - "--line-width"
+          - "88"
+          - "--multi-line"
+          - "3"
+          - "--trailing-comma"
+          - "--use-parentheses"
         types: [python]
 
       - id: black
