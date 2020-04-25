@@ -1,7 +1,7 @@
 #!/bin/bash
 
 INFO "Activating ${CONDA_ENV_NAME} conda environment"
-source $$(conda info --base)/etc/profile.d/conda.sh
+source $(conda info --base)/etc/profile.d/conda.sh
 conda activate ${CONDA_ENV_NAME}
 
 INFO "Run tests in pytest" 

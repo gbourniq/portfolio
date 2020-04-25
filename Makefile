@@ -4,12 +4,7 @@ SHELL=/bin/bash -e -o pipefail
 # Conda environment
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh; conda activate ${CONDA_ENV_NAME}
 
-# Docker
-COMPOSE_FILE=${BUILD}.docker-compose.yml
-PROJECT_NAME=portfolio
-COMPOSE_ARGS=-p ${PROJECT_NAME} -f ${COMPOSE_FILE}
-PORTFOLIO_DOCKERFILE=deployment/docker-build/app.Dockerfile
-POETRY_VERSION=1.0.5
+
 
 
 ### INSTALL DEPENDENCIES ###
@@ -51,8 +46,9 @@ recreatedb:
 ### DOCKER BUILD ###
 .PHONY: tagged-image
 tagged-image:
+	@ export IMAGE_TAG=$(poetry version | awk '{print $NF}')
 	@ INFO "Building docker image ${IMAGE_REPOSITORY}:${IMAGE_TAG}"
-	@ docker build -f ${PORTFOLIO_DOCKERFILE} -t ${IMAGE_REPOSITORY}:${IMAGE_TAG} \
+	@ docker build -f ${DOCKERFILE_PATH} -t ${IMAGE_REPOSITORY}:${IMAGE_TAG} \
 		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
 		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
 		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
@@ -64,7 +60,7 @@ tagged-image:
 .PHONY: latest
 latest:
 	@ INFO "Building docker image ${IMAGE_REPOSITORY}:latest"
-	@ docker build -f ${PORTFOLIO_DOCKERFILE} -t ${IMAGE_REPOSITORY}:latest \
+	@ docker build -f ${DOCKERFILE_PATH} -t ${IMAGE_REPOSITORY}:latest \
 		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
 		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
 		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
@@ -109,6 +105,7 @@ docker-login:
 
 .PHONY: publish-tagged
 publish-tagged: docker-login
+	@ export IMAGE_TAG=$(poetry version | awk '{print $NF}')
 	@ INFO "Publishing ${IMAGE_REPOSITORY}:${IMAGE_TAG} image to Dockerhub..."
 	@ docker push ${IMAGE_REPOSITORY}:${IMAGE_TAG}
 	@ SUCCESS "Image published successfully"

@@ -25,10 +25,11 @@ services:
       EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
       # aws s3 - should be docker/k8s secret
+      S3_STORAGE_ENABLED: ${S3_STORAGE_ENABLED:?.env not set up correctly}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?.env not set up correctly}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?.env not set up correctly}
       AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?.env not set up correctly}
-      S3_STORAGE_ENABLED: ${S3_STORAGE_ENABLED:?.env not set up correctly}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?.env not set up correctly}
     volumes:
       # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
