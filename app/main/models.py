@@ -78,7 +78,6 @@ class Category(models.Model):
 class SubCategory(models.Model):
     subcategory_name = models.CharField(max_length=200)
     summary = models.CharField(max_length=200)
-    content = models.TextField()
     image = models.ImageField(upload_to=UPLOADS_FOLDER_PATH)
     subcategory_slug = models.CharField(max_length=200, default=1)
     category_name = models.ForeignKey(

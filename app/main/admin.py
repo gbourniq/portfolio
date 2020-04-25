@@ -22,7 +22,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
     fieldsets = [
         ("Title", {"fields": ["subcategory_name", "subcategory_slug"]}),
         ("Parent Element", {"fields": ["category_name"]}),
-        ("Content", {"fields": ["summary", "content", "image"]}),
+        ("Content", {"fields": ["summary", "image"]}),
     ]
     # Overwrite properties for TextFields only
     formfield_overrides = {
