@@ -51,7 +51,6 @@ EXCLUDE_MODULES = [
     ".idea",
     ".pytest_cache",
     "app/tests",
-    "scripts",
 ]
 EXCLUDE_MODULES_PATHS = [
     Path(excl_dir).absolute() for excl_dir in EXCLUDE_MODULES

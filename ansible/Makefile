@@ -1,22 +1,7 @@
 # Set shell
 SHELL=/bin/bash -e -o pipefail
 
-# Cosmetics
-RED := "\e[1;31m"
-YELLOW := "\e[1;33m"
-GREEN := "\033[32m"
-NC := "\e[0m"
-INFO := @bash -c 'printf ${YELLOW}; echo "[INFO] $$1"; printf ${NC}' MESSAGE
-MESSAGE := @bash -c 'printf ${NC}; echo "$$1"; printf ${NC}' MESSAGE
-SUCCESS := @bash -c 'printf ${GREEN}; echo "[SUCCESS] $$1"; printf ${NC}' MESSAGE
-WARNING := @bash -c 'printf ${RED}; echo "[WARNING] $$1"; printf ${NC}' MESSAGE
-
-
-###### ANSIBLE ######
-
-.PHONY: run-docker-deploy-playbook run-docker-qa-playbook
-
-before-playbook: env-vars-check
+before-playbook: env-validation
 	@ echo "${ANSIBLE_VAULT_PASSWORD}" > /tmp/ansible-vault-pw
 
 after-playbook:
@@ -38,33 +23,15 @@ docker-qa-playbook:
 		--skip-tags="slack-notification-dev" \
 		-vv
 
-postgres-dump-playbook:
-	@ ansible-playbook \
-		-i inventories \
-		--vault-id /tmp/ansible-vault-pw \
-		postgres_backup.yml \
-		--tags="postgres-dump" \
-		-vv
-
-postgres-restore-playbook:
-	@ ansible-playbook \
-		-i inventories \
-		--vault-id /tmp/ansible-vault-pw \
-		postgres_backup.yml \
-		--tags="postgres-restore" \
-		-vv
-
+.PHONY: run-docker-deploy-playbook run-docker-qa-playbook
 run-docker-deploy-playbook: before-playbook docker-deploy-playbook after-playbook
 run-docker-qa-playbook: before-playbook docker-qa-playbook after-playbook
-run-postgres-dump-playbook: before-playbook postgres-dump-playbook after-playbook
-run-postgres-restore-playbook: before-playbook postgres-restore-playbook after-playbook
-
 
 ###### UTILS ######
 
 # Ensure all environment variables are set
-.PHONY: env-vars-check
-env-vars-check:
-	${INFO} "Checking if required environment variables are set..."
-	@ ../scripts/env_vars_check.sh
-	${SUCCESS} "All good!"
+.PHONY: env-validation
+env-validation:
+	@ INFO "Checking if required environment variables are set..."
+	@ ../scripts/env_validation.sh
+	@ SUCCESS "All good!"

@@ -37,8 +37,8 @@ services:
       - ./app/dev.startup_server.sh:${DOCKER_APP_CODE}/dev.startup_server.sh
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
-      interval: 10s
-      timeout: 30s
+      interval: 30s
+      timeout: 60s
       retries: 5
     expose: 
       - 8080

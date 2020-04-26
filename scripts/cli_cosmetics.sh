@@ -10,10 +10,10 @@ export NC="\e[0m"
 INFO() { printf ${YELLOW}; echo "[INFO] $1"; printf ${NC}; }
 MESSAGE() { printf ${NC}; echo "$1"; printf ${NC}; }
 SUCCESS() { printf ${GREEN}; echo "[SUCCESS] $1"; printf ${NC}; }
-WARNING() { printf ${RED}; echo "[WARNING] $1"; printf ${NC}; }
+ERROR() { printf ${RED}; echo "[ERROR] $1"; printf ${NC}; }
 
 # Export functions to be used within Makefile
 export -f INFO
 export -f MESSAGE
 export -f SUCCESS
-export -f WARNING
+export -f ERROR

@@ -21,6 +21,24 @@
   roles:
     - send_slack_notification
 
+- name: Create and upload Postgres dump to S3
+  hosts: docker_qa
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - postgres_dump_to_s3
+  tags:
+    - postgres-dump
+
+- name: Load latest Postgres dump from S3
+  hosts: docker_qa
+  remote_user: ubuntu
+  become: yes
+  roles:
+    - postgres_restore_from_s3
+  tags:
+    - postgres-restore
+
 - name: Stopping docker-compose services
   hosts: docker_qa
   remote_user: ubuntu

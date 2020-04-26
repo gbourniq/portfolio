@@ -34,7 +34,7 @@
 - name: Download compose files from AWS S3
   become: yes
   aws_s3:
-    bucket: "{{ DOCKER_DEPLOY_BUCKET }}"
+    bucket: "{{ AWS_STORAGE_BUCKET_NAME }}"
     object: "/{{ DOCKER_DEPLOY_BUCKET_FOLDER }}/{{ DOCKER_DEPLOY_ARTEFACT }}"
     dest: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
     mode: get

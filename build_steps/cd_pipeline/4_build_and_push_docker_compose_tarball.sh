@@ -1,16 +1,32 @@
 #!/bin/bash
 
-# echo "Setting PYTHONPATH to $PWD for tarball script imports to work properly"
-# export PYTHONPATH=$PWD
+# Exit on error
+set -e
 
-# echo "Installing any needed dependencies for docker compose tarball creation"
-# pip install -r docker_deployment/deployment_requirements.txt
+# Set traps to clean up if exit or something goes wrong
+trap "echo 'Something went wrong!' && exit 1" ERR
 
-# python docker_deployment/build_docker_deploy_tarball.py -dp # fill in dummy vals b/c this is for QA auto deploys
+# Helper function: Exit with error
+function exit_error() {
+  ERROR "$1" 1>&2
+  exit 1
+}
 
-# echo "creating directory docker_compose_artifacts and moving docker compose files there"
-# mkdir -p docker_compose_artifacts
-# mv docker_deployment/bin/mvp_docker_deploy.tar.gz docker_compose_artifacts/mvp_docker_deploy.tar.gz
+INFO "Setting PYTHONPATH to $PWD for tarball script imports to work properly"
+export PYTHONPATH=$PWD
 
+INFO "Build docker_deploy.tar.gz"
+python utils/build_docker_deploy_tarball.py
+BUILD_SCRIPT_STATE=$?
+if [ "$BUILD_SCRIPT_STATE" -ne 0 ]; then
+  exit_error "Build script failed! Aborting."
+fi
 
-  - make upload-docker-deploy-tarball
+INFO "Upload docker_deploy.tar.gz to S3"
+aws s3 cp ./bin/docker_deploy.tar.gz ${S3_DOCKER_DEPLOY_URI}/
+S3_UPLOAD_STATE=$?
+if [ "$S3_UPLOAD_STATE" -ne 0 ]; then
+  exit_error "S3 upload failed! Aborting."
+fi
+
+SUCCESS "docker_deploy.tar.gz built and uploaded to S3."

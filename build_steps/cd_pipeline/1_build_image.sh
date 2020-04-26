@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Exit on error
+set -e
+
+# Set traps to clean up if exit or something goes wrong
+trap "echo 'Something went wrong!' && exit 1" ERR
+
 INFO "Packaging portfolio app to /bin"
 python utils/package_builder.py --name ${PROJECT_NAME}
 

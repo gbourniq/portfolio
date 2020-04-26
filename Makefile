@@ -4,9 +4,6 @@ SHELL=/bin/bash -e -o pipefail
 # Conda environment
 CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh; conda activate ${CONDA_ENV_NAME}
 
-
-
-
 ### INSTALL DEPENDENCIES ###
 .PHONY: env
 env:
@@ -74,16 +71,11 @@ latest:
 up:
 	@ INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
 	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} up -d
-	@ SUCCESS "Services started successfully"
 	@ INFO "Checking services health..."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},postgres)
-	@ MESSAGE "POSTGRES OK."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},redis)
-	@ MESSAGE "REDIS OK."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},app)
-	@ MESSAGE "WEB SERVER OK."
 	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},worker)
-	@ MESSAGE "CELERY WORKER OK."
 	@ SUCCESS "All services are healthy"
 
 .PHONY: down
@@ -121,21 +113,21 @@ publish-latest: docker-login
 upload-docker-deploy-tarball:
 	@ INFO "Build and upload docker_deploy.tar.gz to AWS S3 "
 	@ python utils/build_docker_deploy_tarball.py
-	@ aws s3 cp ./bin/docker_deploy.tar.gz ${S3_DOCKER_DEPLOY_URI}
+	@ aws s3 cp ./bin/docker_deploy.tar.gz ${S3_DOCKER_DEPLOY_URI}/
 	@ SUCCESS "docker_deploy.tar.gz built and uploaded successfully to S3."
 
 ### CREATE POSTGRES DUMP AND UPLOAD TO S3 ###
 .PHONY: postgres-dump-to-s3
 postgres-dump-to-s3:
 	@ INFO "Create and upload postgres backup to AWS S3"
-	@ ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
+	@ ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
 	@ SUCCESS "Postgres dump uploaded to S3"
 
 ### DOWNLOAD POSTGRES DUMP FROM S3 AND RESTORE DATABASE  ###
 .PHONY: postgres-restore-from-s3
 postgres-restore-from-s3:
 	@ INFO "Download postgres dump from S3 and restore database"
-	@ ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
+	@ ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
 	@ SUCCESS "Postgres successfully restored from backup"
 
 
@@ -143,10 +135,10 @@ postgres-restore-from-s3:
 ###### UTILS ######
 
 # Ensure all environment variables are set
-.PHONY: env-vars-check
-env-vars-check:
+.PHONY: env-validation
+env-validation:
 	@ INFO "Checking if required environment variables are set..."
-	@ ./scripts/env_vars_check.sh
+	@ ./scripts/env_validation.sh
 	@ SUCCESS "All good!"
 
 # Ensure environment variable is set
@@ -167,5 +159,6 @@ check_service_health = { \
   done; \
   if [[ $(call get_service_health,$(1),$(2)) != healthy ]]; \
     then echo $(2) failed health check; exit 1; \
+	else echo $(2) healthy!; \
   fi; \
 }

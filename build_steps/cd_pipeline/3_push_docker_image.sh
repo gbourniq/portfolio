@@ -1,23 +1,38 @@
 #!/bin/bash
 
-# DOCKER_TAG_LATEST="latest"
-# DOCKER_TAG_CURRENT=$(poetry version | grep -oE '[0-9]+\.[0-9]+\.[0-9]+(?:-rc\.[0-9]+)?$')
-# echo $DOCKER_TAG_CURRENT
+# Exit on error
+set -e
 
-# docker system prune -a --force
+# Set traps to clean up if exit or something goes wrong
+trap "echo 'Something went wrong!' && exit 1" ERR
 
-# # # Building docker image
-# docker build -f docker_deployment/mvp.Dockerfile -t mvpipeline --build-arg MVP_TARBALL=bin/installer/mvp.tar.gz --build-arg CONDA_TARBALL=bin/installer/conda.tar.gz .
+# Helper function: Exit with error
+function exit_error() {
+  ERROR "$1" 1>&2
+  exit 1
+}
 
-# # Logging in before pushing to dockerhub
-# echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+# Define functions
+function docker_login() {
+  echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin 2>&1
+  DOCKER_LOGIN_STATE=$?
+  if [ "$DOCKER_LOGIN_STATE" -ne 0 ]; then
+    exit_error "Docker login failed! Aborting."
+  fi
+}
 
-# # # Pushing latest to dockerhub
-# docker tag mvpipeline eigentech/mvpipeline:${DOCKER_TAG_LATEST}
-# docker push eigentech/mvpipeline:${DOCKER_TAG_LATEST}
+function push_image() {
+  INFO "Publishing ${IMAGE_REPOSITORY}:latest image to ${DOCKER_REGISTRY:-docker.io}..."
+  docker push ${IMAGE_REPOSITORY}:latest
+  PUBLISH_STATE=$?
+  if [ "$PUBLISH_STATE" -ne 0 ]; then
+    exit_error "Pushing ${IMAGE_REPOSITORY}:latest failed! Aborting."
+  else
+    SUCCESS "${IMAGE_REPOSITORY}:latest published successfully!"
+  fi
+}
 
-# # # Logout
-# docker logout
-
-  - make docker-login
-  - make publish-latest
+# Start script
+docker_login
+push_image
+docker logout

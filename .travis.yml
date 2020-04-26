@@ -10,7 +10,7 @@ env:
 before_install:
   # Set required environment variables and awscli configuration
   - source .env
-  - make env-vars-check
+  - ./scripts/env_validation.sh
 
 install:
   # Install docker-compose
@@ -26,7 +26,7 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  # sshpass for Ansible to use ssh password authentication
+  # install sshpass on Travis instance for Ansible to use ssh password authentication
   # macOS: brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
   - sudo apt-get install sshpass
 
