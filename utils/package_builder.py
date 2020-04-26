@@ -44,6 +44,7 @@ EXCLUDE_FILES = [
 EXCLUDE_MODULES = [
     "bin",
     "ansible",
+    "build_steps",
     "deployment",
     "utils",
     "__pycache__",

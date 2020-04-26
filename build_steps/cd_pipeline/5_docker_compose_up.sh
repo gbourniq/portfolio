@@ -12,7 +12,16 @@ function exit_error() {
   exit 1
 }
 
-# Define functions
+remove_services() {
+  INFO "[BUILD=${BUILD}] Removing docker-compose services..."
+  docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
+}
+
+start_services() {
+  INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
+  docker-compose ${COMPOSE_ARGS} up -d
+}
+
 get_container_id() {
   echo $(docker-compose $1 ps -q $2)
 }
@@ -33,11 +42,6 @@ check_service_health() {
   fi;
 }
 
-start_services() {
-  INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
-  docker-compose ${COMPOSE_ARGS} up -d
-}
-
 check_all_services_health() {
   INFO "[BUILD=${BUILD}] Checking services health..."
   services=("postgres" "redis" "app" "worker")
@@ -47,23 +51,8 @@ check_all_services_health() {
   SUCCESS "All services are up and healthy"
 }
 
-remove_services() {
-  INFO "[BUILD=${BUILD}] Removing docker-compose services..."
-  docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
-  SUCCESS "[BUILD=${BUILD}] All cleaned up!"
-}
-
-
 ### Start script
 cd deployment/docker-deployment
-
-builds=("dev" "prod")
-
-for build in ${builds[*]}; do
-  export BUILD="$build"
-  start_services
-  check_all_services_health
-  remove_services
-done
-
-
+remove_services
+start_services
+check_all_services_health

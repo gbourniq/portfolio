@@ -1,139 +1,98 @@
 # Set shell
 SHELL=/bin/bash -e -o pipefail
 
-# Conda environment
-CONDA_ACTIVATE=source $$(conda info --base)/etc/profile.d/conda.sh; conda activate ${CONDA_ENV_NAME}
 
-### INSTALL DEPENDENCIES ###
-.PHONY: env
+# ----------------------------------------------------
+#
+# CI SCRIPTS
+#
+# ----------------------------------------------------
+.PHONY: env pre-commit lint-code unit-tests recreatedb
+
+ci-all: env pre-commit lint-code unit-tests recreatedb
+
 env:
-	@ INFO "Creating conda environment and installing poetry packages"
-	@ conda env create
-	@ SUCCESS "${CONDA_ENV_NAME} conda environment has been created!"
-	@ ($(CONDA_ACTIVATE); poetry install)
-	@ SUCCESS "Dependencies installed with Poetry!"
+	@ ./build_steps/ci_pipeline/1_set_environment.sh
 	@ MESSAGE "Please activate the conda environment and source your environment variables:"
 	@ MESSAGE "- conda activate ${CONDA_ENV_NAME}"
 	@ MESSAGE "- source .env"
 
-### SET PRE-COMMIT ###
-.PHONY: pre-commit
 pre-commit:
 	@ pre-commit install -t pre-commit -t commit-msg
 	@ SUCCESS "pre-commit set up"
 
-### UNIT TESTS ###
-.PHONY: unit-tests
-unit-tests: 
-	@ INFO "Running unit tests"
-	@ cd app; pytest .
-	
-### PACKAGE APPLICATION ###
-.PHONY: portfolio
-portfolio:
-	@ INFO "Building portfolio package"
-	@ python utils/package_builder.py --name ${PROJECT_NAME}
+lint-code: 
+	@ ./build_steps/ci_pipeline/2_lint_code.sh
 
-### DUMMY DJANGO SUPERUSER FOR LOCAL DEVELOPMENT ###
-.PHONY: recreatedb
+unit-tests: 
+	@ ./build_steps/ci_pipeline/3_run_pytest.sh
+
 recreatedb:
 	@ INFO "Re-create postgres, migrations and dummy superuser"
 	@ . ./scripts/reset_all.sh
 
-### DOCKER BUILD ###
-.PHONY: tagged-image
-tagged-image:
-	@ export IMAGE_TAG=$(poetry version | awk '{print $NF}')
-	@ INFO "Building docker image ${IMAGE_REPOSITORY}:${IMAGE_TAG}"
-	@ docker build -f ${DOCKERFILE_PATH} -t ${IMAGE_REPOSITORY}:${IMAGE_TAG} \
-		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
-		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
-		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
-		--build-arg POETRY_VERSION=${POETRY_VERSION} \
-		--build-arg POETRY_LOCK_FILE=./poetry.lock \
-		--build-arg PYPROJECT_FILE=./pyproject.toml
-	@ SUCCESS "${IMAGE_REPOSITORY}:${IMAGE_TAG} built successfully"
 
-.PHONY: latest
-latest:
-	@ INFO "Building docker image ${IMAGE_REPOSITORY}:latest"
-	@ docker build -f ${DOCKERFILE_PATH} -t ${IMAGE_REPOSITORY}:latest \
-		--build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
-		--build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
-		--build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
-		--build-arg POETRY_VERSION=${POETRY_VERSION} \
-		--build-arg POETRY_LOCK_FILE=./poetry.lock \
-		--build-arg PYPROJECT_FILE=./pyproject.toml
-	@ SUCCESS "${IMAGE_REPOSITORY}:latest built successfully"
+# ----------------------------------------------------
+#
+# CD SCRIPTS
+#
+# ----------------------------------------------------
+.PHONY: cd-all image-latest image-tagged check-compose-health-dev-prod up down publish-latest publish-tagged docker-deploy-tarball test-connection-postgres-backup run-ansible-playbook
 
-### DOCKER COMPOSE ###
-.PHONY: up
+cd-all: image-latest image-tagged check-compose-health-dev-prod up down publish-latest publish-tagged docker-deploy-tarball test-connection-postgres-backup run-ansible-playbook
+
+image-latest:
+	@ ./build_steps/cd_pipeline/1_build_image.sh
+
+image-tagged:
+	@ ./build_steps/cd_pipeline/1_build_image.sh tagged
+
+check-compose-health-dev-prod:
+	@ ./build_steps/cd_pipeline/2_docker_compose_health.sh
+
 up:
-	@ INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
-	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} up -d
-	@ INFO "Checking services health..."
-	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},postgres)
-	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},redis)
-	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},app)
-	@ cd deployment/docker-deployment && $(call check_service_health,${COMPOSE_ARGS},worker)
-	@ SUCCESS "All services are healthy"
+	@ ./build_steps/cd_pipeline/5_docker_compose_up.sh
 
-.PHONY: down
 down:
-	@ INFO "[BUILD=${BUILD}] Removing docker-compose services..."
-	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} down --remove-orphans
-	@ SUCCESS "Services removed successfully"
+	@ ./build_steps/cd_pipeline/7_docker_compose_down.sh
 
-.PHONY: stop
-stop:
-	@ INFO "[BUILD=${BUILD}] Stopping docker-compose services..."
-	@ cd deployment/docker-deployment && docker-compose ${COMPOSE_ARGS} stop
-	@ SUCCESS "Services stopped successfully"
+publish-latest:
+	@ ./build_steps/cd_pipeline/3_push_docker_image.sh
 
-### PUBLISH IMAGE ###
-.PHONY: docker-login
-docker-login:
-	@ docker login ${DOCKER_REGISTRY} -u ${DOCKER_USER} -p ${DOCKER_PASSWORD}
+publish-tagged:
+	@ ./build_steps/cd_pipeline/3_push_docker_image.sh tagged
 
-.PHONY: publish-tagged
-publish-tagged: docker-login
-	@ export IMAGE_TAG=$(poetry version | awk '{print $NF}')
-	@ INFO "Publishing ${IMAGE_REPOSITORY}:${IMAGE_TAG} image to Dockerhub..."
-	@ docker push ${IMAGE_REPOSITORY}:${IMAGE_TAG}
-	@ SUCCESS "Image published successfully"
+docker-deploy-tarball:
+	@ ./build_steps/cd_pipeline/4_build_and_push_docker_compose_tarball.sh
 
-.PHONY: publish-latest
-publish-latest: docker-login
-	@ INFO "Publishing ${IMAGE_REPOSITORY}:latest image to ${DOCKER_REGISTRY:-docker.io}..."
-	@ docker push ${IMAGE_REPOSITORY}:latest
-	@ SUCCESS "Image published successfully"
+test-connection-postgres-backup: up
+	@ ./build_steps/cd_pipeline/6_postgres_backup_test.sh
 
-### BUILD AND UPLOAD DOCKER_DEPLOY TARBALL TO AWS S3 ###
-.PHONY: upload-docker-deploy-tarball
-upload-docker-deploy-tarball:
-	@ INFO "Build and upload docker_deploy.tar.gz to AWS S3 "
-	@ python utils/build_docker_deploy_tarball.py
-	@ aws s3 cp ./bin/docker_deploy.tar.gz ${S3_DOCKER_DEPLOY_URI}/
-	@ SUCCESS "docker_deploy.tar.gz built and uploaded successfully to S3."
+run-ansible-playbook:
+	@ ./build_steps/cd_pipeline/8_run_ansible_playbooks.sh
 
-### CREATE POSTGRES DUMP AND UPLOAD TO S3 ###
-.PHONY: postgres-dump-to-s3
+
+# ----------------------------------------------------
+#
+# POSTGRES BACKUP
+#
+# ----------------------------------------------------
+.PHONY: postgres-dump-to-s3 postgres-restore-from-s3
+
 postgres-dump-to-s3:
 	@ INFO "Create and upload postgres backup to AWS S3"
 	@ ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
-	@ SUCCESS "Postgres dump uploaded to S3"
 
-### DOWNLOAD POSTGRES DUMP FROM S3 AND RESTORE DATABASE  ###
-.PHONY: postgres-restore-from-s3
 postgres-restore-from-s3:
 	@ INFO "Download postgres dump from S3 and restore database"
 	@ ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
-	@ SUCCESS "Postgres successfully restored from backup"
 
 
-
-###### UTILS ######
-
+# ----------------------------------------------------
+#
+# UTILS
+#
+# ----------------------------------------------------
 # Ensure all environment variables are set
 .PHONY: env-validation
 env-validation:
@@ -147,18 +106,3 @@ check-%:
         echo "Environment variable $* not set"; \
         exit 1; \
     fi
-
-# Service health functions
-# Syntax: $(call check_service_health,<docker-compose-environment>,<service-name>)
-get_container_id = $$(docker-compose $(1) ps -q $(2))
-get_container_state = $$(echo $(call get_container_id,$(1),$(2)) | xargs -I ID docker inspect -f '$(3)' ID)
-get_service_health = $$(echo $(call get_container_state,$(1),$(2),{{if .State.Running}}{{ .State.Health.Status }}{{end}}))
-check_service_health = { \
-  until [[ $(call get_service_health,$(1),$(2)) != starting ]]; \
-    do sleep 1; \
-  done; \
-  if [[ $(call get_service_health,$(1),$(2)) != healthy ]]; \
-    then echo $(2) failed health check; exit 1; \
-	else echo $(2) healthy!; \
-  fi; \
-}

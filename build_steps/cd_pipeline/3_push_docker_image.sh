@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Usage:
+# Push image with latest tag
+#   .build_steps/cd_pipeline/3_push_docker_image.sh
+# Push image with project tag (pyproject.toml)
+#   .build_steps/cd_pipeline/3_push_docker_image.sh "tagged"
+
 # Exit on error
 set -e
 
@@ -21,6 +27,19 @@ function docker_login() {
   fi
 }
 
+set_tag() {
+  if [[ $1 == tagged ]]; then
+    source $(conda info --base)/etc/profile.d/conda.sh
+    conda activate ${CONDA_ENV_NAME}
+    TAG=$(poetry version | awk '{print $NF}')
+  else
+    TAG=latest
+  fi
+  if [[ -z $TAG ]]; then
+    exit_error "TAG could not be set! Aborting."
+  fi
+}
+
 function push_image() {
   INFO "Publishing ${IMAGE_REPOSITORY}:latest image to ${DOCKER_REGISTRY:-docker.io}..."
   docker push ${IMAGE_REPOSITORY}:latest
@@ -34,5 +53,6 @@ function push_image() {
 
 # Start script
 docker_login
+set_tag $1
 push_image
 docker logout

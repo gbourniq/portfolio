@@ -3,19 +3,11 @@
 # Exit on error
 set -e
 
-# Set traps to clean up if exit or something goes wrong
-trap "echo 'Something went wrong! Tidying up...' && remove_services && exit 1" ERR
-trap "echo 'Tidying up...' && remove_services && exit 0" EXIT
 
 # Helper function: Exit with error
 function exit_error() {
   ERROR "$1" 1>&2
   exit 1
-}
-
-start_services() {
-  INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
-  docker-compose ${COMPOSE_ARGS} up -d
 }
 
 get_service_health() {
@@ -32,11 +24,6 @@ check_service_health() {
   else
     echo $2 healthy!;
   fi;
-}
-
-remove_services() {
-  INFO "[BUILD=${BUILD}] Removing docker-compose services..."
-  docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
 }
 
 postgres_dump_to_s3_test() {
@@ -61,10 +48,7 @@ postgres_restore_from_s3_test() {
 
 ### Start script
 cd deployment/docker-deployment
-start_services
 check_service_health "${COMPOSE_ARGS}" postgres
 cd -
 postgres_dump_to_s3_test
 postgres_restore_from_s3_test
-cd -
-remove_services
