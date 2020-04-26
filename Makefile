@@ -37,9 +37,9 @@ recreatedb:
 # CD SCRIPTS
 #
 # ----------------------------------------------------
-.PHONY: cd-all image-latest image-tagged check-compose-health-dev-prod up down publish-latest publish-tagged docker-deploy-tarball test-connection-postgres-backup run-ansible-playbook
+.PHONY: cd-all image-latest image-tagged check-compose-health-dev-prod publish-latest publish-tagged docker-deploy-tarball up postgres-backup-test down run-ansible-playbook
 
-cd-all: image-latest image-tagged check-compose-health-dev-prod up down publish-latest publish-tagged docker-deploy-tarball test-connection-postgres-backup run-ansible-playbook
+cd-all: image-latest image-tagged check-compose-health-dev-prod publish-latest publish-tagged docker-deploy-tarball up postgres-backup-test down run-ansible-playbook
 
 image-latest:
 	@ ./build_steps/cd_pipeline/1_build_image.sh
@@ -50,13 +50,6 @@ image-tagged:
 check-compose-health-dev-prod:
 	@ ./build_steps/cd_pipeline/2_docker_compose_health.sh
 
-up:
-	@ . .env
-	@ ./build_steps/cd_pipeline/5_docker_compose_up.sh
-
-down:
-	@ ./build_steps/cd_pipeline/7_docker_compose_down.sh
-
 publish-latest:
 	@ ./build_steps/cd_pipeline/3_push_docker_image.sh
 
@@ -66,8 +59,15 @@ publish-tagged:
 docker-deploy-tarball:
 	@ ./build_steps/cd_pipeline/4_build_and_push_docker_compose_tarball.sh
 
-test-connection-postgres-backup:
+up:
+	@ . .env
+	@ ./build_steps/cd_pipeline/5_docker_compose_up.sh
+
+postgres-backup-test:
 	@ ./build_steps/cd_pipeline/6_postgres_backup_test.sh
+
+down:
+	@ ./build_steps/cd_pipeline/7_docker_compose_down.sh
 
 run-ansible-playbook:
 	@ ./build_steps/cd_pipeline/8_run_ansible_playbooks.sh

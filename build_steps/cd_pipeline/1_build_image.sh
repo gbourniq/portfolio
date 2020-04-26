@@ -24,8 +24,8 @@ function activate_environment() {
 }
 
 # Functions
-function function set_tag() {
-  if [[ $1 == tagged ]]; then
+function set_tag() {
+  if [[ "$1" == "tagged" ]]; then
     activate_environment
     TAG=$(poetry version | awk '{print $NF}')
   else

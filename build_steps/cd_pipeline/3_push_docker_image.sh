@@ -33,7 +33,7 @@ function activate_environment() {
 }
 
 function set_tag() {
-  if [[ $1 == tagged ]]; then
+  if [[ "$1" == "tagged" ]]; then
     activate_environment
     TAG=$(poetry version | awk '{print $NF}')
   else
@@ -45,13 +45,13 @@ function set_tag() {
 }
 
 function push_image() {
-  INFO "Publishing ${IMAGE_REPOSITORY}:latest image to ${DOCKER_REGISTRY:-docker.io}..."
-  docker push ${IMAGE_REPOSITORY}:latest
+  INFO "Publishing ${IMAGE_REPOSITORY}:${TAG} image to ${DOCKER_REGISTRY:-docker.io}..."
+  docker push ${IMAGE_REPOSITORY}:${TAG}
   PUBLISH_STATE=$?
   if [ "$PUBLISH_STATE" -ne 0 ]; then
-    exit_error "Pushing ${IMAGE_REPOSITORY}:latest failed! Aborting."
+    exit_error "Pushing ${IMAGE_REPOSITORY}:${TAG} failed! Aborting."
   else
-    SUCCESS "${IMAGE_REPOSITORY}:latest published successfully!"
+    SUCCESS "${IMAGE_REPOSITORY}:${TAG} published successfully!"
   fi
 }
 
