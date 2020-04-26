@@ -66,4 +66,4 @@ for build in ${builds[*]}; do
   remove_services
 done
 
-
+cd -

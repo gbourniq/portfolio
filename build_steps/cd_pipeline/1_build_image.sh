@@ -26,7 +26,6 @@ function activate_environment() {
 # Functions
 function set_tag() {
   if [[ "$1" == "tagged" ]]; then
-    activate_environment
     TAG=$(poetry version | awk '{print $NF}')
   else
     TAG=latest
@@ -38,6 +37,7 @@ function set_tag() {
 
 function package_app() {
   INFO "Packaging portfolio app to /bin"
+  python --version
   python utils/package_builder.py --name ${PROJECT_NAME}
   PACKAGE_APP_STATE=$?
   if [ "$PACKAGE_APP_STATE" -ne 0 ]; then
@@ -61,6 +61,7 @@ function build_image() {
 }
 
 # Start script
+activate_environment
 set_tag $1
 package_app
 build_image

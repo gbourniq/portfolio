@@ -56,3 +56,4 @@ cd deployment/docker-deployment
 remove_services
 start_services
 check_all_services_health
+cd -
