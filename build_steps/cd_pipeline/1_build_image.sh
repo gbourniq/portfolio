@@ -37,7 +37,6 @@ function set_tag() {
 
 function package_app() {
   INFO "Packaging portfolio app to /bin"
-  python --version
   python utils/package_builder.py --name ${PROJECT_NAME}
   PACKAGE_APP_STATE=$?
   if [ "$PACKAGE_APP_STATE" -ne 0 ]; then

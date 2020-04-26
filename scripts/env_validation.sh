@@ -29,3 +29,5 @@ fi
 if [[ -z $ANSIBLE_SSH_PASSWORD ]]; then
     exit_error "ANSIBLE_SSH_PASSWORD environment variable required to run"
 fi
+
+SUCCESS All required environment variables are set
