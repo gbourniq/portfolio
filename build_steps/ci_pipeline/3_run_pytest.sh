@@ -12,7 +12,6 @@ function exit_error() {
 }
 
 function activate_environment() {
-  INFO "Activating ${CONDA_ENV_NAME} conda environment"
   source $(conda info --base)/etc/profile.d/conda.sh
   conda activate ${CONDA_ENV_NAME}
 }

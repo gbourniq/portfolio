@@ -12,10 +12,17 @@ function exit_error() {
   exit 1
 }
 
+function activate_environment() {
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate ${CONDA_ENV_NAME}
+}
+
+
 INFO "Setting PYTHONPATH to $PWD for tarball script imports to work properly"
 export PYTHONPATH=$PWD
 
 INFO "Build docker_deploy.tar.gz"
+activate_environment
 python utils/build_docker_deploy_tarball.py
 BUILD_SCRIPT_STATE=$?
 if [ "$BUILD_SCRIPT_STATE" -ne 0 ]; then

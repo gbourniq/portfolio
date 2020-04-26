@@ -10,7 +10,6 @@ env:
 before_install:
   # Set required environment variables and awscli configuration
   - source .env
-  - ./scripts/env_validation.sh
 
 install:
   # Install docker-compose
@@ -31,6 +30,7 @@ install:
   - sudo apt-get install sshpass
 
 script:
+  - ./scripts/env_validation.sh
   - ./build_steps/run_ci_pipeline.sh
   - ./build_steps/run_cd_pipeline.sh
   # - ./build_steps/run_k8s_pipeline.sh
