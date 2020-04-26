@@ -1,15 +1,7 @@
 - name: Send Slack notification for QA deployment
   slack:
     token: '{{ SLACK_TOKEN }}'
-    msg: '[QA] App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn! (http://{{ ANSIBLE_DEV_HOSTNAME }}:{{ ANSIBLE_APP_PORT }}) 💫🚀'
+    msg: |
+      '[QA] App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn!
+      (http://{{ ANSIBLE_DEV_HOSTNAME }}:{{ ANSIBLE_APP_PORT }}) 💫🚀'
   delegate_to: localhost
-  tags:
-    - slack-notification-qa
-
-- name: Send Slack notification for DEV deployment
-  slack:
-    token: '{{ SLACK_TOKEN }}'
-    msg: '[DEV] App is up on http://{{ ANSIBLE_DEV_HOSTNAME }}:{{ ANSIBLE_APP_PORT }}) 💫🚀'
-  delegate_to: localhost
-  tags:
-    - slack-notification-dev

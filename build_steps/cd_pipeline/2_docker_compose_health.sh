@@ -13,16 +13,16 @@ function exit_error() {
 }
 
 # Define functions
-get_container_id() {
+function get_container_id() {
   echo $(docker-compose $1 ps -q $2)
 }
 
-get_service_health() {
+function get_service_health() {
   container_id=$(get_container_id "$1" "$2")
   echo $(echo ${container_id} | xargs -I ID docker inspect -f '{{if .State.Running}}{{ .State.Health.Status }}{{end}}' ID)
 }
 
-check_service_health() {
+function check_service_health() {
   until [[ $(get_service_health "$1" "$2") != "starting" ]]; do
     sleep 1
   done;
@@ -33,12 +33,12 @@ check_service_health() {
   fi;
 }
 
-start_services() {
+function start_services() {
   INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
   docker-compose ${COMPOSE_ARGS} up -d
 }
 
-check_all_services_health() {
+function check_all_services_health() {
   INFO "[BUILD=${BUILD}] Checking services health..."
   services=("postgres" "redis" "app" "worker")
   for service_name in ${services[*]}; do
@@ -47,7 +47,7 @@ check_all_services_health() {
   SUCCESS "All services are up and healthy"
 }
 
-remove_services() {
+function remove_services() {
   INFO "[BUILD=${BUILD}] Removing docker-compose services..."
   docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
   SUCCESS "[BUILD=${BUILD}] All cleaned up!"

@@ -51,6 +51,7 @@ check-compose-health-dev-prod:
 	@ ./build_steps/cd_pipeline/2_docker_compose_health.sh
 
 up:
+	@ . .env
 	@ ./build_steps/cd_pipeline/5_docker_compose_up.sh
 
 down:
@@ -65,7 +66,7 @@ publish-tagged:
 docker-deploy-tarball:
 	@ ./build_steps/cd_pipeline/4_build_and_push_docker_compose_tarball.sh
 
-test-connection-postgres-backup: up
+test-connection-postgres-backup:
 	@ ./build_steps/cd_pipeline/6_postgres_backup_test.sh
 
 run-ansible-playbook:

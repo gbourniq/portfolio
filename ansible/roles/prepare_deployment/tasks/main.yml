@@ -20,9 +20,7 @@
   tags:
     - remove-volume
   
-
 # Clean up repository root dir
-
 - name: Deleting repo folder if exists
   become: yes
   file:
@@ -30,7 +28,6 @@
     state: absent
 
 # Download docker compose files as tarball
-
 - name: Download compose files from AWS S3
   become: yes
   aws_s3:
@@ -43,7 +40,6 @@
     region: '{{AWS_REGION}}'
 
 # Untar files and set up project root directory
-
 - name: Unarchive docker_deploy.tar.gz
   become: yes
   unarchive:

@@ -1,5 +1,20 @@
 
 - name: docker-compose up
-  shell: . {{ PORTFOLIO_ROOT_DIR }}/.env && \
-         cd {{ PORTFOLIO_ROOT_DIR }} && \
-         make up
+  become_user: ubuntu
+  shell: cd {{ PORTFOLIO_ROOT_DIR }} && source .env && make up
+  args:
+    executable: /bin/bash
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ AWS_ACCESS_KEY_ID }}"
+    AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
+
+- name: Wait until webserver is running
+  uri:
+    url: "http://{{ ANSIBLE_HOST }}:8080"
+    method: GET
+    validate_certs: no
+  register: _result
+  until: _result.status == 200
+  delay: 10 # Every 10 seconds
+  retries: 10
+  debugger: on_failed

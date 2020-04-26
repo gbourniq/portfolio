@@ -18,11 +18,15 @@ function exit_error() {
   exit 1
 }
 
+function activate_environment() {
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate ${CONDA_ENV_NAME}
+}
+
 # Functions
-set_tag() {
+function function set_tag() {
   if [[ $1 == tagged ]]; then
-    source $(conda info --base)/etc/profile.d/conda.sh
-    conda activate ${CONDA_ENV_NAME}
+    activate_environment
     TAG=$(poetry version | awk '{print $NF}')
   else
     TAG=latest
@@ -32,7 +36,7 @@ set_tag() {
   fi
 }
 
-package_app() {
+function package_app() {
   INFO "Packaging portfolio app to /bin"
   python utils/package_builder.py --name ${PROJECT_NAME}
   PACKAGE_APP_STATE=$?
@@ -41,7 +45,7 @@ package_app() {
   fi
 }
 
-build_image() {
+function build_image() {
   INFO "Building docker image ${IMAGE_REPOSITORY}:${TAG}"
   docker build -f ${DOCKERFILE_PATH} -t ${IMAGE_REPOSITORY}:${TAG} \
     --build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \

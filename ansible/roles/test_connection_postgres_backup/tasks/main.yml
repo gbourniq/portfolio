@@ -1,7 +1,6 @@
-
-- name: docker-compose down
+- name: Create and upload postgres backup to AWS S3 in test/ sub folder
   become_user: ubuntu
-  shell: cd {{ PORTFOLIO_ROOT_DIR }} && source .env && make down
+  shell: cd {{ PORTFOLIO_ROOT_DIR }} && source .env && make test-connection-postgres-backup
   args:
     executable: /bin/bash
   environment:

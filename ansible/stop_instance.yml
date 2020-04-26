@@ -1,0 +1,10 @@
+### Playbook to stop ec2 instance
+
+- name: Stop AWS instance
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - stop_instance
+  tags:
+    - stop-instance
+

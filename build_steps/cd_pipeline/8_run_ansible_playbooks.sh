@@ -13,8 +13,19 @@ function exit_error() {
   exit 1
 }
 
+function activate_environment() {
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate ${CONDA_ENV_NAME}
+}
+
 # Define functions
 function tidy_up() {
+  INFO "Run the Ansible tidy up playbook..."
+  ansible-playbook \
+    -i inventories \
+    --vault-id /tmp/ansible-vault-pw \
+    stop_instance.yml \
+    -vv
   rm -rf /tmp/ansible-vault-pw
   exit 0
 }
@@ -24,12 +35,11 @@ function set_ansible_vault() {
 }
 
 function run_qa_playbook() {
-
   ansible-playbook \
     -i inventories \
     --vault-id /tmp/ansible-vault-pw \
-    site.yml \
-    --skip-tags="slack-notification-dev" \
+    docker_deployment.yml \
+		--skip-tags="stop-instance" \
     -vv
 
     ANSIBLE_OUTPUT_STATE=$?
@@ -41,6 +51,7 @@ function run_qa_playbook() {
 
 # Start script
 if [ "$RUN_ANSIBLE_PLAYBOOK" == True ]; then
+  activate_environment
   INFO "Run the Ansible QA playbook..."
   cd ansible
   set_ansible_vault

@@ -11,10 +11,13 @@ function exit_error() {
   exit 1
 }
 
-INFO "Activating ${CONDA_ENV_NAME} conda environment"
-source $(conda info --base)/etc/profile.d/conda.sh
-conda activate ${CONDA_ENV_NAME}
+function activate_environment() {
+  INFO "Activating ${CONDA_ENV_NAME} conda environment"
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate ${CONDA_ENV_NAME}
+}
 
+activate_environment
 INFO "Running pre-commit to lint code"
 pre-commit run --all-files
 

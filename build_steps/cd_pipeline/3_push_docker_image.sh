@@ -27,10 +27,14 @@ function docker_login() {
   fi
 }
 
-set_tag() {
+function activate_environment() {
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate ${CONDA_ENV_NAME}
+}
+
+function set_tag() {
   if [[ $1 == tagged ]]; then
-    source $(conda info --base)/etc/profile.d/conda.sh
-    conda activate ${CONDA_ENV_NAME}
+    activate_environment
     TAG=$(poetry version | awk '{print $NF}')
   else
     TAG=latest

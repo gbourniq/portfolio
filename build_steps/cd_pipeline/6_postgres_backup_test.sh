@@ -10,12 +10,16 @@ function exit_error() {
   exit 1
 }
 
-get_service_health() {
+function get_container_id() {
+  echo $(docker-compose $1 ps -q $2)
+}
+
+function get_service_health() {
   container_id=$(get_container_id "$1" "$2")
   echo $(echo ${container_id} | xargs -I ID docker inspect -f '{{if .State.Running}}{{ .State.Health.Status }}{{end}}' ID)
 }
 
-check_service_health() {
+function check_service_health() {
   until [[ $(get_service_health "$1" "$2") != "starting" ]]; do
     sleep 1
   done;
@@ -26,7 +30,7 @@ check_service_health() {
   fi;
 }
 
-postgres_dump_to_s3_test() {
+function postgres_dump_to_s3_test() {
   INFO "Create and upload postgres backup to ${S3_POSTGRES_BACKUP_URI}/cd_test"
   ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/cd_test
   DUMP_TO_S3_STATE=$?
@@ -36,7 +40,7 @@ postgres_dump_to_s3_test() {
   SUCCESS "Postgres dump uploaded to ${S3_POSTGRES_BACKUP_URI}/cd_test"
 }
 
-postgres_restore_from_s3_test() {
+function postgres_restore_from_s3_test() {
   INFO "Restore latest postgres backup from ${S3_POSTGRES_BACKUP_URI}/cd_test"
   ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/cd_test
   RESTORE_FROM_S3_STATE=$?

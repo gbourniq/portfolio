@@ -1,4 +1,4 @@
-### Playbook for a fresh (not an upgrade) docker deployment
+### Playbook to test docker deployment scripts
 
 - name: Start AWS instance
   hosts: localhost
@@ -14,40 +14,27 @@
     - setup_instance
     - prepare_deployment
     - docker_compose_up
+    - test_connection_postgres_backup
 
-- name: Send notification
+- name: Send slack notification
   hosts: localhost
   gather_facts: true
   roles:
     - send_slack_notification
-
-- name: Create and upload Postgres dump to S3
+    
+- name: Pause playbook
   hosts: docker_qa
   remote_user: ubuntu
   become: yes
   roles:
-    - postgres_dump_to_s3
-  tags:
-    - postgres-dump
-
-- name: Load latest Postgres dump from S3
-  hosts: docker_qa
-  remote_user: ubuntu
-  become: yes
-  roles:
-    - postgres_restore_from_s3
-  tags:
-    - postgres-restore
+    - pause_playbook
 
 - name: Stopping docker-compose services
   hosts: docker_qa
   remote_user: ubuntu
   become: yes
   roles:
-    - pause_playbook
     - docker_compose_down
-  tags:
-    - compose-down
 
 - name: Stop AWS instance
   hosts: localhost

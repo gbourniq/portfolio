@@ -1,14 +1,5 @@
 ### Playbook for a fresh (not an upgrade) kubernetes deployment
-- hosts: kubernetes_qa
-  remote_user: ubuntu
-  become: yes
-  roles:
-    - start_instance
-    - setup_instance
-    - helm_delete_all
-    - prepare_deployment
-    - build_image
-    - helm_install_all
-    - pause_playbook
-    - helm_delete_all
-    - stop_instance
+# - hosts: kubernetes_qa
+#   remote_user: ubuntu
+#   become: yes
+#   roles:
