@@ -40,12 +40,18 @@ function run_qa_playbook() {
 
 
 # Start script
-cd ansible
+if [ "$RUN_ANSIBLE_PLAYBOOK" == True ]; then
+  INFO "Run the Ansible QA playbook..."
+  cd ansible
+  set_ansible_vault
+  run_qa_playbook
+  SUCCESS "QA playbook was run successfully!"
+else
+  INFO "RUN_ANSIBLE_PLAYBOOK is set to False. Aborting."
+fi
 
-INFO "Run the QA playbook..."
-set_ansible_vault
-run_qa_playbook
-SUCCESS "QA playbook was run successfully!"
+
+
 
 
 
