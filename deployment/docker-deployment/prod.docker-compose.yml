@@ -59,8 +59,8 @@ services:
     healthcheck:
       test: curl -f -s -S http://localhost:8080 || exit 1
       interval: 30s
-      timeout: 60s
-      retries: 5
+      timeout: 120s
+      retries: 10
     expose: 
       - 8080
     # comment ports if used with nginx (production)
@@ -97,6 +97,12 @@ services:
       # Email Contact page
       EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
       EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
+      # aws s3 - should be docker/k8s secret
+      S3_STORAGE_ENABLED: ${S3_STORAGE_ENABLED:?.env not set up correctly}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?.env not set up correctly}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?.env not set up correctly}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?.env not set up correctly}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?.env not set up correctly}
     volumes:
       # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
@@ -104,9 +110,9 @@ services:
       - ./app/startup_celery.sh:${DOCKER_APP_CODE}/startup_celery.sh
     healthcheck:
       test: ps | grep celery || exit 1
-      interval: 10s
-      timeout: 30s
-      retries: 5
+      interval: 30s
+      timeout: 120s
+      retries: 10
     expose: 
       - 8081
     networks:
