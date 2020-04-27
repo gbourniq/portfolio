@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on error
-set -ex
+set -e
 
 # Set traps to clean up if exit or something goes wrong
 trap "echo 'Something went wrong! Tidying up...' && remove_services && exit 1" ERR
