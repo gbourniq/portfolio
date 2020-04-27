@@ -1,5 +1,0 @@
-### Master playbook which imports the underlying playbooks
----
-
-- import_playbook: docker_deployment.yml
-# - import_playbook: kubernetes_deployment.yml

@@ -2,6 +2,6 @@
   slack:
     token: '{{ SLACK_TOKEN }}'
     msg: |
-      '[QA] App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn!
-      (http://{{ ANSIBLE_DEV_HOSTNAME }}:{{ ANSIBLE_APP_PORT }}) 💫🚀'
+      [QA] App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn!
+      (http://{{ ANSIBLE_DEV_HOSTNAME }}:{{ ANSIBLE_APP_PORT }}) 💫🚀
   delegate_to: localhost

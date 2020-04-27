@@ -14,7 +14,7 @@
     - setup_instance
     - prepare_deployment
     - docker_compose_up
-    - test_connection_postgres_backup
+    - test_postgres_backup
 
 - name: Send slack notification
   hosts: localhost

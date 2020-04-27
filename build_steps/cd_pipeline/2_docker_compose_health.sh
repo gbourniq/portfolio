@@ -36,7 +36,6 @@ function check_service_health() {
 function start_services() {
   INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
   docker-compose ${COMPOSE_ARGS} up -d
-  docker-compose ${COMPOSE_ARGS} up -d app
 }
 
 function check_all_services_health() {
