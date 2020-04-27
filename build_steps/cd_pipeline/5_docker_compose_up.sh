@@ -20,6 +20,7 @@ function remove_services() {
 function start_services() {
   INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:latest."
   docker-compose ${COMPOSE_ARGS} up -d
+  docker-compose ${COMPOSE_ARGS} up -d app
 }
 
 function get_container_id() {
