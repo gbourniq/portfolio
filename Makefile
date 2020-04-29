@@ -37,9 +37,9 @@ recreatedb:
 # CD SCRIPTS
 #
 # ----------------------------------------------------
-.PHONY: cd-all image-latest image-tagged check-compose-health-dev-prod publish-latest publish-tagged docker-deploy-tarball up postgres-backup-test down run-ansible-playbook
+.PHONY: cd-all image-latest image-tagged up postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball run-ansible-playbook
 
-cd-all: image-latest image-tagged check-compose-health-dev-prod publish-latest publish-tagged docker-deploy-tarball up postgres-backup-test down run-ansible-playbook
+cd-all: image-latest image-tagged up postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball run-ansible-playbook
 
 image-latest:
 	@ ./build_steps/cd_pipeline/1_build_image.sh
@@ -47,30 +47,26 @@ image-latest:
 image-tagged:
 	@ ./build_steps/cd_pipeline/1_build_image.sh tagged
 
-check-compose-health-dev-prod:
-	@ ./build_steps/cd_pipeline/2_docker_compose_health.sh
-
-publish-latest:
-	@ ./build_steps/cd_pipeline/3_push_docker_image.sh
-
-publish-tagged:
-	@ ./build_steps/cd_pipeline/3_push_docker_image.sh tagged
-
-docker-deploy-tarball:
-	@ ./build_steps/cd_pipeline/4_build_and_push_docker_compose_tarball.sh
-
 up:
-	@ . .env
-	@ ./build_steps/cd_pipeline/5_docker_compose_up.sh
+	@ ./build_steps/cd_pipeline/2_docker_compose_up.sh
 
 postgres-backup-test:
-	@ ./build_steps/cd_pipeline/6_postgres_backup_test.sh
+	@ ./build_steps/cd_pipeline/3_postgres_backup_test.sh
 
 down:
-	@ ./build_steps/cd_pipeline/7_docker_compose_down.sh
+	@ ./build_steps/cd_pipeline/4_docker_compose_down.sh
+
+publish-latest:
+	@ ./build_steps/cd_pipeline/5_push_docker_image.sh
+
+publish-tagged:
+	@ ./build_steps/cd_pipeline/5_push_docker_image.sh tagged
+
+docker-deploy-tarball:
+	@ ./build_steps/cd_pipeline/6_build_and_push_docker_compose_tarball.sh
 
 run-ansible-playbook:
-	@ ./build_steps/cd_pipeline/8_run_ansible_playbooks.sh
+	@ ./build_steps/cd_pipeline/7_run_ansible_playbooks.sh
 
 
 # ----------------------------------------------------
