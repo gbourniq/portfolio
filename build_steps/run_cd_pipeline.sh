@@ -2,8 +2,10 @@
 
 set -e
 
-source ./scripts/env_validation.sh
+# Source environment variable for dev build
+source ./.dev.env
 
+# Validate all required variables exist
 if [[ $VALIDATION_FAILED == True ]]; then
     exit 1
 fi

@@ -17,6 +17,7 @@ DEFAULT_TARGET_DIR = ROOT_DIR / "bin"
 IGNORED_ARTEFACTS = {"DIR": [], "FILE": [], "GIT": []}
 
 WHITELIST_FILES = []
+
 WHITELIST_DIRS = ["deployment/docker-deployment/nginx/certs"]
 
 GIT_IGNORED = []
