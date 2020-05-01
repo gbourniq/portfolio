@@ -9,9 +9,9 @@ function set_as_failed() {
 # Required environment for development
 function env_check_dev() {
     if [[ -z $DOCKER_USER ]]; then
-        set_as_failed "DOCKER_PASSWORD environment variable required to run"
+        set_as_failed "DOCKER_USER environment variable required to run"
     fi
-    if [[ -z $DOCKER_USER ]]; then
+    if [[ -z $DOCKER_PASSWORD ]]; then
         set_as_failed "DOCKER_PASSWORD environment variable required to run"
     fi
     if [[ -z $AWS_ACCESS_KEY_ID ]]; then
