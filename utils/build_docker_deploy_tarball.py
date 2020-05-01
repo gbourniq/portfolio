@@ -16,7 +16,7 @@ DEFAULT_TARGET_DIR = ROOT_DIR / "bin"
 # Path of the artefacts actually ignored from the build command
 IGNORED_ARTEFACTS = {"DIR": [], "FILE": [], "GIT": []}
 
-WHITELIST_FILES = [".env", "Makefile", "README.md"]
+WHITELIST_FILES = []
 WHITELIST_DIRS = ["deployment/docker-deployment/nginx/certs"]
 
 GIT_IGNORED = []
@@ -43,6 +43,8 @@ EXCLUDE_MODULES = [
     "ansible",
     "app",
     "bin",
+    "build_steps",
+    "deployment/docker-build",
     "utils",
     "__pycache__",
     ".git",

@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
-# Note: This script must run it from root directory with `. ./scripts/reset_all.sh`
-
-source .local.env
-echo ".local.env has been sourced."
+# This script is only for recreating a local postgresql database (non docker)
+# Note: This script must run it from root directory with `. ./scripts/reset_local_db.sh`
 
 echo "Recreate Postgres database"
 dropdb ${POSTGRES_DB}

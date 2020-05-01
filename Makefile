@@ -9,7 +9,7 @@ SHELL=/bin/bash -e -o pipefail
 # ----------------------------------------------------
 .PHONY: env pre-commit lint-code unit-tests recreatedb
 
-ci-all: env pre-commit lint-code unit-tests recreatedb
+ci-all: env pre-commit lint-code unit-tests
 
 env:
 	@ ./build_steps/ci_pipeline/1_set_environment.sh
@@ -26,10 +26,6 @@ lint-code:
 
 unit-tests: 
 	@ ./build_steps/ci_pipeline/3_run_pytest.sh
-
-recreatedb:
-	@ INFO "Re-create postgres, migrations and dummy superuser"
-	@ . ./scripts/reset_all.sh
 
 
 # ----------------------------------------------------
@@ -71,22 +67,6 @@ run-ansible-playbook:
 
 # ----------------------------------------------------
 #
-# POSTGRES BACKUP
-#
-# ----------------------------------------------------
-.PHONY: postgres-dump-to-s3 postgres-restore-from-s3
-
-postgres-dump-to-s3:
-	@ INFO "Create and upload postgres backup to AWS S3"
-	@ ./scripts/postgres_dump_to_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
-
-postgres-restore-from-s3:
-	@ INFO "Download postgres dump from S3 and restore database"
-	@ ./scripts/postgres_restore_from_s3.sh ${POSTGRES_CONTAINER_NAME} ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
-
-
-# ----------------------------------------------------
-#
 # UTILS
 #
 # ----------------------------------------------------
@@ -97,9 +77,6 @@ env-validation:
 	@ ./scripts/env_validation.sh
 	@ SUCCESS "All good!"
 
-# Ensure environment variable is set
-check-%:
-	@ if [ "${${*}}" = "" ]; then \
-        echo "Environment variable $* not set"; \
-        exit 1; \
-    fi
+recreatedb:
+	@ INFO "Re-create postgres, migrations and dummy superuser"
+	@ . ./scripts/reset_local_db.sh
