@@ -7,7 +7,7 @@ SHELL=/bin/bash -e -o pipefail
 up: env-validation
 	@ cd docker-deployment/ && docker-compose ${COMPOSE_ARGS} up -d
 
-check-services-heath: env-validation
+check-services-health: env-validation
 	@ ../scripts/check_services_health.sh
 
 down: env-validation
@@ -25,9 +25,7 @@ postgres-restore-from-s3: env-validation
 .PHONY: env-validation
 
 env-validation:
-	@ INFO "Checking if required environment variables are set..."
 	@ ../scripts/env_validation.sh
-	@ SUCCESS "All good!"
 
 
 # ----------------------------------------------------

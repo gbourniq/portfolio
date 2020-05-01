@@ -11,6 +11,18 @@
     AWS_ACCESS_KEY_ID: "{{ AWS_ACCESS_KEY_ID }}"
     AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
 
+- name: Check all services are healthy
+  become_user: ubuntu
+  shell: >
+    cd {{ PORTFOLIO_ROOT_DIR }}/deployment/ &&
+    source .env &&
+    make check-services-health
+  args:
+    executable: /bin/bash
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ AWS_ACCESS_KEY_ID }}"
+    AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
+
 - name: Wait until webserver is running
   uri:
     url: "http://{{ ANSIBLE_HOST }}:8080"

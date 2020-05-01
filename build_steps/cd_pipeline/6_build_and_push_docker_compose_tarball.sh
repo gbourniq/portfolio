@@ -40,7 +40,7 @@ if [ "$BUILD_SCRIPT_STATE" -ne 0 ]; then
   exit_error "Build script failed! Aborting."
 fi
 
-INFO "Upload docker_deploy.tar.gz to S3"
+INFO "Upload docker deploy tarball to S3"
 aws s3 cp ./bin/${docker_deploy_tarball_name}.tar.gz ${s3_uri}/
 S3_UPLOAD_STATE=$?
 if [ "$S3_UPLOAD_STATE" -ne 0 ]; then
