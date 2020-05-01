@@ -32,4 +32,4 @@
   register: _result
   until: _result.status == 200
   delay: 10 # Check every 10 seconds
-  retries: 10
+  retries: 3

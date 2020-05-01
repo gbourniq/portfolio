@@ -3,31 +3,34 @@
 # Exit on error
 set -e
 
-# Set traps to clean up if exit or something goes wrong
-trap "echo 'Something went wrong! Tidying up...' && tidy_up && exit 1" ERR
-trap "echo 'Tidying up...' && tidy_up && exit 0" EXIT
+# Set exit trap
+trap "echo 'Exiting script...' && exit_handler" EXIT
 
-# Helper function: Exit with error
-function exit_error() {
-  ERROR "$1" 1>&2
-  tidy_up
-  exit 1
+function exit_handler() {
+  if [ $playbook_success == True ]; then
+    SUCCESS "QA playbook was run successfully!"
+    tidy_up
+    exit 0
+  else
+    ERROR "Ansible playbook failed. Aborting!" 1>&2
+    tidy_up
+    exit 1
+  fi
 }
 
-function activate_environment() {
-  source $(conda info --base)/etc/profile.d/conda.sh
-  conda activate ${CONDA_ENV_NAME}
-}
-
-# Define functions
 function tidy_up() {
-  INFO "Run the Ansible tidy up playbook..."
+  MESSAGE "Tidying up... [*STOPPING INSTANCE*]"
   ansible-playbook \
     -i inventories \
     --vault-id /tmp/ansible-vault-pw \
     stop_instance.yml \
     -vv
   rm -rf /tmp/ansible-vault-pw
+}
+
+function activate_environment() {
+  source $(conda info --base)/etc/profile.d/conda.sh
+  conda activate ${CONDA_ENV_NAME}
 }
 
 function set_ansible_vault() {
@@ -41,11 +44,6 @@ function run_qa_playbook() {
     docker_deployment.yml \
 		--skip-tags="stop-instance" \
     -vv
-
-    ANSIBLE_OUTPUT_STATE=$?
-    if [ "$ANSIBLE_OUTPUT_STATE" -ne 0 ]; then
-      exit_error "Ansible playbook failed! Aborting."
-    fi
 }
 
 
@@ -55,8 +53,9 @@ if [ "$RUN_ANSIBLE_PLAYBOOK" == True ]; then
   INFO "Run the Ansible QA playbook..."
   cd ansible
   set_ansible_vault
+  playbook_success=False
   run_qa_playbook
-  SUCCESS "QA playbook was run successfully!"
+  playbook_success=True
 else
   INFO "RUN_ANSIBLE_PLAYBOOK is set to False. Aborting."
 fi
