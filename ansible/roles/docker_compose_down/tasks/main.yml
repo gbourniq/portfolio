@@ -1,7 +1,10 @@
 
 - name: docker-compose down
   become_user: ubuntu
-  shell: cd {{ PORTFOLIO_ROOT_DIR }} && source .dev.env && make down
+  shell: >
+    cd {{ PORTFOLIO_ROOT_DIR }}/deployment/ &&
+    source .env &&
+    make down
   args:
     executable: /bin/bash
   environment:

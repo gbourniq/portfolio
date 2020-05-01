@@ -10,6 +10,7 @@ trap "echo 'Tidying up...' && tidy_up && exit 0" EXIT
 # Helper function: Exit with error
 function exit_error() {
   ERROR "$1" 1>&2
+  tidy_up
   exit 1
 }
 
@@ -27,7 +28,6 @@ function tidy_up() {
     stop_instance.yml \
     -vv
   rm -rf /tmp/ansible-vault-pw
-  exit 1
 }
 
 function set_ansible_vault() {

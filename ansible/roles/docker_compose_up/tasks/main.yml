@@ -1,7 +1,10 @@
 
 - name: docker-compose up
   become_user: ubuntu
-  shell: cd {{ PORTFOLIO_ROOT_DIR }} && source .dev.env && make up
+  shell: >
+    cd {{ PORTFOLIO_ROOT_DIR }}/deployment/ &&
+    source .env &&
+    make up
   args:
     executable: /bin/bash
   environment:

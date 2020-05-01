@@ -58,8 +58,8 @@ publish-latest:
 publish-tagged:
 	@ ./build_steps/cd_pipeline/5_push_docker_image.sh tagged
 
-docker-deploy-tarball:
-	@ ./build_steps/cd_pipeline/6_build_and_push_docker_compose_tarball.sh
+docker-deploy-tarball-prod:
+	@ ./build_steps/cd_pipeline/6_build_and_push_docker_compose_tarball.sh ${S3_DOCKER_DEPLOY_URI_PROD} ${S3_DOCKER_DEPLOY_TARBALL_PROD}
 
 run-ansible-playbook:
 	@ ./build_steps/cd_pipeline/7_run_ansible_playbooks.sh

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if [ "$1" = "" ] || [ "$2" = "" ]
-then
+if [ "$1" = "" ] || [ "$2" = "" ]; then
     echo "Usage: $0 <service_name> <database>..."
     echo "Example: $0 yourapp_service_name_postgres dbname"
     exit 1
