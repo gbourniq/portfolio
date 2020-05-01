@@ -19,7 +19,7 @@ function exit_handler() {
 }
 
 function tidy_up() {
-  MESSAGE "Tidying up... [*STOPPING INSTANCE*]"
+  MESSAGE "Tidying up..."
   ansible-playbook \
     -i inventories \
     --vault-id /tmp/ansible-vault-pw \
