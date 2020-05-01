@@ -46,4 +46,3 @@ for service_name in ${services[*]}; do
 done
 
 SUCCESS "All services are up and healthy"
-cd -

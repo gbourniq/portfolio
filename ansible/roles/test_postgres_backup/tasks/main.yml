@@ -1,7 +1,8 @@
 - name: Create and upload postgres backup to AWS S3
   become_user: ubuntu
   shell: >
-    cd {{ PORTFOLIO_ROOT_DIR }}/deployment &&
+    cd {{ PORTFOLIO_ROOT_DIR }} &&
+    cd deployment/ &&
     source .env &&
     make postgres-dump-to-s3
   args:
@@ -13,7 +14,8 @@
 - name: Download and restore postgres backup from AWS S3
   become_user: ubuntu
   shell: >
-    cd {{ PORTFOLIO_ROOT_DIR }}/deployment &&
+    cd {{ PORTFOLIO_ROOT_DIR }} &&
+    cd deployment/ &&
     source .env &&
     make postgres-restore-from-s3
   args:
