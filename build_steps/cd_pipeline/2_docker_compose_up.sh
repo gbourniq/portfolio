@@ -28,4 +28,3 @@ cd deployment/docker-deployment
 remove_services
 start_services
 cd -
-source ./scripts/check_services_health.sh

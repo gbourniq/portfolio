@@ -10,26 +10,6 @@ function exit_error() {
   exit 1
 }
 
-function get_container_id() {
-  echo $(docker-compose $1 ps -q $2)
-}
-
-function get_service_health() {
-  container_id=$(get_container_id "$1" "$2")
-  echo $(echo ${container_id} | xargs -I ID docker inspect -f '{{if .State.Running}}{{ .State.Health.Status }}{{end}}' ID)
-}
-
-function check_service_health() {
-  until [[ $(get_service_health "$1" "$2") != "starting" ]]; do
-    sleep 1
-  done;
-  if [[ $(get_service_health "$1" "$2") != "healthy" ]]; then
-    exit_error "$2 failed health check"
-  else
-    echo $2 healthy!;
-  fi;
-}
-
 function postgres_dump_to_s3_test() {
   INFO "Create and upload postgres backup to ${S3_POSTGRES_BACKUP_URI}/cd_test"
   ./scripts/postgres_dump_to_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/cd_test
@@ -51,8 +31,5 @@ function postgres_restore_from_s3_test() {
 }
 
 ### Start script
-cd deployment/docker-deployment
-check_service_health "${COMPOSE_ARGS}" postgres
-cd -
 postgres_dump_to_s3_test
 postgres_restore_from_s3_test

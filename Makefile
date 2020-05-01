@@ -33,9 +33,9 @@ unit-tests:
 # CD SCRIPTS
 #
 # ----------------------------------------------------
-.PHONY: cd-all image-latest image-tagged up postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-prod run-ansible-playbook
+.PHONY: cd-all image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-prod run-ansible-playbook
 
-cd-all: image-latest image-tagged up postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-prod run-ansible-playbook
+cd-all: image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-prod run-ansible-playbook
 
 image-latest:
 	@ ./build_steps/cd_pipeline/1_build_image.sh
@@ -46,23 +46,26 @@ image-tagged:
 up:
 	@ ./build_steps/cd_pipeline/2_docker_compose_up.sh
 
+check-services-health:
+	@ ./build_steps/cd_pipeline/3_check_services_health.sh
+
 postgres-backup-test:
-	@ ./build_steps/cd_pipeline/3_postgres_backup_test.sh
+	@ ./build_steps/cd_pipeline/4_postgres_backup_test.sh
 
 down:
-	@ ./build_steps/cd_pipeline/4_docker_compose_down.sh
+	@ ./build_steps/cd_pipeline/5_docker_compose_down.sh
 
 publish-latest:
-	@ ./build_steps/cd_pipeline/5_push_docker_image.sh
+	@ ./build_steps/cd_pipeline/6_push_docker_image.sh
 
 publish-tagged:
-	@ ./build_steps/cd_pipeline/5_push_docker_image.sh tagged
+	@ ./build_steps/cd_pipeline/6_push_docker_image.sh tagged
 
 docker-deploy-tarball-prod:
-	@ ./build_steps/cd_pipeline/6_build_and_push_docker_compose_tarball.sh ${S3_DOCKER_DEPLOY_URI_PROD} ${S3_DOCKER_DEPLOY_TARBALL_PROD}
+	@ ./build_steps/cd_pipeline/7_build_and_push_docker_compose_tarball.sh ${S3_DOCKER_DEPLOY_URI_PROD} ${S3_DOCKER_DEPLOY_TARBALL_PROD}
 
 run-ansible-playbook:
-	@ ./build_steps/cd_pipeline/7_run_ansible_playbooks.sh
+	@ ./build_steps/cd_pipeline/8_run_ansible_playbooks.sh
 
 
 # ----------------------------------------------------

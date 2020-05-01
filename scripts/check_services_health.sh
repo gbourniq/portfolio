@@ -1,12 +1,15 @@
 #!/bin/bash
 
+# /!\ this script should be run from project root directory:
+# . ./scripts/check_services_health.sh
+
 # Set traps to clean up if exit or something goes wrong
 trap "echo 'Something went wrong! Tidying up...' && remove_services && exit 1" ERR
 
 # Helper function: Exit with error
 function exit_error() {
   ERROR "$1" 1>&2
-  exit 1
+  deployment_unhealthy=True
 }
 
 function get_container_id() {
@@ -30,8 +33,10 @@ function check_service_health() {
 }
 
 # Start script
-cd deployment/docker-deployment
+
 INFO "Checking services health for ${BUILD} build..."
+cd deployment/docker-deployment
+deployment_unhealthy=False
 
 if [[ ${BUILD} == dev ]]; then
     services=(postgres redis app worker)
@@ -45,4 +50,6 @@ for service_name in ${services[*]}; do
     check_service_health "${COMPOSE_ARGS}" "$service_name"
 done
 
-SUCCESS "All services are up and healthy"
+if [[ ${deployment_unhealthy} != True ]]; then
+  SUCCESS "All services are up and healthy"
+fi
