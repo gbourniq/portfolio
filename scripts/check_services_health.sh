@@ -28,7 +28,7 @@ function check_service_health() {
   if [[ $(get_service_health "$1" "$2") != "healthy" ]]; then
     exit_error "$2 failed health check"
   else
-    echo $2 healthy!;
+    echo ⭐️ $2 healthy ⭐️;
   fi;
 }
 
@@ -51,6 +51,6 @@ for service_name in ${services[*]}; do
 done
 
 if [[ ${deployment_unhealthy} != True ]]; then
-  SUCCESS "All services are up and healthy"
+  SUCCESS "All services are up and healthy ! 🍾🍾🍾"
 fi
-cd -
+cd - > /dev/null

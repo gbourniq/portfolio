@@ -40,7 +40,7 @@
     region: '{{AWS_REGION}}'
 
 # Untar files and set up project root directory
-- name: Unarchive docker_deploy.tar.gz
+- name: Untar docker deploy tarball
   become: yes
   unarchive:
     src: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
