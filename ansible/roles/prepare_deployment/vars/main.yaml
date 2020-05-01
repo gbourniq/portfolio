@@ -1,6 +1,6 @@
 PORTFOLIO_ROOT_DIR: "{{ lookup('env','PORTFOLIO_ROOT_DIR') }}"
 AWS_STORAGE_BUCKET_NAME: "{{ lookup('env','AWS_STORAGE_BUCKET_NAME') }}"
-DOCKER_DEPLOY_BUCKET_FOLDER: "docker_deploy"
+DOCKER_DEPLOY_FOLDER_DEV: "{{ lookup('env','DOCKER_DEPLOY_FOLDER_DEV') }}"
 DOCKER_DEPLOY_ARTEFACT: "docker_deploy.tar.gz"
 AWS_REGION: eu-west-2
 AWS_ACCESS_KEY_ID: !vault |

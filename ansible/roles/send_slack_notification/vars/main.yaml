@@ -1,4 +1,3 @@
 QA_INSTANCE_TIME_MINUTES: "{{ lookup('env','QA_INSTANCE_TIME_MINUTES') }}"
 SLACK_TOKEN: "{{ lookup('env','SLACK_TOKEN') }}"
 ANSIBLE_DEV_HOSTNAME: "{{ lookup('env','ANSIBLE_DEV_HOSTNAME') }}"
-ANSIBLE_APP_PORT: "{{ lookup('env','ANSIBLE_APP_PORT') }}"

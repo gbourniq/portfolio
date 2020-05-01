@@ -32,7 +32,7 @@
   become: yes
   aws_s3:
     bucket: "{{ AWS_STORAGE_BUCKET_NAME }}"
-    object: "/{{ DOCKER_DEPLOY_BUCKET_FOLDER }}/{{ DOCKER_DEPLOY_ARTEFACT }}"
+    object: "/{{ DOCKER_DEPLOY_FOLDER_DEV }}/{{ DOCKER_DEPLOY_ARTEFACT }}"
     dest: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
     mode: get
     aws_access_key: '{{AWS_ACCESS_KEY_ID}}'
