@@ -53,3 +53,4 @@ done
 if [[ ${deployment_unhealthy} != True ]]; then
   SUCCESS "All services are up and healthy"
 fi
+cd -
