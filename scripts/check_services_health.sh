@@ -30,7 +30,7 @@ function check_service_health() {
 }
 
 # Start script
-cd ../deployment/docker-deployment
+cd deployment/docker-deployment
 INFO "Checking services health for ${BUILD} build..."
 
 if [[ ${BUILD} == dev ]]; then
