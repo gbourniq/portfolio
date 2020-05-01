@@ -23,38 +23,9 @@ function start_services() {
   # docker-compose ${COMPOSE_ARGS} up -d app
 }
 
-function get_container_id() {
-  echo $(docker-compose $1 ps -q $2)
-}
-
-function get_service_health() {
-  container_id=$(get_container_id "$1" "$2")
-  echo $(echo ${container_id} | xargs -I ID docker inspect -f '{{if .State.Running}}{{ .State.Health.Status }}{{end}}' ID)
-}
-
-function check_service_health() {
-  until [[ $(get_service_health "$1" "$2") != "starting" ]]; do
-    sleep 1
-  done;
-  if [[ $(get_service_health "$1" "$2") != "healthy" ]]; then
-    exit_error "$2 failed health check"
-  else
-    echo $2 healthy!;
-  fi;
-}
-
-function check_all_services_health() {
-  INFO "[BUILD=${BUILD}] Checking services health..."
-  services=("postgres" "redis" "app" "worker")
-  for service_name in ${services[*]}; do
-    check_service_health "${COMPOSE_ARGS}" "$service_name"
-  done
-  SUCCESS "All services are up and healthy"
-}
-
 ### Start script
 cd deployment/docker-deployment
 remove_services
 start_services
-check_all_services_health
 cd -
+source ./scripts/check_services_health.sh

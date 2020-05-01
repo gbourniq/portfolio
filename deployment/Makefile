@@ -5,10 +5,13 @@ SHELL=/bin/bash -e -o pipefail
 .PHONY: up down postgres-dump-to-s3 postgres-restore-from-s3
 
 up: env-validation
-	@ docker-compose ${COMPOSE_ARGS} up -d
+	@ cd docker-deployment/ && docker-compose ${COMPOSE_ARGS} up -d
+
+check-services-heath: env-validation
+	@ ../scripts/check_services_health.sh
 
 down: env-validation
-	@ docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
+	@ cd docker-deployment/ && docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
 
 postgres-dump-to-s3: env-validation
 	@ INFO "Create and upload postgres backup to AWS S3"
@@ -25,3 +28,23 @@ env-validation:
 	@ INFO "Checking if required environment variables are set..."
 	@ ../scripts/env_validation.sh
 	@ SUCCESS "All good!"
+
+
+# ----------------------------------------------------
+#
+# Check all variables are set with non-empty values
+#
+# ----------------------------------------------------
+# Params:
+#   1. Variable name(s) to test.
+#   2. (optional) Error message to print.
+check_defined = \
+    $(strip $(foreach 1,$1, \
+        $(call __check_defined,$1,$(strip $(value 2)))))
+__check_defined = \
+    $(if $(value $1),, \
+      $(error Undefined $1$(if $2, ($2))))
+
+$(call check_defined, COMPOSE_ARGS, Please source .env)
+$(call check_defined, POSTGRES_DB, Please source .env)
+$(call check_defined, S3_POSTGRES_BACKUP_URI, Please source .env)

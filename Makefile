@@ -80,3 +80,23 @@ env-validation:
 recreatedb:
 	@ INFO "Re-create postgres, migrations and dummy superuser"
 	@ . ./scripts/reset_local_db.sh
+
+
+# ----------------------------------------------------
+#
+# Check all variables are set with non-empty values
+#
+# ----------------------------------------------------
+# Params:
+#   1. Variable name(s) to test.
+#   2. (optional) Error message to print.
+check_defined = \
+    $(strip $(foreach 1,$1, \
+        $(call __check_defined,$1,$(strip $(value 2)))))
+__check_defined = \
+    $(if $(value $1),, \
+      $(error Undefined $1$(if $2, ($2))))
+
+$(call check_defined, CONDA_ENV_NAME, Please source .dev.env)
+$(call check_defined, S3_DOCKER_DEPLOY_URI_PROD, Please source .dev.env)
+$(call check_defined, S3_DOCKER_DEPLOY_TARBALL_PROD, Please source .dev.env)
