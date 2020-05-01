@@ -26,7 +26,6 @@ install:
   - sudo apt-get install sshpass
 
 script:
-  - source .dev.env
   - ./build_steps/run_ci_pipeline.sh
   - ./build_steps/run_cd_pipeline.sh
   # - ./build_steps/run_k8s_pipeline.sh

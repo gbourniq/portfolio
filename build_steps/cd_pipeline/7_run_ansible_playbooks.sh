@@ -27,7 +27,7 @@ function tidy_up() {
     stop_instance.yml \
     -vv
   rm -rf /tmp/ansible-vault-pw
-  exit 0
+  exit 1
 }
 
 function set_ansible_vault() {
