@@ -199,10 +199,10 @@ if static_settings.S3_STORAGE_ENABLED:
         f"s3.{AWS_DEFAULT_REGION}.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}"
     )
     # s3 static settings
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/django_files/static/"
     STATICFILES_STORAGE = "main.storage_backends.StaticStorage"
     # s3 public media settings
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/django_files/media/"
     DEFAULT_FILE_STORAGE = "main.storage_backends.PublicMediaStorage"
 else:
     STATIC_URL = "/staticfiles/"

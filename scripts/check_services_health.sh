@@ -26,7 +26,7 @@ function check_service_health() {
     sleep 1
   done;
   if [[ $(get_service_health "$1" "$2") != "healthy" ]]; then
-    exit_error "$2 failed health check"
+    exit_error "❌ $2 failed health check"
   else
     echo ⭐️ $2 healthy ⭐️;
   fi;
@@ -34,7 +34,7 @@ function check_service_health() {
 
 # Start script
 if [[ -z $BUILD ]] || [[ -z $COMPOSE_ARGS ]]; then
-  exit_error "BUILD / COMPOSE_ARGS not set! Aborting."
+  exit_error "❌ BUILD / COMPOSE_ARGS not set! Aborting."
 fi
 
 INFO "Checking services health for ${BUILD} build..."
@@ -46,7 +46,7 @@ if [[ ${BUILD} == dev ]]; then
 elif [[ ${BUILD} == prod ]]; then
     services=(postgres redis app worker nginx)
 else
-    exit_error "Unknown build type: ${BUILD}"
+    exit_error "❌ Unknown build type: ${BUILD}"
 fi
 
 for service_name in ${services[*]}; do
@@ -54,6 +54,6 @@ for service_name in ${services[*]}; do
 done
 
 if [[ ${deployment_unhealthy} != True ]]; then
-  SUCCESS "All services are up and healthy ! 🍾🍾🍾"
+  SUCCESS "✅ All services are up and healthy!"
 fi
 cd - > /dev/null

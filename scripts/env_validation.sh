@@ -68,9 +68,9 @@ validate_functions
 
 # Success message if set_as_failed() not called
 if [[ $BUILD == prod ]] && [[ $VALIDATION_FAILED != True ]]; then
-    MESSAGE "[PROD build] Secret environment variables are all set!"
+    MESSAGE "✅ [PROD build] Secret environment variables are all set!"
 elif [[ $BUILD == dev ]] && [[ $VALIDATION_FAILED != True ]]; then
-    MESSAGE "[DEV build] Secret environment variables are all set!"
+    MESSAGE "✅ [DEV build] Secret environment variables are all set!"
 else
-    ERROR "Oops.. Environment validation has failed!"
+    ERROR "❌ Oops.. Environment validation has failed!"
 fi

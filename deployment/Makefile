@@ -15,11 +15,11 @@ down: env-validation
 
 postgres-dump-to-s3: env-validation
 	@ INFO "Create and upload postgres backup to AWS S3"
-	@ ../scripts/postgres_dump_to_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
+	@ ../scripts/postgres_dump_to_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
 
 postgres-restore-from-s3: env-validation
 	@ INFO "Download postgres dump from S3 and restore database"
-	@ ../scripts/postgres_restore_from_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/
+	@ ../scripts/postgres_restore_from_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
 
 
 .PHONY: env-validation

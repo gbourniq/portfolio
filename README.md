@@ -1,7 +1,8 @@
 [![Travis Build Status](https://travis-ci.com/gbourniq/portfolio.svg?branch=master)](https://travis-ci.com/gbourniq/portfolio)
 
 # Portfolio Application
-This project is a Django web application that can be used as a template to create any blog or personal portfolio. 
+This is a personal project is a 
+Django web application that can be used as a template to create any blog or personal portfolio. 
 
 By accessing the Django Admin section, a user can easily manage the following website content such as:
 - Articles 
