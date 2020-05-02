@@ -32,8 +32,8 @@
   become: yes
   aws_s3:
     bucket: "{{ AWS_STORAGE_BUCKET_NAME }}"
-    object: "/{{ DOCKER_DEPLOY_FOLDER_DEV }}/{{ DOCKER_DEPLOY_ARTEFACT }}"
-    dest: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
+    object: "/{{ DOCKER_DEPLOY_FOLDER }}/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE }}.tar.gz"
+    dest: /tmp/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE }}.tar.gz
     mode: get
     aws_access_key: '{{AWS_ACCESS_KEY_ID}}'
     aws_secret_key: '{{AWS_SECRET_ACCESS_KEY}}'
@@ -43,12 +43,12 @@
 - name: Untar docker deploy tarball
   become: yes
   unarchive:
-    src: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
+    src: /tmp/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE }}.tar.gz
     dest: /home/ubuntu/
     remote_src: yes
 
 - name: Rename root directory
-  command: mv /home/ubuntu/docker_deploy/ {{ PORTFOLIO_ROOT_DIR }}/
+  command: mv /home/ubuntu/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE}}/ {{ PORTFOLIO_ROOT_DIR }}/
 
 - name: Recursively change ownership of root directory
   file:
@@ -61,7 +61,7 @@
 - name: Delete temporary tarball file
   become: yes
   file:
-    path: /tmp/{{ DOCKER_DEPLOY_ARTEFACT }}
+    path: /tmp/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE }}.tar.gz
     state: absent
 
 - name: Download SSL CA signed certificate from S3

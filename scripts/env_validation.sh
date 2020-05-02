@@ -7,7 +7,7 @@ function set_as_failed() {
 }
 
 # Required environment for development
-function env_check_dev() {
+function secret_env_check_dev() {
     if [[ -z $DOCKER_USER ]]; then
         set_as_failed "DOCKER_USER environment variable required to run"
     fi
@@ -29,7 +29,7 @@ function env_check_dev() {
 }
 
 # Required environment for production
-function env_check_prod() {
+function secret_env_check_prod() {
     if [[ -z $AWS_ACCESS_KEY_ID ]]; then
         set_as_failed "AWS_ACCESS_KEY_ID environment variable required to run"
     fi
@@ -43,9 +43,9 @@ function validate_env() {
     if [[ -z $BUILD ]]; then
         set_as_failed "BUILD environment variable not set. Please source .env! Aborting."
     elif [[ $BUILD == dev ]]; then
-        env_check_dev
+        secret_env_check_dev
     elif [[ $BUILD == prod ]]; then
-        env_check_prod
+        secret_env_check_prod
     else
         set_as_failed "Unknown build type: ${BUILD}. Expected either dev or prod! Aborting."
     fi
@@ -68,9 +68,9 @@ validate_functions
 
 # Success message if set_as_failed() not called
 if [[ $BUILD == prod ]] && [[ $VALIDATION_FAILED != True ]]; then
-    MESSAGE "Environment variables are all set for production build!"
+    MESSAGE "[PROD build] Secret environment variables are all set!"
 elif [[ $BUILD == dev ]] && [[ $VALIDATION_FAILED != True ]]; then
-    MESSAGE "Environment variables are all set for development build!"
+    MESSAGE "[DEV build] Secret environment variables are all set!"
 else
     ERROR "Oops.. Environment validation has failed!"
 fi

@@ -33,6 +33,15 @@ function activate_environment() {
   conda activate ${CONDA_ENV_NAME}
 }
 
+function validate_environment_variables() {
+  if [[ -z $RUN_ANSIBLE_PLAYBOOK ]] || \
+     [[ -z $CONDA_ENV_NAME ]]
+  then
+    exit_error "Some of the following environment variables are not set: \
+RUN_ANSIBLE_PLAYBOOK, CONDA_ENV_NAME. Aborting."
+  fi
+}
+
 function set_ansible_vault() {
   echo "${ANSIBLE_VAULT_PASSWORD}" > /tmp/ansible-vault-pw
 }
@@ -48,6 +57,7 @@ function run_qa_playbook() {
 
 
 # Start script
+validate_environment_variables
 if [ "$RUN_ANSIBLE_PLAYBOOK" == True ]; then
   activate_environment
   INFO "Run the Ansible QA playbook..."

@@ -18,11 +18,22 @@ function exit_error() {
   exit 1
 }
 
+function validate_environment_variables() {
+  if [[ -z $DOCKER_PASSWORD ]] || \
+     [[ -z $DOCKER_USER ]] || \
+     [[ -z $CONDA_ENV_NAME ]] || \
+     [[ -z $IMAGE_REPOSITORY ]]
+  then
+    exit_error "Some of the following environment variables are not set: \
+DOCKER_PASSWORD, DOCKER_USER, CONDA_ENV_NAME, IMAGE_REPOSITORY. Aborting."
+  fi
+}
+
 # Define functions
 function docker_login() {
   echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin 2>&1
   DOCKER_LOGIN_STATE=$?
-  if [ "$DOCKER_LOGIN_STATE" -ne 0 ]; then
+  if [ $? -ne 0 ]; then
     exit_error "Docker login failed! Aborting."
   fi
 }
@@ -47,15 +58,16 @@ function set_tag() {
 function push_image() {
   INFO "Publishing ${IMAGE_REPOSITORY}:${TAG} image to ${DOCKER_REGISTRY:-docker.io}..."
   docker push ${IMAGE_REPOSITORY}:${TAG}
-  PUBLISH_STATE=$?
-  if [ "$PUBLISH_STATE" -ne 0 ]; then
+  if [ $? -ne 0 ]; then
     exit_error "Pushing ${IMAGE_REPOSITORY}:${TAG} failed! Aborting."
   else
     SUCCESS "${IMAGE_REPOSITORY}:${TAG} published successfully!"
   fi
 }
 
+
 # Start script
+validate_environment_variables
 docker_login
 set_tag $1
 push_image

@@ -17,12 +17,15 @@ function activate_environment() {
   conda activate ${CONDA_ENV_NAME}
 }
 
+if [[ -z $CONDA_ENV_NAME ]]; then
+  exit_error "CONDA_ENV_NAME not set! Aborting."
+fi
+
 activate_environment
 INFO "Running pre-commit to lint code"
 pre-commit run --all-files
 
-OUTPUT_CODE=$?
-if [ $OUTPUT_CODE -ne 0 ]; then
+if [ $? -ne 0 ]; then
     exit_error "Some code linting have failed! Aborting."
 else
     SUCCESS "Code linted successfully" 

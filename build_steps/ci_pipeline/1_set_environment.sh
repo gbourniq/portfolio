@@ -30,8 +30,7 @@ function activate_conda_env() {
   INFO "Activating ${CONDA_ENV_NAME} conda environment"
   source $(conda info --base)/etc/profile.d/conda.sh
   conda activate ${CONDA_ENV_NAME}
-  CONDA_ACTIVATE_STATE=$?
-  if [ "$CONDA_ACTIVATE_STATE" -ne 0 ]; then
+  if [ $? -ne 0 ]; then
     exit_error "conda activate failed! Aborting."
   fi
 }
@@ -39,12 +38,15 @@ function activate_conda_env() {
 function run_poetry_install() {
   INFO "Installing Poetry dependencies"
   poetry install
-  POETRY_INSTALL_STATE=$?
-  if [ "$POETRY_INSTALL_STATE" -ne 0 ]; then
+  if [ $? -ne 0 ]; then
     exit_error "poetry installed failed! Aborting."
   fi
 }
 
+
+if [[ -z $CONDA_ENV_NAME ]]; then
+  exit_error "CONDA_ENV_NAME not set! Aborting."
+fi
 
 # Start scripts
 tidy_up

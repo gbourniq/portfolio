@@ -12,6 +12,16 @@ function exit_error() {
   exit 1
 }
 
+function validate_environment_variables() {
+  if [[ -z $BUILD ]] || \
+     [[ -z $IMAGE_REPOSITORY ]] || \
+     [[ -z $COMPOSE_ARGS ]]
+  then
+    exit_error "Some of the following environment variables are not set: \
+BUILD, IMAGE_REPOSITORY, COMPOSE_ARGS. Aborting."
+  fi
+}
+
 function remove_services() {
   INFO "[BUILD=${BUILD}] Removing docker-compose services..."
   docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
@@ -23,7 +33,10 @@ function start_services() {
   # docker-compose ${COMPOSE_ARGS} up -d app
 }
 
+
+
 ### Start script
+validate_environment_variables
 cd deployment/docker-deployment
 remove_services
 start_services

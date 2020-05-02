@@ -38,8 +38,7 @@ function set_tag() {
 function package_app() {
   INFO "Packaging portfolio app to /bin"
   python utils/package_builder.py --name ${PROJECT_NAME}
-  PACKAGE_APP_STATE=$?
-  if [ "$PACKAGE_APP_STATE" -ne 0 ]; then
+  if [ $? -ne 0 ]; then
     exit_error "Packaging app failed! Aborting."
   fi
 }
@@ -53,13 +52,28 @@ function build_image() {
     --build-arg POETRY_VERSION=${POETRY_VERSION} \
     --build-arg POETRY_LOCK_FILE=./poetry.lock \
     --build-arg PYPROJECT_FILE=./pyproject.toml
-  BUILD_IMAGE_STATE=$?
-  if [ "$BUILD_IMAGE_STATE" -ne 0 ]; then
+  if [ $? -ne 0 ]; then
     exit_error "Build image failed! Aborting."
   fi
 }
 
+function validate_environment_variables() {
+  if [[ -z $CONDA_ENV_NAME ]] || \
+     [[ -z $PROJECT_NAME ]] || \
+     [[ -z $IMAGE_REPOSITORY ]] || \
+     [[ -z $DOCKERFILE_PATH ]] || \
+     [[ -z $DOCKER_PORTFOLIO_HOME ]] || \
+     [[ -z $DOCKER_APP_CODE ]] || \
+     [[ -z $POETRY_VERSION ]]
+  then
+    exit_error "Some of the following environment variables are not set: \
+CONDA_ENV_NAME, PROJECT_NAME, IMAGE_REPOSITORY, DOCKERFILE_PATH, \
+DOCKER_PORTFOLIO_HOME, DOCKER_APP_CODE, POETRY_VERSION. Aborting."
+  fi
+}
+
 # Start script
+validate_environment_variables
 activate_environment
 set_tag $1
 package_app

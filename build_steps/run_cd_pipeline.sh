@@ -5,7 +5,7 @@ set -e
 # Source environment variable for dev build
 source ./.dev.env
 
-# Validate all required variables exist
+# Validate secret environment variables are set
 if [[ $VALIDATION_FAILED == True ]]; then
     exit 1
 fi

@@ -33,9 +33,9 @@ unit-tests:
 # CD SCRIPTS
 #
 # ----------------------------------------------------
-.PHONY: cd-all image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-prod run-ansible-playbook
+.PHONY: cd-all image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-custom run-ansible-playbook
 
-cd-all: image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-prod run-ansible-playbook
+cd-all: env-validation image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-custom run-ansible-playbook
 
 image-latest:
 	@ ./build_steps/cd_pipeline/1_build_image.sh
@@ -61,8 +61,8 @@ publish-latest:
 publish-tagged:
 	@ ./build_steps/cd_pipeline/6_push_docker_image.sh tagged
 
-docker-deploy-tarball-prod:
-	@ ./build_steps/cd_pipeline/7_build_and_push_docker_compose_tarball.sh ${S3_DOCKER_DEPLOY_URI_PROD} ${S3_DOCKER_DEPLOY_TARBALL_PROD}
+docker-deploy-tarball-custom:
+	@ ./build_steps/cd_pipeline/7_build_and_push_docker_compose_tarball.sh ${S3_DOCKER_DEPLOY_TARBALL_CUSTOM}
 
 run-ansible-playbook:
 	@ ./build_steps/cd_pipeline/8_run_ansible_playbooks.sh
@@ -101,5 +101,4 @@ __check_defined = \
       $(error Undefined $1$(if $2, ($2))))
 
 $(call check_defined, CONDA_ENV_NAME, Please source .dev.env)
-$(call check_defined, S3_DOCKER_DEPLOY_URI_PROD, Please source .dev.env)
-$(call check_defined, S3_DOCKER_DEPLOY_TARBALL_PROD, Please source .dev.env)
+$(call check_defined, S3_DOCKER_DEPLOY_TARBALL_CUSTOM, Please source .dev.env)

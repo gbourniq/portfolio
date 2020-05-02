@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ "$1" = "" ] || [ "$2" = "" ]; then
-    echo "Usage: $0 <service_name> <database>..."
-    echo "Example: $0 yourapp_service_name_postgres dbname"
+if [ "$1" = "" ] || [ "$2" = "" ] || [ "$3" = "" ]; then
+    echo "Usage: $0 <service_name> <database> <s3_location>"
+    echo "Example: $0 yourapp_service_name_postgres dbname s3://<bucket-name>/postgres_backup/"
     exit 1
 fi
 

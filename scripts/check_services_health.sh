@@ -33,6 +33,9 @@ function check_service_health() {
 }
 
 # Start script
+if [[ -z $BUILD ]] || [[ -z $COMPOSE_ARGS ]]; then
+  exit_error "BUILD / COMPOSE_ARGS not set! Aborting."
+fi
 
 INFO "Checking services health for ${BUILD} build..."
 cd deployment/docker-deployment

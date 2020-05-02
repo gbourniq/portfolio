@@ -3,6 +3,10 @@
 # This script is only for recreating a local postgresql database (non docker)
 # Note: This script must run it from root directory with `. ./scripts/reset_local_db.sh`
 
+if [[ -z $POSTGRES_DB ]]; then
+  exit_error "POSTGRES_DB not set! Aborting."
+fi
+
 echo "Recreate Postgres database"
 dropdb ${POSTGRES_DB}
 createdb ${POSTGRES_DB}
