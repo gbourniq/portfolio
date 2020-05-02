@@ -10,10 +10,13 @@ function exit_handler() {
   if [ $playbook_success == True ]; then
     tidy_up
     exit 0
-  else
+  elif [ $playbook_success == False ]; then
     ERROR "Ansible playbook failed. Aborting!" 1>&2
     tidy_up
     exit 1
+  else
+    MESSAGE "Clean exit."
+    exit 0
   fi
 }
 
@@ -57,21 +60,19 @@ function run_qa_playbook() {
 
 # Start script
 validate_environment_variables
-if [ "$RUN_ANSIBLE_PLAYBOOK" == True ]; then
-  activate_environment
-  INFO "Run the Ansible QA playbook..."
-  cd ansible
-  set_ansible_vault
-  playbook_success=False
-  run_qa_playbook
-  playbook_success=True
-  SUCCESS "QA playbook was run successfully!"
-else
-  playbook_success=True
-  INFO "RUN_ANSIBLE_PLAYBOOK is set to False. Aborting."
+if [ "$RUN_ANSIBLE_PLAYBOOK" != True ]; then
+  INFO "RUN_ANSIBLE_PLAYBOOK is not set to True. Aborting."
+  exit 0
 fi
 
-
+activate_environment
+INFO "Run the Ansible QA playbook..."
+cd ansible
+set_ansible_vault
+playbook_success=False
+run_qa_playbook
+playbook_success=True
+SUCCESS "QA playbook was run successfully!"
 
 
 
