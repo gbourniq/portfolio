@@ -8,7 +8,6 @@ trap "echo 'Exiting script...' && exit_handler" EXIT
 
 function exit_handler() {
   if [ $playbook_success == True ]; then
-    SUCCESS "QA playbook was run successfully!"
     tidy_up
     exit 0
   else
@@ -66,9 +65,10 @@ if [ "$RUN_ANSIBLE_PLAYBOOK" == True ]; then
   playbook_success=False
   run_qa_playbook
   playbook_success=True
+  SUCCESS "QA playbook was run successfully!"
 else
+  playbook_success=True
   INFO "RUN_ANSIBLE_PLAYBOOK is set to False. Aborting."
-  exit 0
 fi
 
 
