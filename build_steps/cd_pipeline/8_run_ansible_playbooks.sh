@@ -68,6 +68,7 @@ if [ "$RUN_ANSIBLE_PLAYBOOK" == True ]; then
   playbook_success=True
 else
   INFO "RUN_ANSIBLE_PLAYBOOK is set to False. Aborting."
+  exit 0
 fi
 
 
