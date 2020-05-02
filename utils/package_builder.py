@@ -27,9 +27,7 @@ GIT_IGNORED = [
     )
 ]
 
-WHITELIST_FILES = [
-    "static_settings.py",
-]
+WHITELIST_FILES = []
 
 # EXCLUDE NON-DIRECTORY FILES
 # Exclude all non directory files in root and docker .env
