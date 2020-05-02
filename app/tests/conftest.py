@@ -20,24 +20,3 @@ def subcategory_instance():
 def article_instance():
     # return Article()
     return None
-
-
-# from tests.mocks import (
-#     MockDocumentClient,
-#     MockDocumentTypeClient,
-#     MockProjectClient,
-#     MockQuestionClient,
-#     MockTagClient,
-#     MockUserClient,
-# )
-
-
-# @pytest.fixture
-# def mock_timestamped_dir_attr(tmp_path, monkeypatch):
-#     def func(instance, directory_name):
-#         timestamped_dir = tmp_path / directory_name
-#         timestamped_dir.mkdir()
-#         monkeypatch.setattr(instance, "timestamped_dir", timestamped_dir)
-#         return timestamped_dir
-
-#     return func

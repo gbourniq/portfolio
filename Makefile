@@ -2,14 +2,30 @@
 SHELL=/bin/bash -e -o pipefail
 
 
+# This Makefile allows to trigger the CI and CD pipelines, as well as individual steps
+
 # ----------------------------------------------------
 #
-# CI SCRIPTS
+# CI/CD Pipeline
+#
+# ----------------------------------------------------
+.PHONY: run-ci-pipeline run-cd-pipeline run-ci-cd-pipeline
+
+run-ci-cd-pipeline: run-ci-pipeline run-cd-pipeline
+
+run-ci-pipeline:
+	@ ./build_steps/run_ci_pipeline.sh
+
+run-cd-pipeline:
+	@ ./build_steps/run_cd_pipeline.sh
+
+
+# ----------------------------------------------------
+#
+# CI STEPS
 #
 # ----------------------------------------------------
 .PHONY: env pre-commit lint-code unit-tests recreatedb
-
-ci-all: env pre-commit lint-code unit-tests
 
 env:
 	@ ./build_steps/ci_pipeline/1_set_environment.sh
@@ -30,12 +46,10 @@ unit-tests:
 
 # ----------------------------------------------------
 #
-# CD SCRIPTS
+# CD STEPS
 #
 # ----------------------------------------------------
 .PHONY: cd-all image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-custom run-ansible-playbook
-
-cd-all: env-validation image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-custom run-ansible-playbook
 
 image-latest:
 	@ ./build_steps/cd_pipeline/1_build_image.sh
@@ -100,5 +114,5 @@ __check_defined = \
     $(if $(value $1),, \
       $(error Undefined $1$(if $2, ($2))))
 
-$(call check_defined, CONDA_ENV_NAME, Please source .dev.env)
-$(call check_defined, S3_DOCKER_DEPLOY_TARBALL_CUSTOM, Please source .dev.env)
+# $(call check_defined, CONDA_ENV_NAME, Please source .dev.env)
+# $(call check_defined, S3_DOCKER_DEPLOY_TARBALL_CUSTOM, Please source .dev.env)

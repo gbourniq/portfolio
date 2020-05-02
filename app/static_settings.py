@@ -32,14 +32,6 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 # Save logs to log.info
 LOGGING_ENABLED = os.getenv("LOGGING_ENABLED") == "True"
 
-# ==================== ANSIBLE ======================
-
-# Docker
-DOCKER_REGISTRY = os.getenv("DOCKER_REGISTRY")
-DOCKER_USER = os.getenv("DOCKER_USER")
-DOCKER_PASSWORD = os.getenv("DOCKER_PASSWORD")
-
-
 # ==================== AWS ======================
 
 AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
@@ -62,6 +54,7 @@ ENV_VARS = [
     "POSTGRES_PASSWORD",
     "EMAIL_HOST_USER",
     "EMAIL_HOST_PASSWORD",
+    "LOGGING_ENABLED",
 ]
 
 if S3_STORAGE_ENABLED:

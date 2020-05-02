@@ -12,6 +12,7 @@ services:
       DEBUG: ${DEBUG:?.env not set up correctly}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
       SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
+      LOGGING_ENABLED: ${LOGGING_ENABLED:?.env not set up correctly}
       # Postgres
       POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
       POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
@@ -31,6 +32,7 @@ services:
       AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?.env not set up correctly}
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?.env not set up correctly}
     volumes:
+      # must be used if S3_STORAGE_ENABLED=False
       # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
@@ -64,6 +66,7 @@ services:
       DEBUG: ${DEBUG:?.env not set up correctly}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
       SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
+      LOGGING_ENABLED: ${LOGGING_ENABLED:?.env not set up correctly}
       # Postgres
       POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
       POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
@@ -83,6 +86,7 @@ services:
       AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?.env not set up correctly}
       AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?.env not set up correctly}
     volumes:
+      # must be used if S3_STORAGE_ENABLED=False
       # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
       # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
       - redisdata:/data
@@ -143,6 +147,7 @@ services:
 
 
 volumes:
+  # must be used if S3_STORAGE_ENABLED=False
   # staticfiles:
   # mediafiles:
   redisdata:
