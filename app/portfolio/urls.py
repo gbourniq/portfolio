@@ -21,27 +21,20 @@ from django.urls import include, path, re_path
 import main.views
 
 urlpatterns = [
-    path("", main.views.homepage, name="homepage"),
-    re_path(r"^contact/$", main.views.contactPage, name="contactPage"),
-    re_path(
-        r"^info/(?P<code>[\w\-]+)/$", main.views.goBackPage, name="goBackPage"
-    ),
+    path("", main.views.viewHome, name="viewHome"),
+    re_path(r"^items/$", main.views.viewCategories, name="viewCategories"),
+    re_path(r"^contact/$", main.views.viewContactUs, name="viewContactUs"),
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
     re_path(
-        r"^(?P<cat_slug>[\w\-]+)/$",
-        main.views.viewSubCategories,
-        name="viewSubCategories",
+        r"^items/(?P<category_slug>[\w\-]+)/$",
+        main.views.viewItems,
+        name="viewItems",
     ),
     re_path(
-        r"^(?P<cat_slug>[\w\-]+)/(?P<subcat_slug>[\w\-]+)/$",
-        main.views.viewArticles,
-        name="viewArticles",
-    ),
-    re_path(
-        r"^(?P<cat_slug>[\w\-]+)/(?P<subcat_slug>[\w\-]+)/(?P<article_slug>[\w\-]+)/$",
-        main.views.viewArticle,
-        name="viewArticle",
+        r"^items/(?P<category_slug>[\w\-]+)/(?P<item_slug>[\w\-]+)/$",
+        main.views.viewItem,
+        name="viewItem",
     ),
 ]
 

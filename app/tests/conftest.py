@@ -1,7 +1,7 @@
 # from unittest.mock import Mock
 import pytest
 
-# from main.models import Category, SubCategory, Article
+# from main.models import Category, Item
 
 
 @pytest.fixture
@@ -11,12 +11,6 @@ def category_instance():
 
 
 @pytest.fixture
-def subcategory_instance():
-    # return SubCategory()
-    return None
-
-
-@pytest.fixture
-def article_instance():
-    # return Article()
+def item_instance():
+    # return Item()
     return None

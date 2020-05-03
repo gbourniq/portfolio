@@ -2,12 +2,11 @@
 <html lang="en">
 
 <head>
-
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <meta name="description" content="Personal portfolio for Guillaume Bournique">
-    <meta name="author" content="Guillaume Bournique">
-    <title>Guillaume Bournique</title>
+  <meta name="description" content="Personal portfolio for Guillaume Bournique">
+  <meta name="author" content="Guillaume Bournique">
+  <title>Guillaume Bournique</title>
 
 	{% load static %}
 	<!-- Loading css from tinyMCE app -->
@@ -33,7 +32,8 @@
 	</main>
 
 	<footer>
-	{% include "main/includes/footer.html" %}
+		{% block footer %}
+		{% endblock %}
 	</footer>
 
 

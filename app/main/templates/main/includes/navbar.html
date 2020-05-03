@@ -1,48 +1,34 @@
-<!--
-<nav>
-	<div class="nav-wrapper">
-	  <a href="#" class="brand-logo">Tutorials</a>
-	  <ul id="nav-mobile" class="right hide-on-med-and-down">
-	    <li><a href="/">Home</a></li>
-	    {% if user.is_authenticated %}
-		    <li><a href="/account">{{user.username}}</a></li>
-		    <li><a href="/logout">Logout</a></li>
-		{% else %}
-			<li><a href="/register">Register</a></li>
-		    <li><a href="/login">Login</a></li>	
-		{% endif %}
-
-	  </ul>
-	</div>
-</nav>
--->
-
 {% load static %}
-  <nav class="white" role="navigation">
+
+<div class="navbar-fixed">
+  <nav style="background-color:white">
+
     <div class="nav-wrapper container">
       <a id="logo-container" href="/" class="brand-logo">
-	  	<IMG SRC="{% static 'Logo.png' %}" width=55 height=57>
-	  </a>
+        <IMG SRC="{% static 'Logo.png' %}" width=55 height=57>
+      </a>
 
       <ul class="right hide-on-med-and-down">
-        <li><a href="/contact">Email me</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
       <ul class="right hide-on-med-and-down">
-        <li><a href="/admin">Contact</a></li> <!-- #my-footer -->
+        <li><a href="/items">Items</a></li>
       </ul>
       <ul class="right hide-on-med-and-down">
         <li><a href="/">Home</a></li>
       </ul>
+
       <ul id="nav-mobile" class="sidenav">
-        <li><a href="/">Email Me</a></li>
+         <li><a href="/contact">Contact</a></li>
       </ul>
-	  <ul id="nav-mobile" class="sidenav">
-        <li><a href="#my-footer">Contact</a></li>
+	    <ul id="nav-mobile" class="sidenav">
+        <li><a href="/items">Items</a></li>
       </ul>
-	  <ul id="nav-mobile" class="sidenav">
+	    <ul id="nav-mobile" class="sidenav">
         <li><a href="/">Home</a></li>
       </ul>
 
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">Menu</i></a>
     </div>
   </nav>
+</div>

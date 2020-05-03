@@ -1,2 +1,2 @@
 # File to mock some actual object:
-# - Articles, Categories, SubCategories, > all details, comments, pictures
+# - Items, Categories, > all details, comments, pictures

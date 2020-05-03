@@ -7,15 +7,12 @@ from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 
 from .forms import ContactForm
-from .models import Article, Category, SubCategory
+from .models import Category
 from .services import (
-    _get_articles_by_subcat_slug,
-    _get_subcategories_by_cat_slug,
-    _get_urls_for_subcategories,
-    _is_article_exist,
     _is_category_exist,
-    _is_subcategory_exist,
-    _send_email,
+    get_item_in_category,
+    get_items_by_category_slug,
+    send_email,
 )
 
 # This retrieves a Python logging instance (or creates it)
@@ -23,153 +20,96 @@ logger = logging.getLogger(__name__)
 
 
 @cache_page(settings.CACHE_TTL)
-def homepage(request):
-    """View for /homepage url"""
-    categories = Category.objects.all
-    logger.info("Homepage")
-    return render(request, "main/categories.html", {"categories": categories})
+def viewHome(request):
+    """View home page"""
+    return render(request, "main/home.html")
 
 
 @cache_page(settings.CACHE_TTL)
-def viewSubCategories(request, cat_slug: str) -> None:
-    """
-    View for a /<category> url
-    Redirect to page where User can click on sub-category cards
-    """
-    logger.info(f"GET request to /{cat_slug}")
-    if not _is_category_exist(cat_slug):
+def viewCategories(request):
+    """View categories cards in /homepage url"""
+    categories = Category.objects.all()
+    if not categories:
         raise Http404
-    matching_sub_categories = _get_subcategories_by_cat_slug(cat_slug)
-    # import pdb; h.set_trace()
-    if matching_sub_categories is None:
-        logger.info(f"No sub-category for /{cat_slug}.")
-        logger.info(f"Redirecting to gobackpage.html")
-        return redirect(goBackPage, code=1)
     return render(
         request,
-        "main/subcategories.html",
-        {
-            "subcategories_urls": _get_urls_for_subcategories(
-                matching_sub_categories
-            ),
-            "category_name": Category.objects.filter(
-                category_slug=cat_slug
-            ).first(),
-        },
+        "main/categories.html",
+        {"categories": categories.order_by("category_name")},
     )
 
 
 @cache_page(settings.CACHE_TTL)
-def viewArticles(request, cat_slug: str, subcat_slug: str) -> None:
+def viewItems(request, category_slug: str) -> None:
     """
-    If user manually goes to /<category>/<sub-category>/ url
-    It will be redirected to /<category>/<sub-category>/<first_article>
+    Requests at /<category>/ are redirected to /<category>/<first_item>
     """
-    if not _is_category_exist(cat_slug) and not _is_subcategory_exist(
-        subcat_slug
-    ):
+    matching_items = get_items_by_category_slug(category_slug)
+    if not matching_items:
+        logger.warning(f"Category {category_slug} does not contain any item.")
         raise Http404
 
-    matching_articles = _get_articles_by_subcat_slug(subcat_slug)
-    if matching_articles is None:
-        logger.info(f"No articles for /{cat_slug}/{subcat_slug}/.")
-        logger.info(f"Redirecting to gobackpage.html")
-        return redirect(goBackPage, code=2)
-
-    first_article = matching_articles.latest("date_published")
-    first_article_slug = first_article.article_slug
+    first_item_object = matching_items.order_by("item_name").first()
+    first_item_slug = first_item_object.item_slug
 
     return redirect(
-        viewArticle,
-        cat_slug=cat_slug,
-        subcat_slug=subcat_slug,
-        article_slug=first_article_slug,
+        viewItem, category_slug=category_slug, item_slug=first_item_slug,
     )
 
 
 @cache_page(settings.CACHE_TTL)
-def viewArticle(request, cat_slug, subcat_slug, article_slug) -> None:
+def viewItem(request, category_slug: str, item_slug: str) -> None:
     """
-    View for a /<category>/<sub-category>/<article-name> url
-    When user clicked on a sub-category card or article list item
+    View for /<category>/<first_item>
     """
-
-    logger.info(f"GET request to /{cat_slug}/{subcat_slug}/{article_slug}")
-
-    if (
-        not _is_category_exist(cat_slug)
-        and not _is_subcategory_exist(subcat_slug)
-        and not _is_article_exist(article_slug)
-    ):
-        raise Http404
-
-    this_article = Article.objects.get(article_slug=article_slug)
-    all_articles = (
-        Article.objects.filter(subcategory_name=this_article.subcategory_name)
-        .order_by("date_published")
-        .reverse()
+    this_item = get_item_in_category(item_slug, category_slug)
+    ordered_items_in_category = get_items_by_category_slug(
+        category_slug, ordered_by_name=True
     )
-    this_tutorial_idx = list(all_articles).index(this_article)
-
-    this_cat_name = Category.objects.get(category_slug=cat_slug).category_name
-    this_subcat_name = SubCategory.objects.get(
-        subcategory_slug=subcat_slug
-    ).subcategory_name
-
+    this_item_idx = list(ordered_items_in_category).index(this_item)
     render_context = {
-        "article": this_article,
-        "sidebar": all_articles,
-        "this_tutorial_idx": this_tutorial_idx,
-        "cat_slug": cat_slug,
-        "subcat_slug": subcat_slug,
-        "cat_name": this_cat_name,
-        "subcat_name": this_subcat_name,
+        "item": this_item,
+        "sidebar": ordered_items_in_category,
+        "this_item_idx": this_item_idx,
+        "category_slug": category_slug,
+        "category_name": this_item.category_name,
     }
+    return render(request, "main/items.html", context=render_context,)
 
-    return render(request, "main/articles.html", context=render_context,)
 
-
-def contactPage(request):
+def viewContactUs(request):
     """
-    View for /email url
-    Allows a user to send an email
+    View for /email where a user can send an email
     """
     if request.method == "GET":
         form = ContactForm()
-        return render(request, "main/email.html", {"form": form})
+        return render(request, "main/contact_us.html", {"form": form})
 
     if request.method == "POST":
         to_emails = [settings.EMAIL_HOST_USER]
         from_email = settings.EMAIL_HOST_USER
-        form = _send_email(request, to_emails, from_email)
+        form = send_email(request, to_emails, from_email)
         if not form:
             # if form invalid, stay on the same page
             return redirect(request.META["HTTP_REFERER"])
         messages.success(request, "Email sent successfully.")
-        return redirect(goBackPage, code=3)
-
-
-def goBackPage(request, code):
-    """
-    View for /success url
-    Page to confirm the email has been sent successfully
-    """
-    msg_mapping = {
-        "1": "No sub-category item(s) to display.",
-        "2": "No article item(s) to display.",
-        "3": "Success! Thank you for your message.",
-    }
-    if code not in msg_mapping:
-        raise Http404
-
-    return render(
-        request, "main/gobackpage.html", {"message": msg_mapping[code]}
-    )
+        return render(
+            request,
+            "main/go_back_home.html",
+            {"message": "Success! Thank you for your message."},
+        )
 
 
 def handler404(request, exception):
-    return render(request, "main/404.html")
+    return render(
+        request,
+        "main/go_back_home.html",
+        {"message": "Oops, there's nothing here... (404)"},
+    )
 
 
 def handler500(request):
-    return render(request, "main/500.html")
+    return render(
+        request,
+        "main/go_back_home.html",
+        {"message": "Internal Server Error (500)"},
+    )

@@ -1,7 +1,7 @@
 from unittest.mock import Mock
 
 
-class TestArticleView:
+class TestItemView:
     def test_1(self, monkeypatch):
         mock_1 = Mock()
         return mock_1
