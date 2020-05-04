@@ -27,10 +27,8 @@ def celery_function_test():
 
 
 @shared_task
-def send_email_celery(
-    subject, body, from_email, to_emails, fail_silently=False
-):
+def send_email_celery(subject, body, from_email, to_emails):
     send_mail(
-        subject, body, from_email, to_emails, fail_silently=fail_silently,
+        subject, body, from_email, to_emails, fail_silently=False,
     )
     logger.info(f"Email sent successfully via a Celery task")

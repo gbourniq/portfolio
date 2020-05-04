@@ -81,11 +81,7 @@ def send_email(request, to_emails: List[str], from_email: str) -> None:
     logger.info(f"Sending email with function: {send_email_function}")
     try:
         send_email_function(
-            form.cleaned_data["subject"],
-            body,
-            from_email,
-            to_emails,
-            fail_silently=False,
+            form.cleaned_data["subject"], body, from_email, to_emails
         )
         return form
     except BadHeaderError:
