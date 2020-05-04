@@ -32,3 +32,7 @@ def send_email_celery(subject, body, from_email, to_emails):
         subject, body, from_email, to_emails, fail_silently=False,
     )
     logger.info(f"Email sent successfully via a Celery task")
+    logger.info(f"subject: {subject}")
+    logger.info(f"body: {body}")
+    logger.info(f"from_email: {from_email}")
+    logger.info(f"to_emails: {str(to_emails)}")
