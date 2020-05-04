@@ -78,6 +78,7 @@ def send_email(request, to_emails: List[str], from_email: str) -> None:
     )
 
     send_email_function = send_email_celery.delay if REDIS_HOST else send_mail
+    logger.info(f"Sending email with function: {send_email_function}")
     try:
         send_email_function(
             form.cleaned_data["subject"],
