@@ -49,7 +49,7 @@ unit-tests:
 # CD STEPS
 #
 # ----------------------------------------------------
-.PHONY: cd-all image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-custom run-ansible-playbook
+.PHONY: image-latest image-tagged up check-services-health postgres-backup-test down publish-latest publish-tagged docker-deploy-tarball-custom run-ansible-playbook
 
 image-latest:
 	@ ./build_steps/cd_pipeline/1_build_image.sh
