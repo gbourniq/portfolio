@@ -31,9 +31,8 @@ DOCKER_PASSWORD, DOCKER_USER, CONDA_ENV_NAME, IMAGE_REPOSITORY. Aborting."
 
 # Define functions
 function docker_login() {
-  echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin 2>&1
-  DOCKER_LOGIN_STATE=$?
-  if [ $? -ne 0 ]; then
+  if ! (echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin 2>&1)
+  then
     exit_error "Docker login failed! Aborting."
   fi
 }
@@ -57,8 +56,8 @@ function set_tag() {
 
 function push_image() {
   INFO "Publishing ${IMAGE_REPOSITORY}:${TAG} image to ${DOCKER_REGISTRY:-docker.io}..."
-  docker push ${IMAGE_REPOSITORY}:${TAG}
-  if [ $? -ne 0 ]; then
+  if ! (docker push ${IMAGE_REPOSITORY}:${TAG})
+  then
     exit_error "Pushing ${IMAGE_REPOSITORY}:${TAG} failed! Aborting."
   else
     SUCCESS "${IMAGE_REPOSITORY}:${TAG} published successfully!"

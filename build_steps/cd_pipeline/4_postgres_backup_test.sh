@@ -21,8 +21,8 @@ S3_POSTGRES_BACKUP_URI, POSTGRES_DB. Aborting."
 
 function postgres_dump_to_s3_test() {
   INFO "Create and upload postgres backup to ${S3_POSTGRES_BACKUP_URI}/cd_pipeline"
-  ./scripts/postgres_dump_to_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/cd_pipeline
-  if [ $? -ne 0 ]; then
+  if ! (./scripts/postgres_dump_to_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/cd_pipeline)
+  then
     exit_error "Postgres backup failed! Aborting."
   fi
   SUCCESS "Postgres dump uploaded to ${S3_POSTGRES_BACKUP_URI}/cd_pipeline"
@@ -30,8 +30,8 @@ function postgres_dump_to_s3_test() {
 
 function postgres_restore_from_s3_test() {
   INFO "Restore latest postgres backup from ${S3_POSTGRES_BACKUP_URI}/cd_pipeline"
-  ./scripts/postgres_restore_from_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/cd_pipeline
-  if [ $? -ne 0 ]; then
+  if ! (./scripts/postgres_restore_from_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}/cd_pipeline)
+  then
     exit_error "Postgres restore failed! Aborting."
   fi
   SUCCESS "Latest postgres dump restored from ${S3_POSTGRES_BACKUP_URI}/cd_pipeline"

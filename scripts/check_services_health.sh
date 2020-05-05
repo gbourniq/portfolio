@@ -13,12 +13,12 @@ function exit_error() {
 }
 
 function get_container_id() {
-  echo $(docker-compose $1 ps -q $2)
+  docker-compose $1 ps -q $2
 }
 
 function get_service_health() {
   container_id=$(get_container_id "$1" "$2")
-  echo $(echo ${container_id} | xargs -I ID docker inspect -f '{{if .State.Running}}{{ .State.Health.Status }}{{end}}' ID)
+  echo ${container_id} | xargs -I ID docker inspect -f '{{if .State.Running}}{{ .State.Health.Status }}{{end}}' ID
 }
 
 function check_service_health() {
@@ -38,7 +38,7 @@ if [[ -z $BUILD ]] || [[ -z $COMPOSE_ARGS ]]; then
 fi
 
 INFO "Checking services health for ${BUILD} build..."
-cd deployment/docker-deployment
+cd deployment/docker-deployment || exit
 deployment_unhealthy=False
 
 if [[ ${BUILD} == dev ]]; then
@@ -56,4 +56,4 @@ done
 if [[ ${deployment_unhealthy} != True ]]; then
   SUCCESS "✅ All services are up and healthy!"
 fi
-cd - > /dev/null
+cd - > /dev/null || exit

@@ -55,7 +55,8 @@ function validate_env() {
 function validate_functions() {
     functions=(INFO MESSAGE SUCCESS ERROR)
     for function_name in ${functions[*]}; do
-        if [[ $(declare -f ${function_name} > /dev/null; echo $?) -ne 0 ]]; then
+        if ! (declare -f ${function_name} > /dev/null)
+        then
             set_as_failed "function ${function_name} not defined"
         fi
     done

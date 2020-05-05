@@ -14,6 +14,6 @@ function exit_error() {
 
 source ./scripts/check_services_health.sh
 
-if [[ ${deployment_unhealthy} == True ]]; then
+if [[ ${deployment_unhealthy:?} == True ]]; then
   exit_error "Unhealthy deployment! Aborting."
 fi

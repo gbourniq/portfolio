@@ -23,9 +23,8 @@ fi
 
 activate_environment
 INFO "Running pre-commit to lint code"
-pre-commit run --all-files
-
-if [ $? -ne 0 ]; then
+if ! (pre-commit run --all-files)
+then
     exit_error "Some code linting have failed! Aborting."
 else
     SUCCESS "Code linted successfully" 

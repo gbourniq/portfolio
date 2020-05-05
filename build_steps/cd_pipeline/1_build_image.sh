@@ -37,8 +37,8 @@ function set_tag() {
 
 function package_app() {
   INFO "Packaging portfolio app to /bin"
-  python utils/package_builder.py --name ${PROJECT_NAME}
-  if [ $? -ne 0 ]; then
+  if ! (python utils/package_builder.py --name ${PROJECT_NAME})
+  then
     exit_error "Packaging app failed! Aborting."
   fi
 }

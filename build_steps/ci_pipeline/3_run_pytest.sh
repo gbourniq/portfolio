@@ -23,9 +23,10 @@ fi
 activate_environment
 INFO "Run tests in pytest" 
 cd app/
-pytest -vvx
 
-if [ $? -ne 0 ]; then
+
+if ! (pytest -vvx)
+then
     exit_error "Some tests have failed! Aborting."
 else
     SUCCESS "Run tests in pytest" 

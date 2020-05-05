@@ -49,14 +49,15 @@ export PYTHONPATH=$PWD
 
 INFO "Building docker deploy tarball..."
 activate_environment
-python utils/build_docker_deploy_tarball.py --name ${docker_deploy_tarball_name}
-if [ $? -ne 0 ]; then
+if ! (python utils/build_docker_deploy_tarball.py --name ${docker_deploy_tarball_name})
+then
   exit_error "Build script failed! Aborting."
 fi
 
 INFO "Uploading docker deploy tarball to S3..."
-aws s3 cp ./bin/${docker_deploy_tarball_name}.tar.gz ${s3_uri}/
-if [ $? -ne 0 ]; then
+
+if ! (aws s3 cp ./bin/${docker_deploy_tarball_name}.tar.gz ${s3_uri}/)
+then
   exit_error "Oops.. S3 upload to ${s3_uri} has failed! Aborting."
 fi
 
