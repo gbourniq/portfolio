@@ -2,52 +2,49 @@
 
 # Helper function: Exit with error
 function set_as_failed() {
-  MESSAGE "$1" 1>&2
+  ERROR "$1" 1>&2
   VALIDATION_FAILED=True
 }
 
 # Required environment for development
 function secret_env_check_dev() {
-    if [[ -z $DOCKER_USER ]]; then
-        set_as_failed "DOCKER_USER environment variable required to run"
+    if [[ ! $DOCKER_USER || ! $DOCKER_PASSWORD ]]; then
+        set_as_failed "DOCKER_USER and DOCKER_PASSWORD environment variables are not set!"
     fi
-    if [[ -z $DOCKER_PASSWORD ]]; then
-        set_as_failed "DOCKER_PASSWORD environment variable required to run"
+    if [[ ! $AWS_ACCESS_KEY_ID && $AWS_ENABLED == True ]]; then
+        set_as_failed "AWS_ACCESS_KEY_ID not set, but AWS_ENABLED=True!"
     fi
-    if [[ -z $AWS_ACCESS_KEY_ID ]]; then
-        set_as_failed "AWS_ACCESS_KEY_ID environment variable required to run"
+    if [[ ! $AWS_SECRET_ACCESS_KEY && $AWS_ENABLED == True ]]; then
+        set_as_failed "AWS_SECRET_ACCESS_KEY, but AWS_ENABLED=True!"
     fi
-    if [[ -z $AWS_SECRET_ACCESS_KEY ]]; then
-        set_as_failed "AWS_SECRET_ACCESS_KEY environment variable required to run"
+    if [[ ! $ANSIBLE_VAULT_PASSWORD && $RUN_ANSIBLE_PLAYBOOK == True ]]; then
+        set_as_failed "ANSIBLE_VAULT_PASSWORD not set, but RUN_ANSIBLE_PLAYBOOK=True!"
     fi
-    if [[ -z $ANSIBLE_VAULT_PASSWORD ]] && [[ $RUN_ANSIBLE_PLAYBOOK == True ]]; then
-        set_as_failed "ANSIBLE_VAULT_PASSWORD not set, but RUN_ANSIBLE_PLAYBOOK=True! Aborting."
-    fi
-    if [[ -z $ANSIBLE_SSH_PASSWORD ]] && [[ $RUN_ANSIBLE_PLAYBOOK == True ]]; then
-        set_as_failed "ANSIBLE_SSH_PASSWORD not set, but RUN_ANSIBLE_PLAYBOOK=True! Aborting."
+    if [[ ! $ANSIBLE_SSH_PASSWORD && $RUN_ANSIBLE_PLAYBOOK == True ]]; then
+        set_as_failed "ANSIBLE_SSH_PASSWORD not set, but RUN_ANSIBLE_PLAYBOOK=True!"
     fi
 }
 
 # Required environment for production
 function secret_env_check_prod() {
-    if [[ -z $AWS_ACCESS_KEY_ID ]]; then
-        set_as_failed "AWS_ACCESS_KEY_ID environment variable required to run"
+    if [[ ! $AWS_ACCESS_KEY_ID && $AWS_ENABLED == True ]]; then
+        set_as_failed "AWS_ACCESS_KEY_ID not set, but AWS_ENABLED=True!"
     fi
-    if [[ -z $AWS_SECRET_ACCESS_KEY ]]; then
-        set_as_failed "AWS_SECRET_ACCESS_KEY environment variable required to run"
+    if [[ ! $AWS_SECRET_ACCESS_KEY && $AWS_ENABLED == True ]]; then
+        set_as_failed "AWS_SECRET_ACCESS_KEY, but AWS_ENABLED=True!"
     fi
 }
 
 # Validate environment variables are set
 function validate_env() {
-    if [[ -z $BUILD ]]; then
-        set_as_failed "BUILD environment variable not set. Please source .env! Aborting."
+    if [[ ! $BUILD ]]; then
+        set_as_failed "BUILD environment variable not set. Please source .env!"
     elif [[ $BUILD == dev ]]; then
         secret_env_check_dev
     elif [[ $BUILD == prod ]]; then
         secret_env_check_prod
     else
-        set_as_failed "Unknown build type: ${BUILD}. Expected either dev or prod! Aborting."
+        set_as_failed "Unknown build type: ${BUILD}. Expected either dev or prod!"
     fi
 }
 

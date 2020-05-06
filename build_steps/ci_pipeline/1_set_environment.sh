@@ -29,17 +29,16 @@ function create_conda_env() {
 function activate_conda_env() {
   INFO "Activating ${CONDA_ENV_NAME} conda environment"
   source $(conda info --base)/etc/profile.d/conda.sh
-
-  if ! (conda activate ${CONDA_ENV_NAME})
-  then
+  conda activate ${CONDA_ENV_NAME}
+  if [ $? -ne 0 ]; then
     exit_error "conda activate failed! Aborting."
   fi
 }
 
 function run_poetry_install() {
   INFO "Installing Poetry dependencies"
-  if ! (poetry install)
-  then
+  poetry install
+  if [ $? -ne 0 ]; then
     exit_error "poetry installed failed! Aborting."
   fi
 }

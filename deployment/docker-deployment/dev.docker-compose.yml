@@ -3,38 +3,38 @@ version: "3.5"
 services:
 
   app:
-    image: ${IMAGE_REPOSITORY:?.env not set up correctly}:latest
+    image: ${IMAGE_REPOSITORY:?}:latest
     container_name: app
     restart: "no"
     environment:
       # Settings.py
-      PYTHONPATH: ${DOCKER_PORTFOLIO_HOME:?.env not set up correctly}
-      DEBUG: ${DEBUG:?.env not set up correctly}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
-      SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
-      LOGGING_ENABLED: ${LOGGING_ENABLED:?.env not set up correctly}
+      PYTHONPATH: ${DOCKER_PORTFOLIO_HOME:?}
+      DEBUG: ${DEBUG:?}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:?}
+      SECRET_KEY: ${SECRET_KEY:?}
+      LOGGING_ENABLED: ${LOGGING_ENABLED:?}
       # Postgres
-      POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
-      POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env not set up correctly}
-      POSTGRES_HOST: ${POSTGRES_HOST:?.env not set up correctly}
-      POSTGRES_PORT: ${POSTGRES_PORT:?.env not set up correctly}
+      POSTGRES_DB: ${POSTGRES_DB:?}
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_HOST: ${POSTGRES_HOST:?}
+      POSTGRES_PORT: ${POSTGRES_PORT:?}
       # Redis
-      REDIS_HOST: ${REDIS_HOST:?.env not set up correctly}
-      REDIS_PORT: ${REDIS_PORT:?.env not set up correctly}
+      REDIS_HOST: ${REDIS_HOST:?}
+      REDIS_PORT: ${REDIS_PORT:?}
       # Email Contact page
-      EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
-      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER:?}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?}
       # aws s3 - should be docker/k8s secret
-      S3_STORAGE_ENABLED: ${S3_STORAGE_ENABLED:?.env not set up correctly}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?.env not set up correctly}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?.env not set up correctly}
-      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?.env not set up correctly}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?.env not set up correctly}
+      ENABLE_S3_FOR_DJANGO_FILES: ${ENABLE_S3_FOR_DJANGO_FILES:?}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?}
     volumes:
-      # must be used if S3_STORAGE_ENABLED=False
-      # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
-      # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
+      # must be used if ENABLE_S3_FOR_DJANGO_FILES=False
+      # - staticfiles:${DOCKER_APP_CODE:?}/staticfiles/
+      # - mediafiles:${DOCKER_APP_CODE:?}/mediafiles/
       - redisdata:/data
       - ./app/dev.startup_server.sh:${DOCKER_APP_CODE}/dev.startup_server.sh
     healthcheck:
@@ -51,44 +51,44 @@ services:
       - backend
       - proxy
     entrypoint:
-      - ${DOCKER_APP_CODE:?.env not set up correctly}/dev.startup_server.sh
+      - ${DOCKER_APP_CODE:?}/dev.startup_server.sh
     depends_on:
       - postgres
       - redis
 
   worker:
-    image: ${IMAGE_REPOSITORY:?.env not set up correctly}:latest
+    image: ${IMAGE_REPOSITORY:?}:latest
     container_name: worker
     restart: "no"
     environment:
       # Settings.py
-      PYTHONPATH: ${DOCKER_PORTFOLIO_HOME:?.env not set up correctly}
-      DEBUG: ${DEBUG:?.env not set up correctly}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:?.env not set up correctly}
-      SECRET_KEY: ${SECRET_KEY:?.env not set up correctly}
-      LOGGING_ENABLED: ${LOGGING_ENABLED:?.env not set up correctly}
+      PYTHONPATH: ${DOCKER_PORTFOLIO_HOME:?}
+      DEBUG: ${DEBUG:?}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:?}
+      SECRET_KEY: ${SECRET_KEY:?}
+      LOGGING_ENABLED: ${LOGGING_ENABLED:?}
       # Postgres
-      POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
-      POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env not set up correctly}
-      POSTGRES_HOST: ${POSTGRES_HOST:?.env not set up correctly}
-      POSTGRES_PORT: ${POSTGRES_PORT:?.env not set up correctly}
+      POSTGRES_DB: ${POSTGRES_DB:?}
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_HOST: ${POSTGRES_HOST:?}
+      POSTGRES_PORT: ${POSTGRES_PORT:?}
       # Redis
-      REDIS_HOST: ${REDIS_HOST:?.env not set up correctly}
-      REDIS_PORT: ${REDIS_PORT:?.env not set up correctly}
+      REDIS_HOST: ${REDIS_HOST:?}
+      REDIS_PORT: ${REDIS_PORT:?}
       # Email Contact page
-      EMAIL_HOST_USER: ${EMAIL_HOST_USER:?.env not set up correctly}
-      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?.env not set up correctly}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER:?}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?}
       # aws s3 - should be docker/k8s secret
-      S3_STORAGE_ENABLED: ${S3_STORAGE_ENABLED:?.env not set up correctly}
-      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?.env not set up correctly}
-      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?.env not set up correctly}
-      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?.env not set up correctly}
-      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?.env not set up correctly}
+      ENABLE_S3_FOR_DJANGO_FILES: ${ENABLE_S3_FOR_DJANGO_FILES:?}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:?}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:?}
+      AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME:?}
+      AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION:?}
     volumes:
-      # must be used if S3_STORAGE_ENABLED=False
-      # - staticfiles:${DOCKER_APP_CODE:?.env not set up correctly}/staticfiles/
-      # - mediafiles:${DOCKER_APP_CODE:?.env not set up correctly}/mediafiles/
+      # must be used if ENABLE_S3_FOR_DJANGO_FILES=False
+      # - staticfiles:${DOCKER_APP_CODE:?}/staticfiles/
+      # - mediafiles:${DOCKER_APP_CODE:?}/mediafiles/
       - redisdata:/data
       - ./app/startup_celery.sh:${DOCKER_APP_CODE}/startup_celery.sh
     healthcheck:
@@ -102,16 +102,16 @@ services:
       - backend
       - proxy
     entrypoint:
-      - ${DOCKER_APP_CODE:?.env not set up correctly}/startup_celery.sh
+      - ${DOCKER_APP_CODE:?}/startup_celery.sh
 
   postgres:
     image: postgres:12-alpine
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:?.env not set up correctly}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?.env not set up correctly}
-      POSTGRES_DB: ${POSTGRES_DB:?.env not set up correctly}
+      POSTGRES_USER: ${POSTGRES_USER:?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      POSTGRES_DB: ${POSTGRES_DB:?}
       POSTGRES_INITDB_ARGS: "--encoding='UTF-8'"
     volumes:
       - ./postgres/config/postgres.conf:/etc/postgres/postgres.conf:ro
@@ -147,7 +147,7 @@ services:
 
 
 volumes:
-  # must be used if S3_STORAGE_ENABLED=False
+  # must be used if ENABLE_S3_FOR_DJANGO_FILES=False
   # staticfiles:
   # mediafiles:
   redisdata:

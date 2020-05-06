@@ -187,7 +187,7 @@ if static_settings.REDIS_HOST:
 
 
 # FILE STORAGE
-if static_settings.S3_STORAGE_ENABLED:
+if static_settings.ENABLE_S3_FOR_DJANGO_FILES:
     # aws s3 settings for django
     AWS_ACCESS_KEY_ID = static_settings.AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY = static_settings.AWS_SECRET_ACCESS_KEY

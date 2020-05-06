@@ -21,7 +21,9 @@
   gather_facts: true
   roles:
     - send_slack_notification
-    
+  tags:
+    - slack-notification
+
 - name: Pause playbook
   hosts: docker_qa
   remote_user: ubuntu
@@ -35,12 +37,3 @@
   become: yes
   roles:
     - docker_compose_down
-
-- name: Stop AWS instance
-  hosts: localhost
-  gather_facts: true
-  roles:
-    - stop_instance
-  tags:
-    - stop-instance
-

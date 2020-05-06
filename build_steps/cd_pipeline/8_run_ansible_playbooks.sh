@@ -49,12 +49,20 @@ function set_ansible_vault() {
 }
 
 function run_qa_playbook() {
-  ansible-playbook \
-    -i inventories \
-    --vault-id /tmp/ansible-vault-pw \
-    docker_deployment.yml \
-		--skip-tags="stop-instance" \
-    -vv
+  if [[ $ENABLE_SLACK_NOTIFICATION == True ]]; then
+    ansible-playbook \
+      -i inventories \
+      --vault-id /tmp/ansible-vault-pw \
+      docker_deployment.yml \
+      -vv
+  else
+    ansible-playbook \
+      -i inventories \
+      --vault-id /tmp/ansible-vault-pw \
+      docker_deployment.yml \
+      --skip-tags="slack-notification" \
+      -vv
+  fi
 }
 
 
@@ -62,6 +70,7 @@ function run_qa_playbook() {
 validate_environment_variables
 if [ "$RUN_ANSIBLE_PLAYBOOK" != True ]; then
   INFO "RUN_ANSIBLE_PLAYBOOK is not set to True. Aborting."
+  playbook_success=ExitNoTidyUp
   exit 0
 fi
 

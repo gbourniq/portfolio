@@ -23,13 +23,11 @@ install:
   - conda info -a
   # install sshpass on Travis instance for Ansible to use ssh password authentication
   # macOS: brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
-  - sudo apt-get install sshpass
+  - sudo apt-get install sshpass make
 
 script:
   - export BAREMETAL_DEPLOYMENT=False
-  - ./build_steps/run_ci_pipeline.sh
-  - ./build_steps/run_cd_pipeline.sh
-  # - ./build_steps/run_k8s_pipeline.sh
+  - make run-ci-cd-pipeline
 
 
 
