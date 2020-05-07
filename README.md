@@ -342,7 +342,7 @@ Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> 
 
 
 
-## DevOps
+## CI/CD Pipeline
 
 In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented using Travis CI.
 ![image](documentation/images/ci-cd-pipeline.png)
@@ -415,6 +415,7 @@ Note that the following environment variables must be set in the Travis build co
 |`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `prod`      |
 
 * Secret variables that must be defined on host
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`DOCKER_USER`                 | Docker username to pull images when deploying app with docker-compose up  |
@@ -425,6 +426,7 @@ Note that the following environment variables must be set in the Travis build co
 |`EMAIL_HOST_PASSWORD`         | Email address password (Optional)                                         |
 
 * Django settings
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`DEBUG`                       | Should be set to False (production)                                       |
@@ -435,6 +437,7 @@ Note that the following environment variables must be set in the Travis build co
 |`REDIS_*`                     | Variables for Django app container to connect to the Redis container      |
 
 * AWS to use Postgres backup scripts and serve django static/media files with S3
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`AWS_ENABLED`                 | Must be set to `False` if AWS S3 is not used                              |
@@ -442,17 +445,20 @@ Note that the following environment variables must be set in the Travis build co
 |`AWS_STORAGE_BUCKET_NAME`     | S3 bucket storing PG backups, django files, and docker deploy tarballs    |
 
 * Docker variables for publishing app image and docker-compose deployment
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`IMAGE_REPOSITORY`            | Docker repository for the portfolio app image                             |
 
 
 ### `.dev.env` (Dev environment variables)
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `dev`       |
 
 * Secret variables that must be defined on host
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`AWS_ACCESS_KEY_ID`           | AWS Credentials for DB backup and serving django files with S3 (Optional) |
@@ -461,6 +467,7 @@ Note that the following environment variables must be set in the Travis build co
 |`ANSIBLE_SSH_PASSWORD`        | SSH password to access EC2 instance (sshpass must be installed locally)   |
 
 * General settings
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`BAREMETAL_DEPLOYMENT`        | `True` to run django server locally, and `False` for any docker deployment|
@@ -468,12 +475,14 @@ Note that the following environment variables must be set in the Travis build co
 |`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name            |
 
 * Override "Prod" Django settings
+
 |**Name**                      |**Description**                                                            |
 |------------------------------|---------------------------------------------------------------------------|
 |`DEBUG`                       | Set to `True` to see detailed logs during development                     |
 |`ENABLE_S3_FOR_DJANGO_FILES`  | Can be set to `False` to prevent Django using S3 for media/static files   |
 
 * AWS S3 variables to upload docker deployment tarball
+
 |**Name**                              |**Description**                                                            |
 |--------------------------------------|---------------------------------------------------------------------------|
 |`DOCKER_DEPLOY_FOLDER`                | Folder in `AWS_STORAGE_BUCKET_NAME` to store docker deploy tarballs       |
@@ -482,6 +491,7 @@ Note that the following environment variables must be set in the Travis build co
 Note: A Docker deployment tarball is a compressed folder which includes all necessary files to deploy the application on a new instance.
 
 * AWS S3 variables to upload docker deployment tarball (Not relevant if `RUN_ANSIBLE_PLAYBOOK=False`)
+
 |**Name**                      |**Description**                                                                    |
 |------------------------------|-----------------------------------------------------------------------------------|
 |`ANSIBLE_INSTANCE_ID`         | To start and stop AWS EC2 instance                                                |
