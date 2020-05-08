@@ -398,111 +398,69 @@ Note that the following environment variables must be set in the Travis build co
 
 
 
-
-
-
-
-
-
-
-
-
 ### Appendix: Environment variables
 
-#### `deployment/.env` (Prod environment variables)
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `prod`      |
+#### Environment variables for deployment (prod build)
 
+The main variables in `deployment/.env` include:
 * Secret variables that must be defined on host
+* Django settings for prod build
+* AWS variables to use Postgres backup scripts and serve django static/media files with S3
+* Docker variables for publishing/pulling app image
 
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`DOCKER_USER`                 | Docker username to pull images when deploying app with docker-compose up  |
-|`DOCKER_PASSWORD`             | Password associated with docker account                                   |
-|`AWS_ACCESS_KEY_ID`           | AWS Credentials for DB backup and serving django files with S3 (Optional) |
-|`AWS_SECRET_ACCESS_KEY`       | AWS Credentials for DB backup and serving django files with S3 (Optional) |
-|`EMAIL_HOST_USER`             | Email addr. for website users to send messages via contact page (Optional)|
-|`EMAIL_HOST_PASSWORD`         | Email address password (Optional)                                         |
+|**Name**                      |**Description**                                                               |
+|------------------------------|------------------------------------------------------------------------------|
+|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `prod`         |
+|`DOCKER_USER`                 | Docker username to pull images when deploying app with docker-compose up     |
+|`DOCKER_PASSWORD`             | Password associated with docker account                                      |
+|`AWS_ACCESS_KEY_ID`           | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
+|`AWS_SECRET_ACCESS_KEY`       | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
+|`EMAIL_HOST_USER`             | Email addr. for website users to send messages via contact page (Optional)   |
+|`EMAIL_HOST_PASSWORD`         | Email address password (Optional)                                            |
+|`DEBUG`                       | Should be set to False (production)                                          |
+|`ALLOWED_HOSTS`               | Hosts names the Django site can serve to prevent HTTP Host header attacks    |
+|`SECRET_KEY`                  | For a particular Django installation to provide cryptographic signing        |
+|`ENABLE_S3_FOR_DJANGO_FILES`  | `True` for S3 to store and serve Django files, `False` to use Filesystem     |
+|`POSTGRES_*`                  | Variables for Django app container to connect to Postgres container          |
+|`REDIS_*`                     | Variables for Django app container to connect to the Redis container         |
+|`AWS_ENABLED`                 | Must be set to `False` if AWS S3 is not used                                 |
+|`AWS_DEFAULT_REGION`          | Region associated with the S3 bucket. eg. eu-west-2                          |
+|`AWS_STORAGE_BUCKET_NAME`     | S3 bucket storing PG backups, django files, and docker deploy tarballs       |
+|`IMAGE_REPOSITORY`            | Docker repository for the portfolio app image                                |
 
-* Django settings
+### Environment variables for development (dev build)
 
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`DEBUG`                       | Should be set to False (production)                                       |
-|`ALLOWED_HOSTS`               | https://docs.djangoproject.com/en/3.0/ref/settings/#allowed-hosts         |
-|`SECRET_KEY`                  | https://docs.djangoproject.com/en/3.0/ref/settings/#secret-key            |
-|`ENABLE_S3_FOR_DJANGO_FILES`  | `True` for S3 to store and serve Django files, `False` to use Filesystem  |
-|`POSTGRES_*`                  | Variables for Django app container to connect to Postgres container       |
-|`REDIS_*`                     | Variables for Django app container to connect to the Redis container      |
-
-* AWS to use Postgres backup scripts and serve django static/media files with S3
-
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`AWS_ENABLED`                 | Must be set to `False` if AWS S3 is not used                              |
-|`AWS_DEFAULT_REGION`          | Region associated with the S3 bucket. eg. eu-west-2                       |
-|`AWS_STORAGE_BUCKET_NAME`     | S3 bucket storing PG backups, django files, and docker deploy tarballs    |
-
-* Docker variables for publishing app image and docker-compose deployment
-
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`IMAGE_REPOSITORY`            | Docker repository for the portfolio app image                             |
-
-
-### `.dev.env` (Dev environment variables)
-
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `dev`       |
-
+The main variables in `.dev.env` include:
 * Secret variables that must be defined on host
-
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`AWS_ACCESS_KEY_ID`           | AWS Credentials for DB backup and serving django files with S3 (Optional) |
-|`AWS_SECRET_ACCESS_KEY`       | AWS Credentials for DB backup and serving django files with S3 (Optional) |
-|`ANSIBLE_VAULT_PASSWORD`      | Ansible vault passphrase used to encrypt/decrypt Ansible secret variables |
-|`ANSIBLE_SSH_PASSWORD`        | SSH password to access EC2 instance (sshpass must be installed locally)   |
-
 * General settings
-
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`BAREMETAL_DEPLOYMENT`        | `True` to run django server locally, and `False` for any docker deployment|
-|`RUN_ANSIBLE_PLAYBOOK`        | Set to `False` to skip the Ansible playbook in the CD pipeline            |
-|`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name            |
-
-* Override "Prod" Django settings
-
-|**Name**                      |**Description**                                                            |
-|------------------------------|---------------------------------------------------------------------------|
-|`DEBUG`                       | Set to `True` to see detailed logs during development                     |
-|`ENABLE_S3_FOR_DJANGO_FILES`  | Can be set to `False` to prevent Django using S3 for media/static files   |
-
+* Django settings for dev build
 * AWS S3 variables to upload docker deployment tarball
+* Ansible variables (Not used if `RUN_ANSIBLE_PLAYBOOK=False`)
 
-|**Name**                              |**Description**                                                            |
-|--------------------------------------|---------------------------------------------------------------------------|
-|`DOCKER_DEPLOY_FOLDER`                | Folder in `AWS_STORAGE_BUCKET_NAME` to store docker deploy tarballs       |
-|`S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE`| Basename of docker deployment tarball used by ci/cd pipeline and Ansible  |
-|`S3_DOCKER_DEPLOY_TARBALL_CUSTOM`     | Basename of docker deployment tarball used by user to manually deploy app |
-Note: A Docker deployment tarball is a compressed folder which includes all necessary files to deploy the application on a new instance.
-
-* AWS S3 variables to upload docker deployment tarball (Not relevant if `RUN_ANSIBLE_PLAYBOOK=False`)
-
-|**Name**                      |**Description**                                                                    |
-|------------------------------|-----------------------------------------------------------------------------------|
-|`ANSIBLE_INSTANCE_ID`         | To start and stop AWS EC2 instance                                                |
-|`ANSIBLE_HOST_IP`             | Used in Ansible `inventories` to specify ansible_host                             |
-|`ANSIBLE_HOST_NAME`           | Used by docker-compose up role to check if app returns 200                        |
-|`ANSIBLE_HOST_PUBLIC_DNS`     | To start and stop AWS EC2 instance                                                |
-|`PORTFOLIO_ROOT_DIR`          | For ansible roles to navigate on the remote and run commands                      | 
-|`SSL_*_S3_OBJECT_PATH`        | S3 paths for SSL private key and certificate (required for nginx)                 |
-|`SSL_*_HOST_PATH`             | EC2 host path where SSL private key and certificate are located                   |
-|`ENABLE_SLACK_NOTIFICATION`   | Can be set to `False` to skip slack notification when app is up                   |
-|`QA_INSTANCE_TIME_MINUTES`    | Number of minutes the app should be running before the instance is shut down      | 
-|`SLACK_TOKEN`                 | https://docs.ansible.com/ansible/latest/modules/slack_module.html#parameter-token |
+|**Name**                      |**Description**                                                               |
+|------------------------------|------------------------------------------------------------------------------|
+|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `dev`          |
+|`AWS_ACCESS_KEY_ID`           | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
+|`AWS_SECRET_ACCESS_KEY`       | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
+|`ANSIBLE_VAULT_PASSWORD`      | Ansible vault passphrase used to encrypt/decrypt Ansible secret variables    |
+|`ANSIBLE_SSH_PASSWORD`        | SSH password to access EC2 instance (sshpass must be installed locally)      |
+|`BAREMETAL_DEPLOYMENT`        | `True` to run django server locally, and `False` for any docker deployment   |
+|`RUN_ANSIBLE_PLAYBOOK`        | Set to `False` to skip the Ansible playbook in the CD pipeline               |
+|`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name               |
+|`DEBUG`                       | Set to `True` to see detailed logs during development                        |
+|`ENABLE_S3_FOR_DJANGO_FILES`  | Can be set to `False` to prevent Django using S3 for media/static files      |
+|`DOCKER_DEPLOY_FOLDER`        | Folder in `AWS_STORAGE_BUCKET_NAME` to store docker deploy tarballs          |
+|`S3_DOCKER_DEPLOY_CD_PIPELINE`| Basename of docker deployment tarball used by ci/cd pipeline and Ansible     |
+|`S3_DOCKER_DEPLOY_CUSTOM`     | Basename of docker deployment tarball used by user to manually deploy app    |
+|`ANSIBLE_INSTANCE_ID`         | To start and stop AWS EC2 instance                                           |
+|`ANSIBLE_HOST_IP`             | Used in Ansible `inventories` to specify ansible_host                        |
+|`ANSIBLE_HOST_NAME`           | Used by docker-compose up role to check if app returns 200                   |
+|`ANSIBLE_HOST_PUBLIC_DNS`     | To start and stop AWS EC2 instance                                           |
+|`PORTFOLIO_ROOT_DIR`          | For ansible roles to navigate on the remote and run commands                 | 
+|`SSL_*_S3_OBJECT_PATH`        | S3 paths for SSL private key and certificate (required for nginx)            |
+|`SSL_*_HOST_PATH`             | EC2 host path where SSL private key and certificate are located              |
+|`ENABLE_SLACK_NOTIFICATION`   | Can be set to `False` to skip slack notification when app is up              |
+|`QA_INSTANCE_TIME_MINUTES`    | Number of minutes the app should be running before the instance is shut down | 
+|`SLACK_TOKEN`                 | Token for Ansible to connect to the slack app                                |
 
 
