@@ -2,8 +2,8 @@
 
 
 
-## Repository Overview
-This repository consists of the following:
+## Repository overview
+This repository features of the following:
 - Django web application which can be used as a template for a personal portfolio
 - Instructions to set up the development environment with Conda, Poetry, and Makefiles
 - Extensive documentation to easily deploy your own app on AWS EC2 with docker-compose or Kubernetes
@@ -20,7 +20,7 @@ This repository consists of the following:
 - [CI/CD pipeline](#automated-deployment-options)
 - [Appendix: Environment variables](#backing-up-postgres)
 
-## Portfolio Aaplication overview
+## Portfolio Application overview
 The portfolio app essentially displays "items" (or "articles"), which may include formatted text and media files. Those items can be  grouped into categories for a better navi. The application front-end is based on the [Materialize CSS](https://materializecss.com) framework. A sample app can be seen at htts://gbournique.com. 
 
 <SCREENSHOT OF CATEGORY, HOMEPAGE, ITEMS?>
@@ -64,13 +64,14 @@ make lint-code
  
 ### Environment variables overview
 Environment variables are located in two files: `deployment/.env` and `.dev.env`, and `deployment/.env` will automatically be sourced when `.dev.env` is sourced. 
-`deployment/.env` contains variables required exclusively for deploying the app (production), and `.dev.env` adds variables for used development and the ci/cd pipeline, essentially adding variables "on top".
 
-*************************************************************************
-*      .-------------------.            .----------------------------.  *
-*     |  source `.dev.env` | <---------+|  source `deployment/.env`  |  *
-*      '-------------------'            '----------------------------'  *
-*************************************************************************
+`deployment/.env` contains variables required exclusively for deployment (prod build), and `.dev.env` adds variables for used development and the ci/cd pipeline (dev build).
+
+![image](documentation/images/environment-variables.png)
+
+Note that sourcing any `.env` file will automatically run the validation scripts `scripts/env_validation.sh` to ensure variables are set correctly. 
+
+For example a warning will be raised if `AWS_ACCESS_KEY_ID` or `AWS_SECRET_ACCESS_KEY` are missing, while having `AWS_ENABLED=True`.
 
 Both `.env` files allows to customise the dev/uat/prod experience such as:
 - Run app with either local django server + postgres or docker-compose deployment (includes postgres, redis, celery)
@@ -79,9 +80,7 @@ Both `.env` files allows to customise the dev/uat/prod experience such as:
 - Push artefacts to S3 such as Postgres dumps and docker deployment packages (tarballs)
 - Use Ansible to automatically deploy application on AWS EC2 with docker-compose
 
-Note that sourcing any `.env` file will automatically run the validation scripts `scripts/env_validation.sh` to ensure all main variables are set correctly. For example a warning will be raised if `AWS_ACCESS_KEY_ID` or `AWS_SECRET_ACCESS_KEY` are missing, while having `AWS_ENABLED=True`.
-
-This [section]() #application-architecture include a list of all environment variables and a short description for each.
+The appendix [section]() #application-architecture include a list of all environment variables and a short description for each.
 
 
 ### Install postgres
@@ -345,8 +344,8 @@ Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> 
 ## CI/CD Pipeline
 
 In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented using Travis CI.
-![image](documentation/images/ci-cd-pipeline.png)
 
+![image](documentation/images/ci-cd-pipeline.png)
 
 ### CI Pipeline
 
@@ -367,7 +366,7 @@ Similarly the CD pipeline can be triggered by running:
 make run-cd-pipeline
 ```
 This includes the following steps:
-1.Package application code into /bin/portfolio.tar.gz and build docker image
+1. Package application code into /bin/portfolio.tar.gz and build docker image
 2. Start docker services for the development build (without nginx)
 3. Wait until all services are up and healthy
 4. Test postgres backup scripts (only if S3 variables are configured): Dump pgdata to S3, then restore the latest dump from S3 
@@ -398,9 +397,9 @@ Note that the following environment variables must be set in the Travis build co
 
 
 
-### Appendix: Environment variables
+## Appendix: Environment variables
 
-#### Environment variables for deployment (prod build)
+### Environment variables for deployment (prod build)
 
 The main variables in `deployment/.env` include:
 * Secret variables that must be defined on host
