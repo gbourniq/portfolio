@@ -2,13 +2,22 @@
                             **AWS EC2 Deployment Guide**
 
 
+!!!
+    If you're viewing this html file from Github, the page may not render properly.
+    Please open the [online version](https://portfoliogb.s3.eu-west-2.amazonaws.com/documentation/ec2_deployment_guide.html).
+
+
 Overview
 ===============================================================================
 
-This page provides instructions to deploy the Portfolio application via docker services on AWS.
-The deployment is based on the *prod.docker-compose.yaml* file, which includes nginx as a reverse proxy.
+This page provides instructions to deploy the containerized [portfolio app](https://github.com/gbourniq/portfolio/) using [AWS Free Tier services](https://aws.amazon.com/free/).
 
-Please note that AWS services used in this guide are all elligible to the [AWS Free Tier](https://aws.amazon.com/free/).
+The deployment is based on the *prod.docker-compose.yaml* file, which spins up the following containers:
+- Nginx as a reverse proxy
+- Django webserver
+- Celery worker
+- Redis for caching and as a message broker
+- Postgres database
 
 
 Configure AWS Services

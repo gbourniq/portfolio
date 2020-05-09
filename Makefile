@@ -88,7 +88,7 @@ run-ansible-playbook:
 #
 # ----------------------------------------------------
 # Ensure all environment variables are set
-.PHONY: env-validation
+.PHONY: env-validation recreatedb update-deploy-docs-on-s3
 env-validation:
 	@ INFO "Checking if required environment variables are set..."
 	@ ./scripts/env_validation.sh
@@ -97,7 +97,6 @@ env-validation:
 recreatedb:
 	@ INFO "Re-create postgres, migrations and dummy superuser"
 	@ . ./scripts/reset_local_db.sh
-
 
 # ----------------------------------------------------
 #

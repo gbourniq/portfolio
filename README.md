@@ -5,33 +5,41 @@
 ## Repository overview
 This repository features of the following:
 - Django web application which can be used as a template for a personal portfolio
-- Instructions to set up the development environment with Conda, Poetry, and Makefiles
-- [Extensive instructions](https://portfoliogb.s3.eu-west-2.amazonaws.com/documentation/ec2_deployment_guide.html) to deploy the containerized app on AWS Free Tier services
+- Environment set up steps with Conda, Poetry, and Makefile
 - Integration features with AWS S3 to serve application files and backup Postgres data
 - CI/CD pipeline with Travis CI and Ansible
-
+- [Extensive instructions](https://portfoliogb.s3.eu-west-2.amazonaws.com/documentation/ec2_deployment_guide.html) to deploy the containerized app on AWS Free Tier services
 
 
 ## Contents
-- [Portfolio application overview](#application-architecture)
-- [Setting up the repository](#application-architecture)
-- [Local development](#quick-start)
-- [Docker deployment](#manual-deployment-options)
-- [CI/CD pipeline](#automated-deployment-options)
-- [Appendix: Environment variables](#backing-up-postgres)
+- [Portfolio App Overview](#portfolio-app-overview)
+- [Repository Setup](#repository-setup)
+- [Local Development](#local-development)
+- [Docker Deployment](#docker-deployment)
+- [CI-CD Pipeline](#ci-cd-pipeline)
+- [Appendix: Environment variables](#appendix-environment-variables)
 
-## Portfolio Application overview
-The portfolio app essentially displays "items" (or "articles"), which may include formatted text and media files. Those items can be  grouped into categories for a better navi. The application front-end is based on the [Materialize CSS](https://materializecss.com) framework. A sample app can be seen at htts://gbournique.com. 
+## Portfolio App Overview
+The web application front-end is based on the [Materialize CSS](https://materializecss.com) framework. A sample app can be seen at htts://gbournique.com. 
+< SCREENSHOT HOME PAGE >
 
-<SCREENSHOT OF CATEGORY, HOMEPAGE, ITEMS?>
+The portfolio app essentially displays "items" (or "articles"), that are grouped into categories.
+<CATEGORY>
+<ITEM PAGE>
 
+The application also provides a `Contact Us` to send direct messages.
+<SCREENSHOT>
 
+The `/admin` endpoint allows a Django superuser to easily edit the app content (category cards and items) via the Django admin page. Note that the application features the [django-tinymce4-lite](https://pypi.org/project/django-tinymce4-lite/) package which contains a widget to insert formatted text and media files into articles. 
 
-## Setting up the repository
+<SCREENSHOT>
+<SCREENSHOT>
+
+## Repository Setup
 - Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
 - Install [Poetry](https://github.com/sdispater/poetry) - you will need version 1.0.0 or greater
 - Install [Make](https://www.gnu.org/software/make/) - to run command in Makefiles
-- Clone this repo [portfolio] (https://github.com/gbourniq/portfolio.git) and cd into it
+- Clone this repo [Portfolio](https://github.com/gbourniq/portfolio.git) and cd into it
 
 ### 1. Creating the virtual environment
 cd into portfolio root directory and source environment variables
@@ -45,29 +53,25 @@ To make things easy, we have added this to the Makefile, so you can create the c
 ```bash
 make env
 ```
-Note: the environment can be rebuilt using the same command.
+> Note: the environment can be rebuilt using the same command.
 
-Activate the environment
+Activate the environment and source the dev environment variables:
 ```bash
 conda activate portfolio
+source .dev.env
 ```
 
 ### 2. Set up git hooks
-We use pre-commit (a pip package) to manage our git hooks. The hooks are defined in `.pre-commit-config.yaml`, and allows to automatically format the code with `isort` and `black`. To set them up, run:
+A [pre-commit](https://pypi.org/project/pre-commit/) package is used to manage git hooks. The hooks are defined in `.pre-commit-config.yaml`, and allows to automatically format the code with `autoflake`, `isort` and `black`. To set them up, run:
 ```bash
 make pre-commit
 ```
+> Note: The code can be manually linted with `make lint-code`
 
-Alternatively the code can be manually linted using:
-```bash
-make lint-code
-```
- 
 
-### 3. Install postgres
+### 3. Install Postgres
 
 If it is not already installed, install [Postgres](https://www.postgresql.org/download/).
-
 After installation, you may need to change some of the postgres configuration to open it up to allow connections from your services.
 
 You can find the path to your postgres config files by running:
@@ -75,23 +79,14 @@ You can find the path to your postgres config files by running:
 ```bash
 ps aux | grep 'postgres *-D'
 ```
-If the above doesn’t work, enter the postgres shell and type:
-```bash
-SHOW config_file;
-```
-
-In *postgresql.conf*, change *#listen_addresses = ‘localhost’* to *listen_addresses = ‘*’* In *pg_hba.conf*, change the following lines: Change *127.0.0.1/32* to *0.0.0.0/0* and *::1/128* to *::/0*
-
-Create airflow postgres database
-
 
 ### 4. Create portfoliodb database
 Open a postgres shell as the root user:
-```bash
+```sql
 psql
 ```
 In the psql shell execute the following commands:
-```bash
+```sql
 CREATE USER portfoliodb PASSWORD 'portfoliodb';
 CREATE DATABASE portfoliodb;
 GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO portfoliodb;
@@ -99,59 +94,55 @@ ALTER ROLE portfoliodb IN DATABASE portfoliodb SET search_path = portfoliodb,pub
 ```
 
 ### 5. Environment variables overview
-Environment variables are located in two files: `deployment/.env` and `.dev.env`, and `deployment/.env` will automatically be sourced when `.dev.env` is sourced. 
+Environment variables are defined in two files: `deployment/.env` and `.dev.env`.
 
-`deployment/.env` contains variables required exclusively for deployment (prod build), and `.dev.env` adds variables for used development and the ci/cd pipeline (dev build).
+`deployment/.env` contains variables required exclusively for deployment (*prod build*), and `.dev.env` adds variables "on top", used for used development and the ci/cd pipeline (*dev build*).
+
+> Note that sourcing `.dev.env` will automatically source `deployment/.env`, and run a validation script `scripts/env_validation.sh`.
 
 ![image](documentation/images/environment_variables.png)
 
-Note that sourcing any `.env` file will automatically run the validation scripts `scripts/env_validation.sh` to ensure variables are set correctly. 
+For example, a warning message will be displayed if `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY` are missing, while `AWS_ENABLED` is set to `True`.
 
-For example a warning will be raised if `AWS_ACCESS_KEY_ID` or `AWS_SECRET_ACCESS_KEY` are missing, while having `AWS_ENABLED=True`.
+Environment variables can be edited to customise the dev/uat/prod experience such as:
+- Running app with either baremetal django server or docker-compose services (postgres, redis, celery)
+- Building a custom app image and publishing to your online repository
+- Enabling AWS S3 to store and serve Django media/static files
+- Enabling AWS S3 to store artefacts such as Postgres dumps and docker deployment tarballs
+- Enabling Ansible to automated the deployment on AWS EC2
 
-Both `.env` files allows to customise the dev/uat/prod experience such as:
-- Run app with either local django server + postgres or docker-compose deployment (includes postgres, redis, celery)
-- Building a custom app image and publishing to a personal private repository
-- Use AWS S3 to store and serve Django media/static files
-- Push artefacts to S3 such as Postgres dumps and docker deployment packages (tarballs)
-- Use Ansible to automatically deploy application on AWS EC2 with docker-compose
-
-The appendix [section]() #application-architecture include a list of all environment variables and a short description for each.
+All environment variables are listed with a short description, in the [Appendix](#appendix-environment-variables).
 
 
 ## Local Development
 
 ### Running the server locally without external docker services
-Prerequisite: Postgres must be running locally
 
-If not already active, activate the portfolio conda environment:
+1. If not already active, activate the `portfolio` conda environment:
 ```bash
 conda activate portfolio
 ```
 
-Source environment variables for development
+2. Ensure that `BAREMETAL_DEPLOYMENT` is set to `True` in `.dev.env`, then source the file and cd into the `app/` directory:
 ```bash
-export BAREMETAL_DEPLOYMENT=True
 cd portfolio/  # if not already at the root of the repository.
 source .dev.env
 cd app/
 ```
-(TIP: autoenv is pretty nice to automate the activation of environments)
+> TIP: `autoenv` can be used to automate the activation of environments
 
-Alternativately `BAREMETAL_DEPLOYMENT` can be modified directly in `.dev.env`. Don't forget to source the file again after any change!
-
-Create django superuser to access /admin page
+3. Create the django superuser to access the `/admin` page:
 ```bash
 python manage.py createsuperuser
 ```
 
-Apply django model migrations:
+4. Apply django model migrations:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-Run the django server locally:
+5. Run the django server locally:
 ```bash
 python manage.py runserver
 ```
@@ -169,14 +160,12 @@ make recreatedb
 ```
 
 ### Testing
-To run the tests, run:
-
+Run the unit-tests with:
 ```bash
 pytest -v
 ```
 
 To check test coverage you can generate a coverage report (replace `--cov=.` with a specific directory for a more targeted report):
-
 ```bash
 pytest --cov=. --cov-report=term-missing
 ```
@@ -194,27 +183,18 @@ Valid bump rules are:
 
 ### Build and publish Docker image
 
-Before building the image, set the image name in `deployment/.env`:
+1. Set the image name in `deployment/.env`:
 ```
 export IMAGE_REPOSITORY=<your-image-name>
 ```
 
-Then make sure that `.dev.env` is sourced from the root of the repository
-```bash
-cd portfolio/  # if not already at the root of the repository.
-source .dev.env
-```
-
-To build the image, the following command must be run from the */portfolio* root directory:
+2. To build the image, run the following command from the `/portfolio` root directory:
 ```bash
 make image-latest
 ```
-Alternatively the application version (set in `pyproject.toml`) can be used to tag the image:
-```bash
-make image-tagged
-```
+> Note the app version can be used as the image tag with the `make image-tagged` command.
 
-Note that the docker image build script will generate a `portfolio.tar.gz` in /bin. This tarball contains the application code that is copied into the image.
+The `make image-*` commands will generate the `portfolio.tar.gz` tarball inside `/bin`:
 ```
 bin/portfolio.tar.gz
 ├── app
@@ -230,62 +210,58 @@ bin/portfolio.tar.gz
     ├── postgres_restore_from_s3.sh
     └── reset_local_db.sh
 ```
+This tarball contains the application code mounted in the docker image.
 
-The image can then be published using `make publish-latest` and `make publish-tagged`.
+> The image can be published using either `make publish-latest` or `make publish-tagged`.
+
 
 ## Docker Deployment
 
 ### Docker Services Architecture
-The application is composed of the following docker services:
-- `Nginx` as a reverse proxy (prod build only)
-- `Django web server` (dev/prod builds)
-- `Celery` worker for asynchronous tasks (dev/prod builds)
-- `Redis` as a message broker and caching (dev/prod builds)
-- `Postgres` to store web server data (dev/prod builds)
+The application consist of the following docker containers:
+- `Nginx` as a reverse proxy (*prod build* only)
+- `Django web server` (*dev/prod build*)
+- `Celery worker` for asynchronous tasks (*dev/prod build*)
+- `Redis` as a message broker and caching (*dev/prod build*)
+- `Postgres` to store web server data (*dev/prod build*)
 
 These services are defined in `deployment/docker-deployment/*.docker-compose.yaml` files.
 
-### Running the webserver with docker services (dev build)
+### Running the webserver with docker services (*dev build*)
 
-The application can be run with docker-compose files, when `BAREMETAL_DEPLOYMENT` is set to `False` in `.dev.env`.
-In addition to the Django webserver and Postgres (baremetal approach), the following services will be created:
-
-Make sure that `.dev.env` is sourced, with `export BUILD=dev`
-```bash
-cd portfolio/  # if not already at the root of the repository.
-source .dev.env
-```
+The application can be run with docker-compose files, when `BAREMETAL_DEPLOYMENT=False` in `.dev.env`.
 
 To start the docker-services, run:
 ```bash
 make up
 ```
-This will make the django webserver available at `localhost:8080`
+This django webserver will be running at `localhost:8080`
 
 To check that all services are up and healthy, run:
 ```bash
 make check-services-health
 ```
 
-Once the services are up, the Postgres backup script can be tested, given the following conditions are met:
-- `AWS_ENABLE` set to *True*
-- `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` are set
-- An AWS S3 bucket has been created, and `AWS_STORAGE_BUCKET_NAME` / `AWS_DEFAULT_REGION` are set
-Note: Instructions on how to set AWS S3 can be found in the extensive <deployment documentation>
-
-The script will dump the Postgres data from the running container to S3, and then restore Postgres from the latest dump from on S3.
+Postgres backup scripts can then be tested. The following command will dump the Postgres data from the running container to S3, and then restore the latest dump from S3.
 ```bash
 make postgres-backup-test
 ```
+For the above command to run, the following variables must be set:
+- `AWS_ENABLE` set to `True`
+- `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+- `AWS_STORAGE_BUCKET_NAME` and `AWS_DEFAULT_REGION`
 
-To delete all services, run:
+> Note: Instructions to set AWS S3 can be found in the [ec2 docker deployment guide](https://portfoliogb.s3.eu-west-2.amazonaws.com/documentation/ec2_deployment_guide.html) 
+
+
+To stop and remove docker services, run:
 ```bash
 make down
 ```
 
 ### Build the docker deployment artefact
 
-In order to easily deploy the application to any new instance, one can generate a compressed folder (.tar.gz), which includes only the necessary file for a production deployment:
+In order to easily deploy the application to a new instance, one can generate a compressed folder (.tar.gz)  containing exclusively the required files for a production deployment:
 ```
 bin/docker_deploy.tar.gz
 ├── deployment
@@ -316,85 +292,86 @@ bin/docker_deploy.tar.gz
     └── postgres_restore_from_s3.sh
 ```
 
-This compressed folder is referred as the *docker deploy tarball*, and it can be generated by running:
+This compressed folder is referred as the `docker deploy tarball`, and can be generated by running:
 ```bash
 make docker-deploy-tarball-custom
 ```
-Note: by default this will generate `docker_deploy.tar.gz` file, but a custom file name can be specified with the `S3_DOCKER_DEPLOY_TARBALL_CUSTOM` environment variable.
-Note2: The generated tarball will be automatically uploaded to S3, if AWS credentials are set and S3 bucket variables are configured.
+
+> Note: The default file name is `docker_deploy.tar.gz` file, but it can be modified with the `S3_DOCKER_DEPLOY_TARBALL_CUSTOM` environment variable.
+
+> Note 2: The `make docker-deploy-tarball-custom` command will automatically upload the tarball to S3, given that AWS credentials and S3 environment variables are configured.
 
 ### Running the server with docker services (prod)
 
-The production deployment adds the `nginx` service as a reverse proxy (prod build only), and use a different startup script for the django webserver (using gunicorn).
+The production deployment adds the `nginx` service as a reverse proxy (*prod build*), and run the django webserver using `gunicorn`.
 
-To test the production deployment locally, run:
+To test the production deployment locally, run the following commands:
 ```bash
 cd deployment
 source .env
 make up
 ```
-The prod build deployment will not expose any development port, and incoming traffic is managed by nginx (80/443).
+The *prod build* deployment will expose incoming traffic is managed by nginx (80/443).
 
-In practice, the prod build should be deployed on a remote instance using the *docker deploy tarball*.
 Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> documentation.
 
+> Note: Instructions to deploy the app on AWS can be found from the [ec2 docker deployment guide](https://portfoliogb.s3.eu-west-2.amazonaws.com/documentation/ec2_deployment_guide.html) 
 
 
 
+## CI-CD Pipeline
 
-
-## CI/CD Pipeline
-
-In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented using Travis CI.
+In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented, and can triggered on Travis CI.
 
 ![image](documentation/images/ci_cd_pipeline.png)
 
+> Note: Any error such a linting error or failed tests will abort the pipeline.
+
 ### CI Pipeline
 
-The CI pipeline can triggered locally, by running a make command from the portfolio/ project root directory:
+The CI pipeline can triggered locally from the `portfolio/` project root directory:
 ```bash
 make run-ci-pipeline
 ```
-This will trigger the following steps:
-1. Create (or re-create) the conda environment and install dependencies from `poetry.lock`
-2. Lint application code with `autoflake`, `isort` and `black`. Any linting error will cause the pipeline to fail.
+This will run the following steps:
+1. Create (or re-create) the conda environment, and install app/dev dependencies from `poetry.lock`
+2. Lint application code with `autoflake`, `isort` and `black`
 3. Run unit-tests with pytest
-Note: Any error such a linting error or failed tests will abort the pipeline.
+
 
 ### CD Pipeline
 
-Similarly the CD pipeline can be triggered by running:
+Similarly, the CD pipeline can be manually triggered by running:
 ```bash
 make run-cd-pipeline
 ```
-This includes the following steps:
+This will run the following steps:
 1. Package application code into /bin/portfolio.tar.gz and build docker image
-2. Start docker services for the development build (without nginx)
+2. Start docker services without nginx (*dev build*)
 3. Wait until all services are up and healthy
-4. Test postgres backup scripts (only if S3 variables are configured): Dump pgdata to S3, then restore the latest dump from S3 
-5. Stop and remove docker services for the development build
-6. Publish docker portfolio app image (with the latest tag) to the online repository
-7. Create docker deploy tarball, and upload to S3 (only if S3 configured)
-8. Run Ansible playbook for an automated prod build deployment on AWS EC2 (if `RUN_ANSIBLE_PLAYBOOK=True`) 
-Note: Any error in any step described above will cause the pipeline to fail.
+4. Test postgres backup scripts (if S3 variables are configured): Dump pgdata to S3, then restore the latest dump from S3 
+5. Stop and remove docker services (*dev build*)
+6. Publish docker portfolio app image (latest) to the online repository
+7. Create docker deploy tarball, and upload to S3 (if S3 variables are configured)
+8. Run Ansible playbook for an automated *prod build* deployment on AWS EC2 (if `RUN_ANSIBLE_PLAYBOOK=True`) 
+
 
 ### Ansible
 
-The final step of the CD pipeline runs an Ansible playbook to ensure a smooth deployment on fresh EC2 instances. The Ansible playbook documentation can be found in `ansible/README.md`.
+The final step of the CD pipeline is an Ansible playbook to ensure a smooth deployment to fresh EC2 instances. More details on the playbook can be found in the [Ansible playbook documentation](./ansible/README.md`).
 
 ### Travis
 
-This repository uses [Travis CI](https://travis-ci.org) to run the CI/CD pipeline (including the Ansible step) on Travis servers on every new commit to `master`. Travis CI is free when configured with public Github repositories.
+A [Travis CI](https://travis-ci.org) free account can configured to trigger the CI/CD pipeline on every push to a `Github` repository.
 
-The Travis building configuration file `.travis.yml` defines the following steps:
+The Travis CI build configuration file `.travis.yml` defines the following steps:
 1. Install Docker / docker-compose
 2. Install Miniconda
 3. Install dependencies: make, sshpass
 4. Run CI/CD pipeline with `make run-ci-cd-pipeline`
 
-Note that the following environment variables must be set in the Travis build configuration settings, at https://travis-ci.com.
+> Note that the following environment variables must be set in the Travis CI settings at https://travis-ci.com.
 ![image](documentation/images/travis_env_variables.png)
-
 
 
 
@@ -403,7 +380,7 @@ Note that the following environment variables must be set in the Travis build co
 
 ### Secret Environment variables:
 
-The following variables must be defined on host (locally, and on Travis CI):
+The following sensitive variables must be defined on host (locally in your `~/.bash_profile`, and on Travis CI):
 
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
@@ -417,11 +394,11 @@ The following variables must be defined on host (locally, and on Travis CI):
 |`EMAIL_HOST_PASSWORD`         | Email address password (Optional)                                            |
 
 
-### Environment variables for deployment (prod build)
+### Environment variables for deployment (*prod build*)
 
 Main variables in `deployment/.env`:
 * Secret variables that must be defined on host
-* Django settings for prod build
+* Django settings for *prod build*
 * AWS variables to use Postgres backup scripts and serve django static/media files with S3
 * Docker variables for publishing/pulling app image
 
@@ -439,12 +416,12 @@ Main variables in `deployment/.env`:
 |`AWS_STORAGE_BUCKET_NAME`     | S3 bucket storing PG backups, django files, and docker deploy tarballs       |
 |`IMAGE_REPOSITORY`            | Docker repository for the portfolio app image                                |
 
-### Environment variables for development (dev build)
+### Environment variables for development (*dev build*)
 
 Main variables in `.dev.env`:
 * Secret variables that must be defined on host
 * General settings
-* Django settings for dev build
+* Django settings for *dev build*
 * AWS S3 variables to upload docker deployment tarball
 * Ansible variables (Not used if `RUN_ANSIBLE_PLAYBOOK=False`)
 
