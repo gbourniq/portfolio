@@ -325,7 +325,7 @@ Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> 
 
 
 
-## CI/CD Pipeline
+## CI-CD Pipeline
 
 In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented, and can be triggered on Travis CI.
 
