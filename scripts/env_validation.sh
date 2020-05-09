@@ -106,10 +106,9 @@ function validate_functions() {
 VALIDATION_FAILED=False
 validate_env
 validate_functions
-if [[ $BAREMETAL_DEPLOYMENT && $BAREMETAL_DEPLOYMENT != True ]]; then
+if [[ $BAREMETAL_DEPLOYMENT == False ]]; then
+    INFO "BAREMETAL_DEPLOYMENT is set to False. Run app with Docker!"
     validate_docker_compose_env
-else
-    INFO "BAREMETAL_DEPLOYMENT is set to True!"
 fi
 
 # Success message if set_as_failed() not called

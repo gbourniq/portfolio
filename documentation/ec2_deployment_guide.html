@@ -84,7 +84,7 @@ Storage
 Tag
 :       You may add a tag such as *"Name": "Portfolio App | Prod | 08-05-2020"*
 SG
-:       Create a Security Group to allow incoming traffic via SSH/HTTP/HTTPS
+:       Create a Security Group to allow traffic via SSH/HTTP/HTTPS, and a custom 587 port for Gmail SMTP
 
 On the last tab, click the *Launch* button, this will open a new window to create the **key pair**, which is required to access ec2 instances.
 
@@ -245,8 +245,7 @@ Upload SSL private key and certificate to S3
 -------------------------------------------------------------------------------
 Upload the **CA-signed certificate** (.cert) and SSL **private key** (.key) generated in step 2.8, to an **ssl_certs/** folder in S3.
 
-Please update the *SSL_CERT_S3_OBJECT_PATH* and *SSL_KEY_S3_OBJECT_PATH* environment variables in **.dev.env**. Eg:
-
+If you wish to use the Ansible playbook, please also update the *SSL_CERT_S3_OBJECT_PATH* and *SSL_KEY_S3_OBJECT_PATH* environment variables in **.dev.env**. Eg:
 ~~~~~~bash
 export SSL_CERT_S3_OBJECT_PATH=ssl_certs/cert_chain.crt
 export SSL_KEY_S3_OBJECT_PATH=ssl_certs/www_gbournique_com.key
@@ -273,9 +272,10 @@ Download the tarball file created from step 3.4:
 wget https://portfoliogb.s3.eu-west-2.amazonaws.com/docker_deploy_tarballs/docker_deploy_gbournique.tar.gz
 ~~~~~~
 
-Untar it and cd into the project root directory:
+Untar it, rename the folder to *portfolio/*, and cd into it
 ~~~~~~bash
 tar -xvf docker_deploy_gbournique.tar.gz
+mv docker_deploy_gbournique portfolio
 cd portfolio/
 ~~~~~~
 
@@ -297,16 +297,29 @@ mv cert_chain.crt www_gbournique_com.key docker-deployment/nginx/certs/
 Review environment variables and source .env 
 -------------------------------------------------------------------------------
 Verify that all environment variables are correctly configured in **.env**.
+
+Edit the .env file with vim
 ~~~~~~bash
 cd portfolio/
-cat .env
+vim .env # if requires changes
 ~~~~~~
 
-Edit them if need be, and source the file.
+And populate the following environment variables:
 ~~~~~~bash
-vim .env # if requires changes
+export EMAIL_HOST_USER=
+export EMAIL_HOST_PASSWORD=
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+~~~~~~
+
+!!!
+    Please review other variables such as IMAGE_REPOSITORY to pull the app image
+
+Save and quit the vim editor and source the file
+~~~~~~bash
 source .env
 ~~~~~~
+
 
 Start docker services for prod build
 -------------------------------------------------------------------------------
