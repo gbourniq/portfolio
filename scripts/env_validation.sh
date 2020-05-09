@@ -15,7 +15,10 @@ function secret_env_check_dev() {
         set_as_failed "AWS_ACCESS_KEY_ID not set, but AWS_ENABLED=True!"
     fi
     if [[ ! $AWS_SECRET_ACCESS_KEY && $AWS_ENABLED == True ]]; then
-        set_as_failed "AWS_SECRET_ACCESS_KEY, but AWS_ENABLED=True!"
+        set_as_failed "AWS_SECRET_ACCESS_KEY not set, but AWS_ENABLED=True!"
+    fi
+    if [[ $RUN_ANSIBLE_PLAYBOOK == True && $AWS_ENABLED != True ]]; then
+        set_as_failed "If RUN_ANSIBLE_PLAYBOOK set to True, then AWS_ENABLED must also be to True"
     fi
     if [[ ! $ANSIBLE_VAULT_PASSWORD && $RUN_ANSIBLE_PLAYBOOK == True ]]; then
         set_as_failed "ANSIBLE_VAULT_PASSWORD not set, but RUN_ANSIBLE_PLAYBOOK=True!"

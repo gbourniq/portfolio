@@ -37,10 +37,11 @@ function activate_environment() {
 
 function validate_environment_variables() {
   if [[ -z $RUN_ANSIBLE_PLAYBOOK ]] || \
-     [[ -z $CONDA_ENV_NAME ]]
+     [[ -z $CONDA_ENV_NAME ]] \
+     [[ -z $ANSIBLE_VAULT_PASSWORD ]]
   then
     exit_error "Some of the following environment variables are not set: \
-RUN_ANSIBLE_PLAYBOOK, CONDA_ENV_NAME. Aborting."
+RUN_ANSIBLE_PLAYBOOK, CONDA_ENV_NAME, ANSIBLE_VAULT_PASSWORD. Aborting."
   fi
 }
 

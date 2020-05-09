@@ -37,9 +37,11 @@ function postgres_restore_from_s3_test() {
   SUCCESS "Latest postgres dump restored from ${S3_POSTGRES_BACKUP_URI}/cd_pipeline"
 }
 
-
-
 ### Start script
+if [[ $AWS_ENABLED != True ]]; then
+  INFO "AWS_ENABLED not set to True. Postgres back up set is skipped."
+  exit 0
+fi
 validate_environment_variables
 postgres_dump_to_s3_test
 postgres_restore_from_s3_test

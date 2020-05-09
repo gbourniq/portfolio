@@ -1,13 +1,8 @@
-# TEMP
-/app/tests/templates/*
-/documentation/*
-
 # Add any directories, files, or patterns you don't want to be tracked by version control
 /bin/*
 app/mediafiles/
 app/staticfiles/
 app/images/
-app/main/static/
 app/main/migrations/*
 **__pycache__**
 .pytest_cache
@@ -15,7 +10,6 @@ app/main/migrations/*
 *.DS_Store
 .vscode
 *.vscode
-app/.vscode/settings.json
 
 # ignore python compiled bytecode files
 *.pyc
@@ -27,10 +21,8 @@ app/.vscode/settings.json
 coverage_html_report/
 cov_html/
 
-# ignore environment variables and logs 
+# ignore logs 
 app/info.log
 
-# ignore sensitive information: certs, .env, etc.
-deployment/docker-deployment/nginx/certs/cert_chain.crt
-deployment/docker-deployment/nginx/certs/www_gbournique_com.key
-ansible/ansible-vault-pw
+# ignore sensitive information: certs and keys
+deployment/docker-deployment/nginx/certs/*

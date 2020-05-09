@@ -12,7 +12,7 @@ dropdb ${POSTGRES_DB}
 createdb ${POSTGRES_DB}
 
 # echo "Collecting static files"
-# python manage.py collectstatic --no-input -v 0
+python manage.py collectstatic --no-input -v 0
 
 echo "Run migrations"
 # python app/manage.py makemigrations main

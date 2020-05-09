@@ -6,9 +6,9 @@
 This repository features of the following:
 - Django web application which can be used as a template for a personal portfolio
 - Instructions to set up the development environment with Conda, Poetry, and Makefiles
-- Extensive documentation to easily deploy your own app on AWS EC2 with docker-compose or Kubernetes
+- Extensive documentation to easily deploy your own app on AWS EC2 with docker-compose (or Kubernetes/Helm - WIP)
 - Integration features with AWS S3 to serve application files and backup Postgres data
-- Robust CI/CD pipeline with Travis CI and Ansible
+- CI/CD pipeline with Travis CI and Ansible
 
 
 
@@ -33,10 +33,11 @@ The portfolio app essentially displays "items" (or "articles"), which may includ
 - Install [Make](https://www.gnu.org/software/make/) - to run command in Makefiles
 - Clone this repo [portfolio] (https://github.com/gbourniq/portfolio.git) and cd into it
 
-### Creating the virtual environment
-cd into portfolio root directory
+### 1. Creating the virtual environment
+cd into portfolio root directory and source environment variables
 ```bash
 cd portfolio
+source .dev.env
 ```
 
 To make things easy, we have added this to the Makefile, so you can create the conda environment and install the dependencies by simply running:
@@ -51,7 +52,7 @@ Activate the environment
 conda activate portfolio
 ```
 
-### Set up git hooks
+### 2. Set up git hooks
 We use pre-commit (a pip package) to manage our git hooks. The hooks are defined in `.pre-commit-config.yaml`, and allows to automatically format the code with `isort` and `black`. To set them up, run:
 ```bash
 make pre-commit
@@ -62,28 +63,8 @@ Alternatively the code can be manually linted using:
 make lint-code
 ```
  
-### Environment variables overview
-Environment variables are located in two files: `deployment/.env` and `.dev.env`, and `deployment/.env` will automatically be sourced when `.dev.env` is sourced. 
 
-`deployment/.env` contains variables required exclusively for deployment (prod build), and `.dev.env` adds variables for used development and the ci/cd pipeline (dev build).
-
-![image](documentation/images/environment-variables.png)
-
-Note that sourcing any `.env` file will automatically run the validation scripts `scripts/env_validation.sh` to ensure variables are set correctly. 
-
-For example a warning will be raised if `AWS_ACCESS_KEY_ID` or `AWS_SECRET_ACCESS_KEY` are missing, while having `AWS_ENABLED=True`.
-
-Both `.env` files allows to customise the dev/uat/prod experience such as:
-- Run app with either local django server + postgres or docker-compose deployment (includes postgres, redis, celery)
-- Building a custom app image and publishing to a personal private repository
-- Use AWS S3 to store and serve Django media/static files
-- Push artefacts to S3 such as Postgres dumps and docker deployment packages (tarballs)
-- Use Ansible to automatically deploy application on AWS EC2 with docker-compose
-
-The appendix [section]() #application-architecture include a list of all environment variables and a short description for each.
-
-
-### Install postgres
+### 3. Install postgres
 
 If it is not already installed, install [Postgres](https://www.postgresql.org/download/).
 
@@ -103,7 +84,8 @@ In *postgresql.conf*, change *#listen_addresses = ‘localhost’* to *listen_ad
 
 Create airflow postgres database
 
-### Create portfoliodb database
+
+### 4. Create portfoliodb database
 Open a postgres shell as the root user:
 ```bash
 psql
@@ -116,13 +98,33 @@ GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO portfoliodb;
 ALTER ROLE portfoliodb IN DATABASE portfoliodb SET search_path = portfoliodb,public;
 ```
 
+### 5. Environment variables overview
+Environment variables are located in two files: `deployment/.env` and `.dev.env`, and `deployment/.env` will automatically be sourced when `.dev.env` is sourced. 
+
+`deployment/.env` contains variables required exclusively for deployment (prod build), and `.dev.env` adds variables for used development and the ci/cd pipeline (dev build).
+
+![image](documentation/images/environment_variables.png)
+
+Note that sourcing any `.env` file will automatically run the validation scripts `scripts/env_validation.sh` to ensure variables are set correctly. 
+
+For example a warning will be raised if `AWS_ACCESS_KEY_ID` or `AWS_SECRET_ACCESS_KEY` are missing, while having `AWS_ENABLED=True`.
+
+Both `.env` files allows to customise the dev/uat/prod experience such as:
+- Run app with either local django server + postgres or docker-compose deployment (includes postgres, redis, celery)
+- Building a custom app image and publishing to a personal private repository
+- Use AWS S3 to store and serve Django media/static files
+- Push artefacts to S3 such as Postgres dumps and docker deployment packages (tarballs)
+- Use Ansible to automatically deploy application on AWS EC2 with docker-compose
+
+The appendix [section]() #application-architecture include a list of all environment variables and a short description for each.
+
 
 ## Local Development
 
 ### Running the server locally without external docker services
 Prerequisite: Postgres must be running locally
 
-If not already active, activate the mvp conda environment:
+If not already active, activate the portfolio conda environment:
 ```bash
 conda activate portfolio
 ```
@@ -166,7 +168,7 @@ Alternatively, we have a script to recreate a fresh database, apply migrations a
 make recreatedb
 ```
 
-## Testing
+### Testing
 To run the tests, run:
 
 ```bash
@@ -179,9 +181,9 @@ To check test coverage you can generate a coverage report (replace `--cov=.` wit
 pytest --cov=. --cov-report=term-missing
 ```
 
-## Versioning
-To increment the version number, use `poetry version {bump rule}`. Valid bump rules are:
-
+### Versioning
+The application versioning is based on the [Semantic Versioning 2.0.0](https://semver.org): <major.minor.patch>.  The version can be found in `pyproject.toml` and can be incremented with `poetry version {bump rule}`.
+Valid bump rules are:
 1. patch
 2. minor
 3. major
@@ -190,7 +192,7 @@ To increment the version number, use `poetry version {bump rule}`. Valid bump ru
 6. premajor
 7. prerelease
 
-## Build and Publish Docker image
+### Build and publish Docker image
 
 Before building the image, set the image name in `deployment/.env`:
 ```
@@ -345,7 +347,7 @@ Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> 
 
 In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented using Travis CI.
 
-![image](documentation/images/ci-cd-pipeline.png)
+![image](documentation/images/ci_cd_pipeline.png)
 
 ### CI Pipeline
 
@@ -355,9 +357,9 @@ make run-ci-pipeline
 ```
 This will trigger the following steps:
 1. Create (or re-create) the conda environment and install dependencies from `poetry.lock`
-2. Lint application code with `autoflake`, `isort` and `black`
+2. Lint application code with `autoflake`, `isort` and `black`. Any linting error will cause the pipeline to fail.
 3. Run unit-tests with pytest
-Note: Any error in any step described below will cause the pipeline to fail.
+Note: Any error such a linting error or failed tests will abort the pipeline.
 
 ### CD Pipeline
 
@@ -399,9 +401,25 @@ Note that the following environment variables must be set in the Travis build co
 
 ## Appendix: Environment variables
 
+### Secret Environment variables:
+
+The following variables must be defined on host (locally, and on Travis CI):
+
+|**Name**                      |**Description**                                                               |
+|------------------------------|------------------------------------------------------------------------------|
+|`ANSIBLE_VAULT_PASSWORD`      | Passphrase used to encrypt/decrypt secret variables (see /ansible/README.md) |
+|`ANSIBLE_SSH_PASSWORD`        | SSH password for ec2 instance (see documentation/ec2_deployment_guide.html)  |
+|`AWS_ACCESS_KEY_ID`           | Programmatic access for AWS EC2 and S3 (see ec2_deployment_guide.html)       |
+|`AWS_SECRET_ACCESS_KEY`       | Programmatic access for AWS EC2 and S3 (see ec2_deployment_guide.html)       |
+|`DOCKER_USER`                 | Docker username to publish and pull portfolio app image                      |
+|`DOCKER_PASSWORD`             | Docker password to publish and pull portfolio app image                      |
+|`EMAIL_HOST_USER`             | Email addr. for website users to send messages via contact page (Optional)   |
+|`EMAIL_HOST_PASSWORD`         | Email address password (Optional)                                            |
+
+
 ### Environment variables for deployment (prod build)
 
-The main variables in `deployment/.env` include:
+Main variables in `deployment/.env`:
 * Secret variables that must be defined on host
 * Django settings for prod build
 * AWS variables to use Postgres backup scripts and serve django static/media files with S3
@@ -410,12 +428,6 @@ The main variables in `deployment/.env` include:
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
 |`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `prod`         |
-|`DOCKER_USER`                 | Docker username to pull images when deploying app with docker-compose up     |
-|`DOCKER_PASSWORD`             | Password associated with docker account                                      |
-|`AWS_ACCESS_KEY_ID`           | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
-|`AWS_SECRET_ACCESS_KEY`       | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
-|`EMAIL_HOST_USER`             | Email addr. for website users to send messages via contact page (Optional)   |
-|`EMAIL_HOST_PASSWORD`         | Email address password (Optional)                                            |
 |`DEBUG`                       | Should be set to False (production)                                          |
 |`ALLOWED_HOSTS`               | Hosts names the Django site can serve to prevent HTTP Host header attacks    |
 |`SECRET_KEY`                  | For a particular Django installation to provide cryptographic signing        |
@@ -429,20 +441,17 @@ The main variables in `deployment/.env` include:
 
 ### Environment variables for development (dev build)
 
-The main variables in `.dev.env` include:
+Main variables in `.dev.env`:
 * Secret variables that must be defined on host
 * General settings
 * Django settings for dev build
 * AWS S3 variables to upload docker deployment tarball
 * Ansible variables (Not used if `RUN_ANSIBLE_PLAYBOOK=False`)
 
+
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
 |`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `dev`          |
-|`AWS_ACCESS_KEY_ID`           | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
-|`AWS_SECRET_ACCESS_KEY`       | AWS Credentials for DB backup and serving django files with S3 (Optional)    |
-|`ANSIBLE_VAULT_PASSWORD`      | Ansible vault passphrase used to encrypt/decrypt Ansible secret variables    |
-|`ANSIBLE_SSH_PASSWORD`        | SSH password to access EC2 instance (sshpass must be installed locally)      |
 |`BAREMETAL_DEPLOYMENT`        | `True` to run django server locally, and `False` for any docker deployment   |
 |`RUN_ANSIBLE_PLAYBOOK`        | Set to `False` to skip the Ansible playbook in the CD pipeline               |
 |`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name               |

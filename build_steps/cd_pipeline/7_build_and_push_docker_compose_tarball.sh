@@ -52,9 +52,16 @@ activate_environment
 if ! (python utils/build_docker_deploy_tarball.py --name ${docker_deploy_tarball_name})
 then
   exit_error "Build script failed! Aborting."
+else
+  SUCCESS "${docker_deploy_tarball_name}.tar.gz successfully built and located in bin/"
 fi
 
-INFO "Uploading docker deploy tarball to S3..."
+if [[ $AWS_ENABLED != True ]]; then
+  INFO "AWS_ENABLED not set to True. docker deploy tarball will not be uploaded to S3."
+  exit 0
+else
+  INFO "Uploading docker deploy tarball to S3..."
+fi
 
 if ! (aws s3 cp ./bin/${docker_deploy_tarball_name}.tar.gz ${s3_uri}/)
 then
