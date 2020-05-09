@@ -10,7 +10,7 @@ is renamed or removed.
 
 # General settings
 SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = os.getenv("DEBUG")
+DEBUG = os.getenv("DEBUG") == "True"
 ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 
 # Postgres
@@ -44,7 +44,6 @@ ENABLE_S3_FOR_DJANGO_FILES = os.getenv("ENABLE_S3_FOR_DJANGO_FILES") == "True"
 
 ENV_VARS = [
     "SECRET_KEY",
-    "DEBUG",
     "ALLOWED_HOSTS",
     "POSTGRES_HOST",
     "POSTGRES_PORT",

@@ -88,7 +88,7 @@ run-ansible-playbook:
 #
 # ----------------------------------------------------
 # Ensure all environment variables are set
-.PHONY: env-validation recreatedb update-deploy-docs-on-s3
+.PHONY: env-validation recreatedb
 env-validation:
 	@ INFO "Checking if required environment variables are set..."
 	@ ./scripts/env_validation.sh
