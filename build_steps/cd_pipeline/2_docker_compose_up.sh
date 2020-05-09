@@ -20,6 +20,10 @@ function validate_environment_variables() {
     exit_error "Some of the following environment variables are not set: \
 BUILD, IMAGE_REPOSITORY, COMPOSE_ARGS. Aborting."
   fi
+  if [[ $BAREMETAL_DEPLOYMENT != False ]]
+  then
+    exit_error "BAREMETAL_DEPLOYMENT must be set to False"
+  fi
 }
 
 function remove_services() {

@@ -108,6 +108,8 @@ validate_env
 validate_functions
 if [[ $BAREMETAL_DEPLOYMENT == False ]]; then
     validate_docker_compose_env
+else
+    INFO "BAREMETAL_DEPLOYMENT is set to True!"
 fi
 
 # Success message if set_as_failed() not called
