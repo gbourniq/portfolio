@@ -16,7 +16,7 @@ This repository features of the following:
 - [Repository Setup](#repository-setup)
 - [Local Development](#local-development)
 - [Docker Deployment](#docker-deployment)
-- [CI-CD Pipeline](#ci-cd-pipeline)
+- [CI/CD Pipeline](#ci-cd-pipeline)
 - [Appendix: Environment variables](#appendix-environment-variables)
 
 ## Portfolio App Overview
@@ -36,21 +36,24 @@ The `/admin` endpoint allows a Django superuser to easily edit the app content (
 <SCREENSHOT>
 
 ## Repository Setup
-- Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
-- Install [Poetry](https://github.com/sdispater/poetry) - you will need version 1.0.0 or greater
-- Install [Make](https://www.gnu.org/software/make/) - to run command in Makefiles
-- Clone this repo [Portfolio](https://github.com/gbourniq/portfolio.git) and cd into it
+
+Prerequisites:
+- Install [Miniconda](https://docs.conda.io/en/latest/miniconda.html) 
+- Install [Poetry](https://github.com/sdispater/poetry)
+- Install [Make](https://www.gnu.org/software/make/)
+
+Clone the repository and cd into the root directory:
+```bash
+git clone https://github.com/gbourniq/portfolio.git
+cd portfolio
+```
 
 ### 1. Creating the virtual environment
-cd into portfolio root directory and source environment variables
-```bash
-cd portfolio
-source .dev.env
-```
 
 To make things easy, we have added this to the Makefile, so you can create the conda environment and install the dependencies by simply running:
 
 ```bash
+source .dev.env
 make env
 ```
 > Note: the environment can be rebuilt using the same command.
@@ -66,7 +69,7 @@ A [pre-commit](https://pypi.org/project/pre-commit/) package is used to manage g
 ```bash
 make pre-commit
 ```
-> Note: The code can be manually linted with `make lint-code`
+> Note: The code can be manually linted with `make lint`
 
 
 ### 3. Install Postgres
@@ -123,7 +126,7 @@ All environment variables are listed with a short description, in the [Appendix]
 conda activate portfolio
 ```
 
-2. Ensure that `BAREMETAL_DEPLOYMENT` is set to `True` in `.dev.env`, then source the file and cd into the `app/` directory:
+2. Ensure that `BAREMETAL_DEPLOYMENT` is set to `True` in `.dev.env` and run the following commands:
 ```bash
 cd portfolio/  # if not already at the root of the repository.
 source .dev.env
@@ -131,18 +134,18 @@ cd app/
 ```
 > TIP: `autoenv` can be used to automate the activation of environments
 
-3. Create the django superuser to access the `/admin` page:
+3. Create the django superuser required to access the `/admin` page:
 ```bash
 python manage.py createsuperuser
 ```
 
-4. Apply django model migrations:
+4. Apply Django model migrations:
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-5. Run the django server locally:
+5. Run the Django server locally:
 ```bash
 python manage.py runserver
 ```
@@ -218,18 +221,16 @@ This tarball contains the application code mounted in the docker image.
 ## Docker Deployment
 
 ### Docker Services Architecture
-The application consist of the following docker containers:
+The application is composed of the following docker containers:
 - `Nginx` as a reverse proxy (*prod build* only)
-- `Django web server` (*dev/prod build*)
-- `Celery worker` for asynchronous tasks (*dev/prod build*)
-- `Redis` as a message broker and caching (*dev/prod build*)
-- `Postgres` to store web server data (*dev/prod build*)
+- `Django web server` (*dev/prod* build)
+- `Celery worker` for asynchronous tasks (*dev/prod* build)
+- `Redis` as a message broker and caching (*dev/prod* build)
+- `Postgres` to store web server data (*dev/prod* build)
 
 These services are defined in `deployment/docker-deployment/*.docker-compose.yaml` files.
 
 ### Running the webserver with docker services (*dev build*)
-
-The application can be run with docker-compose files, when `BAREMETAL_DEPLOYMENT=False` in `.dev.env`.
 
 To start the docker-services, run:
 ```bash
@@ -237,16 +238,20 @@ make up
 ```
 This django webserver will be running at `localhost:8080`
 
+> Note: To run the application using docker, `BAREMETAL_DEPLOYMENT` must be set to `False` in `.dev.env`.
+
 To check that all services are up and healthy, run:
 ```bash
 make check-services-health
 ```
 
-Postgres backup scripts can then be tested. The following command will dump the Postgres data from the running container to S3, and then restore the latest dump from S3.
+Postgres backup scripts can then be tested with the following command:
 ```bash
 make postgres-backup-test
 ```
-For the above command to run, the following variables must be set:
+This will dump the Postgres data from the running container to S3, and restore the latest dump from S3.
+
+For the above command to succeed, the following variables must be set:
 - `AWS_ENABLE` set to `True`
 - `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
 - `AWS_STORAGE_BUCKET_NAME` and `AWS_DEFAULT_REGION`
@@ -261,7 +266,7 @@ make down
 
 ### Build the docker deployment artefact
 
-In order to easily deploy the application to a new instance, one can generate a compressed folder (.tar.gz)  containing exclusively the required files for a production deployment:
+To easily deploy the application to a new instance, one can generate a compressed folder (.tar.gz) containing exclusively the deployment files:
 ```
 bin/docker_deploy.tar.gz
 ├── deployment
@@ -292,20 +297,18 @@ bin/docker_deploy.tar.gz
     └── postgres_restore_from_s3.sh
 ```
 
-This compressed folder is referred as the `docker deploy tarball`, and can be generated by running:
+This compressed archive is referred as the `docker deploy tarball`, and can be generated by running:
 ```bash
 make docker-deploy-tarball-custom
 ```
 
-> Note: The default file name is `docker_deploy.tar.gz` file, but it can be modified with the `S3_DOCKER_DEPLOY_TARBALL_CUSTOM` environment variable.
-
-> Note 2: The `make docker-deploy-tarball-custom` command will automatically upload the tarball to S3, given that AWS credentials and S3 environment variables are configured.
+> Note: The above command will also upload the tarball to S3, given that AWS credentials and S3 environment variables are configured.
 
 ### Running the server with docker services (prod)
 
 The production deployment adds the `nginx` service as a reverse proxy (*prod build*), and run the django webserver using `gunicorn`.
 
-To test the production deployment locally, run the following commands:
+To test the production deployment locally, run the following commands from the `deployment/`:
 ```bash
 cd deployment
 source .env
@@ -321,11 +324,11 @@ Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> 
 
 ## CI-CD Pipeline
 
-In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented, and can triggered on Travis CI.
+In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented, and can be triggered on Travis CI.
 
 ![image](documentation/images/ci_cd_pipeline.png)
-
 > Note: Any error such a linting error or failed tests will abort the pipeline.
+
 
 ### CI Pipeline
 
@@ -349,7 +352,7 @@ This will run the following steps:
 1. Package application code into /bin/portfolio.tar.gz and build docker image
 2. Start docker services without nginx (*dev build*)
 3. Wait until all services are up and healthy
-4. Test postgres backup scripts (if S3 variables are configured): Dump pgdata to S3, then restore the latest dump from S3 
+4. Test postgres backup scripts (if S3 variables are configured): Dump and restore pgdata to/from S3
 5. Stop and remove docker services (*dev build*)
 6. Publish docker portfolio app image (latest) to the online repository
 7. Create docker deploy tarball, and upload to S3 (if S3 variables are configured)
@@ -358,7 +361,7 @@ This will run the following steps:
 
 ### Ansible
 
-The final step of the CD pipeline is an Ansible playbook to ensure a smooth deployment to fresh EC2 instances. More details on the playbook can be found in the [Ansible playbook documentation](./ansible/README.md`).
+The final step of the CD pipeline is an Ansible playbook to ensure a smooth deployment to fresh EC2 instances. More details on the playbook can be found in the [Ansible playbook documentation](./ansible/README.md).
 
 ### Travis
 

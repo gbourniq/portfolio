@@ -25,7 +25,7 @@ run-cd-pipeline:
 # CI STEPS
 #
 # ----------------------------------------------------
-.PHONY: env pre-commit lint-code unit-tests recreatedb
+.PHONY: env pre-commit lint unit-tests recreatedb
 
 env:
 	@ ./build_steps/ci_pipeline/1_set_environment.sh
@@ -37,7 +37,7 @@ pre-commit:
 	@ pre-commit install -t pre-commit -t commit-msg
 	@ SUCCESS "pre-commit set up"
 
-lint-code: 
+lint: 
 	@ ./build_steps/ci_pipeline/2_lint_code.sh
 
 unit-tests: 

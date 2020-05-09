@@ -4,9 +4,10 @@
 
 ------------------------------------------
 
-## 1. Usage
+## Usage
 
 ### Running the playbooks
+
 The following command run the docker_deployment playbook:
 ```bash
 ansible-playbook \
@@ -22,12 +23,14 @@ make run-ansible-playbook
 ```
 
 ### Encryption of credentials
-Please note `ansible-vault-pw` is a file containing the *ansible vault passphrase*, which is a string used by Ansible to encrypt (and decrypt) ansible sensitive variables.
-Encrypting a variable:
+
+The `ansible-vault-pw` file mentioned in the command above, contains the `ansible vault passphrase`, which is essentially a string used by Ansible to encrypt and decrypt sensitive variables.
+
+To encrypt a variable, run a command such as:
 ```bash
 ansible-vault encrypt_string --vault-id user@~/.ssh/ansible-vault-pw <sensitive-value> --name <var-name>
 ```
-This will output an encrypted variable, while can be placed in a `<role-name>/vars/main.yaml` to be used within a role.
+This will output the encrypted variable, which can be inserted in a `<role-name>/vars/main.yaml` to be used within a role.
 ```
 var-name: !vault |
     $ANSIBLE_VAULT;1.2;AES256;user
@@ -39,7 +42,7 @@ var-name: !vault |
 ```
 
 
-## 2. Set Environment Variables for Ansible
+## Set Environment Variables for Ansible
 
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
@@ -57,31 +60,37 @@ var-name: !vault |
 |`QA_INSTANCE_TIME_MINUTES`    | Number of minutes the app should be running before the instance is shut down | 
 |`SLACK_TOKEN`                 | Token for Ansible to connect to the slack app                                |
 
-It is recommended to set `ANSIBLE_VAULT_PASSWORD` and `ANSIBLE_SSH_PASSWORD` on the host (eg. ~/.bash_profile)
+> Note: `ANSIBLE_VAULT_PASSWORD` and `ANSIBLE_SSH_PASSWORD` must be set on the host (eg. `~/.bash_profile` or Travis CI account settings)
 
 
-## 3. Project setup
+## Project setup
 
-### `ansible/roles/`
-Roles are ways of automatically loading certain vars_files, tasks, and handlers based on a known file structure. Grouping content by roles also allows easy sharing of roles with other users.
+### Ansible inventories
 
-### `ansible/inventories`
-Inventories in ansible are a pattern for grouping managed nodes/hosts.
+Inventories in ansible are a pattern for grouping managed nodes/hosts. They are located in `ansible/inventories/`.
 
 
-### Playbooks
+### Ansible playbooks
 
-- `ansible/docker_deployment.yml`: set up an EC2 instance and deploy portfolio application (`prod` build) using the latest *docker deploy tarball* created from the CD pipeline (step `7_build_and_push_docker_compose_tarball.sh`).
+Playbooks contain the steps which are set to execute on a particular machine.
 
-- `ansible/kubernetes_deployment.yml`: similar to the above using Helm and Kubernetes (WIP)
+This repository contains the following playbooks:
 
-- `ansible/stop_instance.yml`: stop the EC2 instance whether the above playbooks are successful or not.
+- `docker_deployment.yml`: set up an EC2 instance and deploy portfolio application (`prod` build) using the latest *docker deploy tarball* created from the CD pipeline (step `7_build_and_push_docker_compose_tarball.sh`).
 
-### Roles
+- `kubernetes_deployment.yml`: similar to the above using Helm and Kubernetes (WIP)
 
-- `start_instance`: Start an ec2 instance with a given instance-id, and wait for instance to be running
+- `stop_instance.yml`: stop the EC2 instance whether the above playbooks are successful or not.
 
-- `setup_instance`: Install required packages (pip, awscli, make, ...), and install Docker / docker-compose
+### Ansible roles
+
+Roles can be found in `ansible/roles/` and are ways of automatically loading certain vars_files, tasks, and handlers based on a known file structure. Grouping content by roles also allows easy sharing of roles with other users.
+
+For example, the `docker_deployment.yml` playbook runs the following roles:
+
+- `start_instance`: start an ec2 instance with a given instance-id, and wait for instance to be running
+
+- `setup_instance`: install required packages (pip, awscli, make, ...), and install Docker / docker-compose
 
 - `prepare_deployment`: docker prune all, delete existing project root directory, download the latest docker deployment folder from S3 (built by the CD pipeline), download SSL files for nginx from S3
 
@@ -97,4 +106,5 @@ Inventories in ansible are a pattern for grouping managed nodes/hosts.
 
 
 ### Testing
-TIP: molecule can be used for testing.
+
+> TIP: molecule can be used for testing.
