@@ -20,19 +20,22 @@ This repository features of the following:
 - [Appendix: Environment variables](#appendix-environment-variables)
 
 ## Portfolio App Overview
-The web application front-end is based on the [Materialize CSS](https://materializecss.com) framework. A sample app can be seen at htts://gbournique.com. 
-< SCREENSHOT HOME PAGE >
+The web application is using Django for the backend, and the frontend is based on the [Materialize CSS](https://materializecss.com) framework.
 
-The portfolio app essentially displays "items" (or "articles"), that are grouped into categories.
+A demo of the app can be viewed at https://dev.gbournique.com. 
+<SCREENSHOT>
+
+The portfolio app essentially displays "items" (or "articles"), grouped into categories.
 <CATEGORY>
 <ITEM PAGE>
 
 The application also provides a `Contact Us` to send direct messages.
 <SCREENSHOT>
 
-The `/admin` endpoint allows a Django superuser to easily edit the app content (category cards and items) via the Django admin page. Note that the application features the [django-tinymce4-lite](https://pypi.org/project/django-tinymce4-lite/) package which contains a widget to insert formatted text and media files into articles. 
-
+The `/admin` endpoint allows a Django superuser to easily edit the app content (category cards and items) via the Django admin page.
 <SCREENSHOT>
+
+Note that the application features the [django-tinymce4-lite](https://pypi.org/project/django-tinymce4-lite/) package which contains a widget to insert formatted text and media files into articles. 
 <SCREENSHOT>
 
 ## Repository Setup
@@ -322,7 +325,7 @@ Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> 
 
 
 
-## CI-CD Pipeline
+## CI/CD Pipeline
 
 In order to faciliate testing, build, and deployment tasks, a CI/CD workflow has been implemented, and can be triggered on Travis CI.
 
