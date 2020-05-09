@@ -6,7 +6,7 @@
 This repository features of the following:
 - Django web application which can be used as a template for a personal portfolio
 - Instructions to set up the development environment with Conda, Poetry, and Makefiles
-- Extensive documentation to easily deploy your own app on AWS EC2 with docker-compose (or Kubernetes/Helm - WIP)
+- [Extensive instructions](https://portfoliogb.s3.eu-west-2.amazonaws.com/documentation/ec2_deployment_guide.html) to deploy the containerized app on AWS Free Tier services
 - Integration features with AWS S3 to serve application files and backup Postgres data
 - CI/CD pipeline with Travis CI and Ansible
 
