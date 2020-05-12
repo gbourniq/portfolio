@@ -2,7 +2,7 @@
 <div class="container"> 
   <div class="row">
     {% for cat in categories %}
-      {% comment %} <div class="col s12 m6 l4"> {% endcomment %}
+      <div class="col s12 m6 l4">
         <a href="{{cat.category_slug}}", style="color:#000">
 
           <div class="card hoverable">
@@ -15,7 +15,7 @@
           </div>
 
         </a>
-      {% comment %} </div> {% endcomment %}
+      </div>
     {% endfor %}
   </div>
 </div>
