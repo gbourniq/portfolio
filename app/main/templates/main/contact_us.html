@@ -10,6 +10,8 @@
         </div>
         <form method="POST">
           {% csrf_token %}
+          {% load materializecss %}
+          {{ form|materializecss }}
           {% comment %} {{ form.as_p }} {% endcomment %}
           <div class="form-actions">
             <button class="btn waves-effect waves-light" style="background-color:gray; color:white" type="submit" name="action">

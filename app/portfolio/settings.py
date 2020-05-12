@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     "django_celery_results",
     "main",
     "tinymce",
+    "materializecssform",
 ]
 
 MIDDLEWARE = [

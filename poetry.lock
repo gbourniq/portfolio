@@ -325,6 +325,14 @@ celery = ">=4.0,<5.0"
 
 [[package]]
 category = "main"
+description = "A simple Django form template tag to work with Materializecss"
+name = "django-materializecss-form"
+optional = false
+python-versions = "*"
+version = "1.1.17"
+
+[[package]]
+category = "main"
 description = "Full featured redis cache backend for Django."
 name = "django-redis"
 optional = false
@@ -958,7 +966,7 @@ python-versions = "*"
 version = "1.11.2"
 
 [metadata]
-content-hash = "27f86dd5a37888a4ac7b1d9985ff7014bbfa5313b3527fa410bdaa96e2ea670b"
+content-hash = "58be67438a1b40d949fbeb36dede31b6d577f1115e3d28808de7e20d90b0b10c"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1121,6 +1129,10 @@ django = [
 django-celery-results = [
     {file = "django_celery_results-1.0.4-py2.py3-none-any.whl", hash = "sha256:80292a68c8b705c788ff0bca9cacc5a431a4de39d7ff49e2ca8277b700d3d616"},
     {file = "django_celery_results-1.0.4.tar.gz", hash = "sha256:89ae9e32076efc65bcba31bc729870da9b230c63af22b673b79170c4a98039b1"},
+]
+django-materializecss-form = [
+    {file = "django-materializecss-form-1.1.17.tar.gz", hash = "sha256:29cb4f1cb371d0f7a2b2c10af842e03d6e8b5de5b78aadf1416f24efd854494b"},
+    {file = "django_materializecss_form-1.1.17-py2.py3-none-any.whl", hash = "sha256:648e81cc801fda172c7405966b29877d1242d9712b3d52c7b20aa3a78833a96a"},
 ]
 django-redis = [
     {file = "django-redis-4.11.0.tar.gz", hash = "sha256:a5b1e3ffd3198735e6c529d9bdf38ca3fcb3155515249b98dc4d966b8ddf9d2b"},

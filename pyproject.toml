@@ -41,6 +41,7 @@ pillow = "^7.0.0"
 psycopg2 = "^2.8.4"
 django-storages = "^1.9.1"
 boto3 = "^1.12.39"
+django-materializecss-form = "^1.1.17"
 
 [tool.poetry.dev-dependencies]
 ansible = "^2.9.2"
