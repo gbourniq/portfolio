@@ -25,16 +25,17 @@ The web application is using Django for the backend, and the frontend is based o
 * App Homepage
 ![App Homepage](documentation/images/app_homepage.png)
 
-* Item Category cards
+* Select Category
 ![Category cards](documentation/images/app_category_cards.png)
 
-* Item page
+* View Items
 ![Items](documentation/images/app_item_page.png)
 
 * Mobile view: Item page and Contact Us page
-![Items](documentation/images/app_mobile_view.png)
 
-* Django admin page (`/admin`) to edit the website content
+![Items](documentation/images/app_mobile_view.png) ![Items](documentation/images/app_contactus_mobile_view.png)
+
+* Django admin endpoint (`/admin`) to edit the website content
 ![Django Admin page](documentation/images/app_django_admin.png)
 
 * [django-tinymce](https://pypi.org/project/django-tinymce4-lite/) widget to insert formatted text and media files
