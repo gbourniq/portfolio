@@ -36,15 +36,11 @@ The web application is using Django for the backend, and the frontend is based o
 
 * Mobile view: Items and Contact Us pages
 
-![Items](documentation/images/app_mobile_view.png) ![Items](documentation/images/app_contactus_mobile_view.png)
+![Items](documentation/images/app_mobile_view.png)    ![Items](documentation/images/app_contactus_mobile_view.png)
 
-* Django admin endpoint (`/admin`) to edit the website content
+* Django admin page to manage website content (`/admin`) and [django-tinymce](https://pypi.org/project/django-tinymce4-lite/) widget to insert formatted text and media files
 
-![Django Admin page](documentation/images/app_django_admin.png)
-
-* [django-tinymce](https://pypi.org/project/django-tinymce4-lite/) widget to insert formatted text and media files
-
-![Add an Item from the Admin page](documentation/images/app_admin_add_item.png)
+![Django Admin page](documentation/images/app_django_admin.png)    ![Add an Item from the Admin page](documentation/images/app_admin_add_item.png)
 
 
 ## Repository Setup
