@@ -31,7 +31,7 @@ The web application is using Django for the backend, and the frontend is based o
 * Item page
 ![Items](documentation/images/app_item_page.png)
 
-* Item page in resized browser / mobile view
+* Mobile view: Item page and Contact Us page
 ![Items](documentation/images/app_mobile_view.png)
 
 * Django admin page (`/admin`) to edit the website content
