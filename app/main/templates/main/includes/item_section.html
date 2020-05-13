@@ -1,35 +1,21 @@
 {% load static %}  
 <div class="container" style="max-width:1500px; min-height:100%">
 
-  {% comment %} <div class="navbar-fixed">
-    <nav class="teal lighten-1" role="navigation">
-      <div class="container"> 
-        <div class="nav-wrapper text-lighten-4">
-          <div class="col s12">
-            <a href="/items" class="breadcrumb">All Items</a>
-            <span href="/items/{{category_slug}}" class="breadcrumb">{{category_name}}</span>
-            <span href="/items/{{category_slug}}/{{item_slug}}" class="breadcrumb">{{item.item_name}}</span>
-          </div>
+  <nav class="teal lighten-1" role="navigation">
+    <div class="container-fluid" align="left" >
+      <div class="nav-wrapper text-lighten-4">
+        <div class="col s12">
+          &nbsp&nbsp&nbsp&nbsp<a href="/items" class="breadcrumb">All Items</a>
+          <span href="/items/{{category_slug}}" class="breadcrumb">{{category_name}}</span>
+          <span href="/items/{{category_slug}}/{{item_slug}}" class="breadcrumb">{{item.item_name}}</span>
         </div>
       </div>
-    </nav>
-  </div> {% endcomment %}
+    </div>
+  </nav>
 
   <div class="row"> 
 
-    <nav class="teal lighten-1" role="navigation">
-      <div class="container-fluid" align="left" >
-        <div class="nav-wrapper text-lighten-4">
-          <div class="col s12">
-            <a href="/items" class="breadcrumb">All Items</a>
-            <span href="/items/{{category_slug}}" class="breadcrumb">{{category_name}}</span>
-            <span href="/items/{{category_slug}}/{{item_slug}}" class="breadcrumb">{{item.item_name}}</span>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <div class="col l8 m12 s12">
+    <div class="col l9 m12 s12">
       <div class="container-fluid" align="left" >
       <h4>{{item.item_name}}</h4>
       {% comment %} <p style="font-size:70%">Published {{item.date_published}}</p> {% endcomment %}
@@ -37,7 +23,7 @@
       </div>
     </div>
     
-    <div class="col l4 m12 s12">
+    <div class="col l3 m12 s12">
       <ul class="collapsible popout" data-collapsible="accordion" style='font-size:85%; padding-left:30px'>
         {% for item in sidebar %}
           {% if forloop.counter0 == this_item_idx %}
