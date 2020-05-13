@@ -1,15 +1,13 @@
 {% load static %}  
 
-<div class="navbar-fixed">
-  <nav class="teal lighten-1" role="navigation">
-    <div class="container"> 
-      <div class="nav-wrapper text-lighten-4">
-        <div class="col s12">
-          <a href="/items" class="breadcrumb">All Items</a>
-          <span href="/items/{{category_slug}}" class="breadcrumb">{{category_name}}</span>
-          <span href="/items/{{category_slug}}/{{item_slug}}" class="breadcrumb">{{item.item_name}}</span>
-        </div>
+{% comment %} <nav class="teal lighten-1" role="navigation">
+  <div class="container"> 
+    <div class="nav-wrapper text-lighten-4">
+      <div class="col s12">
+        <a href="/items" class="breadcrumb">All Items</a>
+        <span href="/items/{{category_slug}}" class="breadcrumb">{{category_name}}</span>
+        <span href="/items/{{category_slug}}/{{item_slug}}" class="breadcrumb">{{item.item_name}}</span>
       </div>
     </div>
-  </nav>
-</div>
+  </div>
+</nav> {% endcomment %}
