@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 
 # This file is used by an ubuntu Crontab (crontab -e) to run app on instance start up.

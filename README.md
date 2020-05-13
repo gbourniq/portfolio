@@ -20,23 +20,26 @@ This repository features of the following:
 - [Appendix: Environment variables](#appendix-environment-variables)
 
 ## Portfolio App Overview
-The web application is using Django for the backend, and the frontend is based on the [Materialize CSS](https://materializecss.com) framework.
+The web application is using Django for the backend, and the frontend is based on the [Materialize CSS](https://materializecss.com) framework. The portfolio app can be used to displays any items (articles, medias, etc.), conveniently grouped into categories. A demo of the app can be viewed at https://gbournique.com. 
 
-A demo of the app can be viewed at https://gbournique.com. 
+* App Homepage
 ![App Homepage](documentation/images/app_homepage.png)
 
-The portfolio app essentially displays "items" (or "articles"), grouped into categories.
+* Item Category cards
 ![Category cards](documentation/images/app_category_cards.png)
 
-![Items (Articles)](documentation/images/app_item_page.png)
+* Item page
+![Items](documentation/images/app_item_page.png)
 
-The `/admin` endpoint allows a Django superuser to easily edit the app content (category cards and items) via the Django admin page.
+* Item page in resized browser / mobile view
+![Items](documentation/images/app_mobile_view.png)
+
+* Django admin page (`/admin`) to edit the website content
 ![Django Admin page](documentation/images/app_django_admin.png)
 
-Note that the application features the [django-tinymce4-lite](https://pypi.org/project/django-tinymce4-lite/) package which contains a widget to insert formatted text and media files into articles. 
+* [django-tinymce](https://pypi.org/project/django-tinymce4-lite/) widget to insert formatted text and media files
 ![Add an Item from the Admin page](documentation/images/app_admin_add_item.png)
 
-Finally, the application also provides a `Contact Us` page to send direct messages.
 
 ## Repository Setup
 
