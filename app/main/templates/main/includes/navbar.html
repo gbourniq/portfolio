@@ -5,8 +5,10 @@
 
     <div class="nav-wrapper container">
       <a id="logo-container" href="/" class="brand-logo">
-        <img class="img-responsive" style="width:60px; height:50px; margin-top:5px" src="{% static 'Logo.png' %}">
+        <img class="img-responsive" style="width:60px; height:50px; margin-top:6px" src="{% static 'Logo.png' %}">
       </a>
+      <a href="#" data-activates="navsidebar" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+      {% comment %} <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a> {% endcomment %}
 
       <ul class="right hide-on-med-and-down">
         <li><a href="/">Home</a></li>
@@ -14,13 +16,19 @@
         <li><a href="/contact">Contact</a></li>
       </ul>
 
-      <ul id="nav-mobile" class="sidenav">
+      {% comment %} <ul id="nav-mobile" class="sidenav">
         <li><a href="/">Home</a></li>
         <li><a href="/items">Items</a></li>
         <li><a href="/contact">Contact</a></li>
-      </ul>
+      </ul> {% endcomment %}
 
-      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+			<ul class="side-nav" id="navsidebar">
+        <li><a href="/">Home</a></li>
+        <li><a href="/items">Items</a></li>
+        <li><a href="/contact">Contact</a></li>
+			</ul>
+
+      
     </div>
   </nav>
 </div>
