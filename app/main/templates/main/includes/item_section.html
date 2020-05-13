@@ -1,41 +1,48 @@
 {% load static %}  
-<div class="container">
-  <div class="section">
-    <div class="row">
-      <div class="col s12 center">
+<div class="container" style="max-width:1500px; min-height:100%">
 
-        <div class="container"> 
-          <div class="row">
-
-            <div class="col s12, m8, l8">
-              <h4>{{item.item_name}}</h4>
-              {% comment %} <p style="font-size:70%">Published {{item.date_published}}</p> {% endcomment %}
-              {{item.content|safe}}
-            </div>
-            
-            <div class="col s12 m4 l4">
-              <ul class="collapsible popout">
-                {% for item in sidebar %}
-                  {% if forloop.counter0 == this_item_idx %}
-                    <li class="active">
-                      <div class="collapsible-header"><i class="material-icons">visibility</i>{{item.item_name}}</div>
-                    </li>
-                  {% else %}
-                    <li>
-                      <div class="collapsible-header"><i class="material-icons">keyboard_arrow_right</i>{{item.item_name}}</div>
-                      <div class="collapsible-body">
-                        <p><a href="/items/{{category_slug}}/{{item.item_slug}}"><button class="btn waves-effect waves-light right-align" style="background-color:gray; color:white">Go</button></a></p>
-                      </div>
-                    </li>
-                  {% endif %}
-                {% endfor %}
-              </ul>
-            </div>
-
+  {% comment %} <div class="navbar-fixed">
+    <nav class="teal lighten-1" role="navigation">
+      <div class="container"> 
+        <div class="nav-wrapper text-lighten-4">
+          <div class="col s12">
+            <a href="/items" class="breadcrumb">All Items</a>
+            <span href="/items/{{category_slug}}" class="breadcrumb">{{category_name}}</span>
+            <span href="/items/{{category_slug}}/{{item_slug}}" class="breadcrumb">{{item.item_name}}</span>
           </div>
         </div>
+      </div>
+    </nav>
+  </div> {% endcomment %}
 
+  <div class="row"> 
+
+    <div class="col l8 m12 s12">
+      <div class="container-fluid" align="left" >
+      <h4>{{item.item_name}}</h4>
+      {% comment %} <p style="font-size:70%">Published {{item.date_published}}</p> {% endcomment %}
+      {{item.content|safe}}
       </div>
     </div>
+    
+    <div class="col l4 m12 s12">
+      <ul class="collapsible popout" data-collapsible="accordion" style='font-size:85%; padding-left:30px'>
+        {% for item in sidebar %}
+          {% if forloop.counter0 == this_item_idx %}
+            <li class="active">
+              <div class="collapsible-header"><i class="material-icons">visibility</i>{{item.item_name}}</div>
+            </li>
+          {% else %}
+            <li>
+              <div class="collapsible-header"><i class="material-icons">keyboard_arrow_right</i>{{item.item_name}}</div>
+              <div class="collapsible-body">
+                <p><a href="/items/{{category_slug}}/{{item.item_slug}}"><button class="btn waves-effect waves-light right-align" style="background-color:gray; color:white">Go</button></a></p>
+              </div>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+
   </div>
 </div>

@@ -2,6 +2,27 @@
 <html lang="en">
 
 <head>
+
+	<!--
+	palette:
+	dark blue: #003F72
+	yellow: #FFD166
+	salmon: #EF476F
+	offwhite: #e7d7d7
+	Light Blue: #118AB2
+	Light green: #7DDF64
+	-->
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-KGHMSNB4ND"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-KGHMSNB4ND');
+	</script>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<meta name="description" content="Personal portfolio Template">
@@ -18,8 +39,22 @@
 	<link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 	<link rel="shortcut icon" href="{% static 'favicon.ico' type='image/x-icon' %}">
 
-	{% comment %} <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.1/css/materialize.min.css" integrity="sha256-qj3p6P1fJIV+Ndv7RW1ovZI2UhOuboj9GcODzcNFIN8=" crossorigin="anonymous" /> {% endcomment %}
+	<style>
+	@media (min-width:992px) {
+	#aside {
+		width:250px;
+	}
+	pre { tab-size: 4;}
+	.btn {background-color:#FFD166;
+			color:#000;
+			height:auto;
+			font-color:#000;
+			}
+	.btn:hover {background-color:#FFD166;
+				}
+
+
+	</style>
 
 </head>
 
