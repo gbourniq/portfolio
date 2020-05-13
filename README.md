@@ -23,21 +23,27 @@ This repository features of the following:
 The web application is using Django for the backend, and the frontend is based on the [Materialize CSS](https://materializecss.com) framework. The portfolio app can be used to displays any items (articles, medias, etc.), conveniently grouped into categories. A demo of the app can be viewed at https://gbournique.com. 
 
 * App Homepage
+
 ![App Homepage](documentation/images/app_homepage.png)
 
 * Select Category
+
 ![Category cards](documentation/images/app_category_cards.png)
 
 * View Items
+
 ![Items](documentation/images/app_item_page.png)
 
-* Mobile view: Item page and Contact Us page
+* Mobile view: Items and Contact Us pages
+
 ![Items](documentation/images/app_mobile_view.png) ![Items](documentation/images/app_contactus_mobile_view.png)
 
 * Django admin endpoint (`/admin`) to edit the website content
+
 ![Django Admin page](documentation/images/app_django_admin.png)
 
 * [django-tinymce](https://pypi.org/project/django-tinymce4-lite/) widget to insert formatted text and media files
+
 ![Add an Item from the Admin page](documentation/images/app_admin_add_item.png)
 
 
