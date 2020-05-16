@@ -1,3 +1,0 @@
-- name: Pause playbook
-  pause:
-    minutes: "{{ QA_INSTANCE_TIME_MINUTES }}"

@@ -1,5 +1,0 @@
-- name: Send Slack notification for QA deployment
-  slack:
-    token: '{{ SLACK_TOKEN }}'
-    msg: "[QA] App is up for {{ QA_INSTANCE_TIME_MINUTES }}mn! Visit https://{{ ANSIBLE_HOST_NAME }} 💫🚀"
-  delegate_to: localhost
