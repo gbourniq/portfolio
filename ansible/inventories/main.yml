@@ -6,16 +6,16 @@ local_dev:
 
 docker_qa:
   hosts:
-    18.132.30.8:
-      ansible_host: 18.132.30.8
+    35.176.145.214:
+      ansible_host: 35.176.145.214
       ansible_user: ubuntu
       ansible_ssh_pass: "{{ lookup('env','ANSIBLE_SSH_PASSWORD') }}"
       ansible_become: true
 
 kubernetes_qa:
   hosts:
-    18.132.30.8:
-      ansible_host: 18.132.30.8
+    35.176.145.214:
+      ansible_host: 35.176.145.214
       ansible_user: ubuntu
       ansible_ssh_pass: "{{ lookup('env','ANSIBLE_SSH_PASSWORD') }}"
       ansible_become: true
