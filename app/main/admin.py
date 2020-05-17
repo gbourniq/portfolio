@@ -10,7 +10,7 @@ class ItemAdmin(admin.ModelAdmin):
         ("Title/date", {"fields": ["item_name", "date_published"]}),
         ("URL", {"fields": ["item_slug"]}),
         ("Parent Element", {"fields": ["category_name"]}),
-        ("Content (Width ~600px)", {"fields": ["summary", "content"]}),
+        ("Content", {"fields": ["image", "summary", "content"]}),
     ]
     # Overwrite properties for TextFields only
     formfield_overrides = {

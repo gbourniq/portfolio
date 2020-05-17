@@ -78,6 +78,7 @@ class Category(models.Model):
 class Item(models.Model):
     item_name = models.CharField(max_length=200, unique=True)
     summary = models.CharField(max_length=200)
+    image = models.ImageField(upload_to=UPLOADS_FOLDER_PATH)
     content = models.TextField()
     date_published = models.DateTimeField(
         "date published", default=timezone.now
