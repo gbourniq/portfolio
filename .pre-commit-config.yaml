@@ -34,11 +34,11 @@ repos:
         entry: black
         types: [python]
 
-      # - id: prepend-jira
-      #   name: prepend-jira
+      # - id: append-id
+      #   name: append-id
       #   stages: [commit-msg]
       #   language: system
-      #   entry: scripts/prepend_jira_id_to_commit_message.sh
+      #   entry: scripts/append_id_to_commit_message.sh
 
       - id: pytest
         name: pytest
