@@ -176,7 +176,7 @@ Unit-tests and integration tests are run with pytest-django to cover the followi
 * Form validation and processing
 * Template rendering
 
-To the all the test, the following make command is available from the project root directory:
+To run all the test, the following make command is available from the project root directory:
 ```bash
 make tests
 ```
