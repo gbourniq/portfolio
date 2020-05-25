@@ -171,15 +171,17 @@ make recreatedb
 ```
 
 ### Testing
-Run the unit-tests with:
-```bash
-pytest -v
-```
+Unit-tests and integration tests are run with pytest-django to cover the following:
+* Simulate requests and insert test data from HTTP-level request handling
+* Form validation and processing
+* Template rendering
 
-To check test coverage you can generate a coverage report (replace `--cov=.` with a specific directory for a more targeted report):
+To the all the test, the following make command is available from the project root directory:
 ```bash
-pytest --cov=. --cov-report=term-missing
+make tests
 ```
+> This command runs ~70 tests which cover ~95% of the application code. 
+
 
 ### Versioning
 The application versioning is based on the [Semantic Versioning 2.0.0](https://semver.org): <major.minor.patch>.  The version can be found in `pyproject.toml` and can be incremented with `poetry version {bump rule}`.
