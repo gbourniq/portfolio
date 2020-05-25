@@ -87,7 +87,9 @@ def viewContactUs(request):
     if request.method == "POST":
         to_emails = [settings.EMAIL_HOST_USER]
         from_email = settings.EMAIL_HOST_USER
+
         form = send_email(request, to_emails, from_email)
+
         if not form:
             # if form invalid, stay on the same page
             return redirect(request.META["HTTP_REFERER"])
@@ -103,7 +105,10 @@ def handler404(request, exception):
     return render(
         request,
         "main/go_back_home.html",
-        {"message": "Oops, there's nothing here... (404)"},
+        context={
+            "message": "Oops, there's nothing here... (404)",
+            "code_handled": 404,
+        },
     )
 
 
@@ -111,5 +116,8 @@ def handler500(request):
     return render(
         request,
         "main/go_back_home.html",
-        {"message": "Internal Server Error (500)"},
+        context={
+            "message": "Internal Server Error (500)",
+            "code_handled": 500,
+        },
     )

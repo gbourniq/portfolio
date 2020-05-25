@@ -1,35 +1,91 @@
-"""Test Environmental settings are handled properly."""
+import importlib
+from os import getenv
+from typing import Dict
+
+from app import static_settings
+from app.portfolio import settings
 
 
-# from django.test import TestCase
-# from unittest import skip
-# we have to use tools outside of django, because when it's initialized
-# it's too late to change environment variables
-from unittest import TestCase, main
+class TestDjangoSettingsRedis:
+
+    static_settings.REDIS_HOST = "redis"
+    importlib.reload(settings)
+
+    def test_cache_settings(self):
+        """
+        Test category created with the expected attributes
+        """
+        assert settings.CACHES == {
+            "default": {
+                "BACKEND": "django_redis.cache.RedisCache",
+                "LOCATION": "redis://redis:6379/1",
+                "OPTIONS": {
+                    "CLIENT_CLASS": "django_redis.client.DefaultClient"
+                },
+                "KEY_PREFIX": "example",
+            }
+        }
+
+    def test_celery_settings(self):
+        """
+        Test category created with the expected attributes
+        """
+        assert all(
+            hasattr(settings, attr)
+            for attr in [
+                "CELERY_RESULT_BACKEND",
+                "CELERY_REDIS_MAX_CONNECTIONS",
+                "CELERY_ALWAYS_EAGER",
+                "CELERY_ACKS_LATE",
+                "CELERY_TASK_PUBLISH_RETRY",
+                "CELERY_DISABLE_RATE_LIMITS",
+                "CELERY_SEND_TASK_ERROR_EMAILS",
+                "CELERY_TASK_RESULT_EXPIRES",
+                "CELERY_DEFAULT_QUEUE",
+            ]
+        )
 
 
-class DebugSettingTest(TestCase):
-    """Test if setting DEBUG is handled properly."""
+class TestDjangoSettingsS3:
 
-    _variants = {
-        True: ("Yes", "YES", "Y", "TRUE", "tRUE", "true", "On"),
-        False: ("No", "nO", "N", "n", "false", "False", "off", "oFF"),
-    }
-    env_var_debug = "DEBUG"
+    static_settings.ENABLE_S3_FOR_DJANGO_FILES = True
+    importlib.reload(settings)
 
-    def test_debug_setting(self):
-        """Check if config accepts environment variable DEBUG and sets it."""
-        # from app.portfolio import settings
+    def test_cache_settings(self):
+        """
+        Test category created with the expected attributes
+        """
+        assert settings.AWS_ACCESS_KEY_ID == getenv("AWS_ACCESS_KEY_ID")
+        assert settings.AWS_SECRET_ACCESS_KEY == getenv("AWS_SECRET_ACCESS_KEY")
+        assert settings.AWS_STORAGE_BUCKET_NAME == getenv(
+            "AWS_STORAGE_BUCKET_NAME"
+        )
+        assert settings.AWS_DEFAULT_REGION == getenv("AWS_DEFAULT_REGION")
 
-        # for result, words in self._variants.items():
-        #     for word in words:
-        #         # print(word, result)
-        #         with patch.dict("os.environ", {self.env_var_debug: word}):
-        #             importlib.reload(settings)
-        #             assert self.env_var_debug in os.environ
-        #             self.assertEqual(settings.DEBUG, result)
-        #         assert self.env_var_debug not in os.environ  # should be True
+        assert all(
+            hasattr(settings, attr)
+            for attr in [
+                "AWS_DEFAULT_ACL",
+                "AWS_S3_OBJECT_PARAMETERS",
+                "AWS_S3_CUSTOM_DOMAIN",
+                "STATIC_URL",
+                "STATICFILES_STORAGE",
+                "MEDIA_URL",
+                "DEFAULT_FILE_STORAGE",
+            ]
+        )
 
 
-if __name__ == "__main__":
-    main()
+class TestDjangoSettingsLogging:
+
+    static_settings.LOGGING_ENABLED = True
+    importlib.reload(settings)
+
+    def test_cache_settings(self):
+        """
+        Test category created with the expected attributes
+        """
+
+        assert all(hasattr(settings, attr) for attr in ["LOGGING",])
+
+        assert isinstance(settings.LOGGING, Dict)

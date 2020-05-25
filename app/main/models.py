@@ -4,6 +4,7 @@ from io import BytesIO
 
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.db.models.fields.files import ImageFieldFile
 from django.utils import timezone
 from PIL import Image
 
@@ -16,7 +17,7 @@ THUMBNAIL_SIZE = (500, 500)
 CROP_SIZE = (300, 300)
 
 
-def resizeImage(uploadedImage):
+def resizeImage(uploadedImage: ImageFieldFile) -> ImageFieldFile:
     """
     Performs the following operation on a given image:
     - Thumbmail: returns an image that fits inside of a given size (preserving aspect ratios)
@@ -56,15 +57,27 @@ class Category(models.Model):
     image = models.ImageField(upload_to=UPLOADS_FOLDER_PATH)
     category_slug = models.CharField(max_length=200, unique=True)
 
+    @classmethod
+    def create(cls, dictionary):
+        """
+        Class method to instantiate a Category objects with dictionaries.
+        """
+        return cls(**dictionary)
+
+    def json(self):
+        """
+        Returns class attributes as a dictionary.
+        """
+        return {
+            "category_name": self.category_name,
+            "summary": self.summary,
+            "image": self.image,
+            "category_slug": self.category_slug,
+        }
+
     def save(self, *args, **kwargs):
-        if not self.id:
-            try:
-                self.image = resizeImage(self.image)
-            except Exception as e:
-                logger.warning(
-                    f"Exception occured within image processing function. \
-                    Error: {e}"
-                )
+        # if not self.id:
+        self.image = resizeImage(self.image)
         super(Category, self).save(*args, **kwargs)
 
     class Meta:
@@ -89,6 +102,29 @@ class Item(models.Model):
         verbose_name="Category",
         on_delete=models.SET_DEFAULT,
     )
+
+    @classmethod
+    def create(cls, dictionary):
+        """
+        Class method to instantiate Item objects with dictionaries.
+        """
+        return cls(**dictionary)
+
+    def json(self):
+        """
+        Returns class attributes as a dictionary.
+        """
+        return {
+            "item_name": self.item_name,
+            "summary": self.summary,
+            "content": self.content,
+            "date_published": self.date_published,
+            "item_slug": self.item_slug,
+            "category_name": self.category_name,
+        }
+
+    def save(self, *args, **kwargs):
+        super(Item, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = "Items"

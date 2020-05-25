@@ -9,3 +9,14 @@ class ContactForm(forms.Form):
     message = forms.CharField(
         widget=forms.Textarea(), required=True, max_length=2048,
     )
+
+    def json(self):
+        """
+        Returns class attributes as a dictionary.
+        """
+        return {
+            "name": self.name,
+            "contact_email": self.contact_email,
+            "subject": self.subject,
+            "message": self.message,
+        }

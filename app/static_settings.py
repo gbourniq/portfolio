@@ -12,6 +12,7 @@ is renamed or removed.
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG") == "True"
 ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
+MEDIA_URL = os.getenv("MEDIA_URL", "mediafiles")
 
 # Postgres
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")

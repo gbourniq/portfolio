@@ -4,7 +4,7 @@ from typing import List, Union
 from django.core.mail import BadHeaderError, send_mail
 from django.http import Http404
 
-from static_settings import REDIS_HOST
+from app.static_settings import REDIS_HOST
 
 from .forms import ContactForm
 from .models import Category, Item
@@ -19,10 +19,11 @@ def _is_category_exist(category_slug: str) -> bool:
     Returns True if category object exists for a given slug.
     Returns False otherwose
     """
-    categories = [c.category_slug for c in Category.objects.all()]
-    if category_slug not in categories:
-        return False
-    return True
+    return (
+        True
+        if category_slug in [c.category_slug for c in Category.objects.all()]
+        else False
+    )
 
 
 def get_item_in_category(
@@ -59,7 +60,9 @@ def get_items_by_category_slug(
         return Item.objects.filter(category_name__category_slug=category_slug)
 
 
-def send_email(request, to_emails: List[str], from_email: str) -> None:
+def send_email(
+    request, to_emails: List[str], from_email: str
+) -> Union[None, ContactForm]:
     """
     Send email from the contact page, using the fromemail specified.
     ToEmail variable is defined as an environment variable in .env
@@ -77,8 +80,8 @@ def send_email(request, to_emails: List[str], from_email: str) -> None:
         f"Message: \n{form.cleaned_data['message']}"
     )
 
-    send_email_function = send_email_celery.delay if REDIS_HOST else send_mail
     logger.info(f"Sending email with function: {send_email_function}")
+
     try:
         send_email_function(
             form.cleaned_data["subject"], body, from_email, to_emails
@@ -89,3 +92,10 @@ def send_email(request, to_emails: List[str], from_email: str) -> None:
             f"Email function {send_email_function} returned BadHeaderError"
         )
         return None
+
+
+def send_email_function():
+    if REDIS_HOST:
+        return send_email_celery.delay
+    else:
+        return send_mail
