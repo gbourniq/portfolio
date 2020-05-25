@@ -25,7 +25,7 @@ run-cd-pipeline:
 # CI STEPS
 #
 # ----------------------------------------------------
-.PHONY: env pre-commit lint unit-tests recreatedb
+.PHONY: env pre-commit lint tests recreatedb
 
 env:
 	@ ./build_steps/ci_pipeline/1_set_environment.sh
@@ -40,7 +40,7 @@ pre-commit:
 lint: 
 	@ ./build_steps/ci_pipeline/2_lint_code.sh
 
-unit-tests: 
+tests: 
 	@ ./build_steps/ci_pipeline/3_run_pytest.sh
 
 
