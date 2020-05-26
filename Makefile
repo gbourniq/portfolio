@@ -25,7 +25,7 @@ run-cd-pipeline:
 # CI STEPS
 #
 # ----------------------------------------------------
-.PHONY: env pre-commit lint tests recreatedb
+.PHONY: env pre-commit lint recreatedb
 
 env:
 	@ ./build_steps/ci_pipeline/1_set_environment.sh
@@ -40,9 +40,15 @@ pre-commit:
 lint: 
 	@ ./build_steps/ci_pipeline/2_lint_code.sh
 
-tests: 
+tests-local: 
+	@ cd app && pytest --cov=. --cov-report=term-missing && cd -
+
+tests-docker: tests-rebuild-dependencies
 	@ ./build_steps/ci_pipeline/3_run_pytest.sh
 
+tests-rebuild-dependencies:
+	@ docker build -f deployment/docker-build/tests.Dockerfile -t ${IMAGE_REPOSITORY}:tests .
+	@ SUCCESS "${IMAGE_REPOSITORY}:tests built successfully"
 
 # ----------------------------------------------------
 #
@@ -106,12 +112,12 @@ recreatedb:
 # Params:
 #   1. Variable name(s) to test.
 #   2. (optional) Error message to print.
-check_defined = \
-    $(strip $(foreach 1,$1, \
-        $(call __check_defined,$1,$(strip $(value 2)))))
-__check_defined = \
-    $(if $(value $1),, \
-      $(error Undefined $1$(if $2, ($2))))
+# check_defined = \
+#     $(strip $(foreach 1,$1, \
+#         $(call __check_defined,$1,$(strip $(value 2)))))
+# __check_defined = \
+#     $(if $(value $1),, \
+#       $(error Undefined $1$(if $2, ($2))))
 
 # $(call check_defined, CONDA_ENV_NAME, Please source .dev.env)
 # $(call check_defined, S3_DOCKER_DEPLOY_TARBALL_CUSTOM, Please source .dev.env)

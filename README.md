@@ -171,16 +171,23 @@ make recreatedb
 ```
 
 ### Testing
-Unit-tests and integration tests are run with pytest-django to cover the following:
+Unit-tests and integration tests are run with `pytest-django` to cover the following:
 * Simulate requests and insert test data from HTTP-level request handling
 * Form validation and processing
 * Template rendering
 
-To run all the test, the following make command is available from the project root directory:
-```bash
-make tests
+There are ~70 tests which cover ~98% of the application code. The tests will require the app to read/write to a Postgres test database, therefore two distinct commands are available.
+
+To run the tests using a local Postgres database:
 ```
-> This command runs ~70 tests which cover ~95% of the application code. 
+make tests-local
+```
+
+To run the tests using a Postgres docker container:
+```
+make tests-docker
+```
+
 
 
 ### Versioning

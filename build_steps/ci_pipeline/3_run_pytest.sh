@@ -1,36 +1,43 @@
 #!/bin/bash
 
+# Exit on error
 set -e
 
 # Set traps to clean up if exit or something goes wrong
-trap "echo 'Something went wrong! && exit 1" ERR
+trap "echo 'Something went wrong! Tidying up...' && remove_services && exit 1" ERR
 
 # Helper function: Exit with error
 function exit_error() {
   ERROR "$1" 1>&2
-  cd -
   exit 1
 }
 
-function activate_environment() {
-  source $(conda info --base)/etc/profile.d/conda.sh
-  conda activate ${CONDA_ENV_NAME}
+function remove_services() {
+  INFO "[BUILD=${BUILD}] Removing docker-compose services..."
+  docker-compose ${COMPOSE_ARGS} down --remove-orphans || true
 }
 
-if [[ -z $CONDA_ENV_NAME ]]; then
-  exit_error "CONDA_ENV_NAME not set! Aborting."
+function start_services() {
+  INFO "[BUILD=${BUILD}] Starting docker-compose services with ${IMAGE_REPOSITORY}:tests."
+  docker-compose ${COMPOSE_ARGS} up -d
+}
+
+### Set environment variables for testing
+BUILD=tests
+PROJECT_NAME=portfolio-tests
+COMPOSE_FILE=deployment/docker-deployment/tests.docker-compose.yml
+COMPOSE_ARGS="-p ${PROJECT_NAME} -f ${COMPOSE_FILE}"
+
+### Start script
+remove_services
+start_services
+source ./scripts/check_services_health.sh
+if ! (docker exec -it app-tests sh -c "cd app && pytest --cov")
+then
+    exit_error "Some tests have failed! Aborting."
 fi
-
-activate_environment
-INFO "Run tests with pytest-django" 
-cd app/
-
-
-INFO "Temporarily overriding MEDIA_URL, POSTGRES_HOST, and REDIS_HOST for tests (pytest.ini)"
-
-if ! (pytest --cov=. --cov-report=term-missing); then
-  exit_error "Some tests have failed! Aborting."
-fi
-
+remove_services
 SUCCESS "Run tests successfully with pytest-django" 
-cd -
+
+
+

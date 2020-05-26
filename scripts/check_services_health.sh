@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# /!\ this script should be run from project root directory:
-# . ./scripts/check_services_health.sh
+# /!\ this script should be run from the same directory context that was used for docker-compose up.
+# for dev/prod build -> cd deployment/docker-deployment && ../../scripts/check_services_health.sh
+# for tests build -> ./scripts/check_services_health.sh
 
 # Set traps to clean up if exit or something goes wrong
 trap "echo 'Something went wrong! Tidying up...' && remove_services && exit 1" ERR
@@ -38,13 +39,16 @@ if [[ -z $BUILD ]] || [[ -z $COMPOSE_ARGS ]]; then
 fi
 
 INFO "Checking services health for ${BUILD} build..."
-cd deployment/docker-deployment || exit
+# cd deployment/docker-deployment || exit
 deployment_unhealthy=False
 
 if [[ ${BUILD} == dev ]]; then
     services=(postgres redis app worker)
 elif [[ ${BUILD} == prod ]]; then
     services=(postgres redis app worker nginx)
+elif [[ ${BUILD} == tests ]]; then
+    services=(postgres)
+    # cd -
 else
     exit_error "❌ Unknown build type: ${BUILD}"
 fi
@@ -56,4 +60,4 @@ done
 if [[ ${deployment_unhealthy} != True ]]; then
   SUCCESS "✅ All services are up and healthy!"
 fi
-cd - > /dev/null || exit
+# cd - > /dev/null || exit

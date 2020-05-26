@@ -6,13 +6,12 @@ ARG DOCKER_PORTFOLIO_HOME
 ARG DOCKER_APP_CODE
 ENV HOME="/home" \
     PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
-    APP_CODE=${DOCKER_APP_CODE} \
     PYTHONPATH=${PORTFOLIO_HOME}
 
 # Add additional basic packages.
 # * gcc libpq-dev python3-dev: psycopg2 source dependencies
 # * curl: to healthcheck services with http response
-# * vim: Because it's awesome?
+# * vim: editing files
 # * procps: useful utilities such as ps, top, vmstat, pgrep,...
 # Clean the apt cache
 RUN apt-get update \

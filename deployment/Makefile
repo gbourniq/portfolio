@@ -8,7 +8,7 @@ up: env-validation
 	@ cd docker-deployment/ && docker-compose ${COMPOSE_ARGS} up -d
 
 check-services-health: env-validation
-	@ cd .. && ./scripts/check_services_health.sh
+	@ cd docker-deployment && ../../scripts/check_services_health.sh
 
 down: env-validation
 	@ cd docker-deployment/ && docker-compose ${COMPOSE_ARGS} down --remove-orphans || true

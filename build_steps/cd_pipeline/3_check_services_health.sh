@@ -12,7 +12,9 @@ function exit_error() {
   exit 1
 }
 
+cd deployment/docker-deployment
 source ./scripts/check_services_health.sh
+cd -
 
 if [[ ${deployment_unhealthy:?} == True ]]; then
   exit_error "Unhealthy deployment! Aborting."
