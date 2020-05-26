@@ -13,7 +13,7 @@ function exit_error() {
 }
 
 cd deployment/docker-deployment
-source ./scripts/check_services_health.sh
+source ../../scripts/check_services_health.sh
 cd -
 
 if [[ ${deployment_unhealthy:?} == True ]]; then
