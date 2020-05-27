@@ -29,7 +29,7 @@ run-cd-pipeline:
 
 env:
 	@ ./build_steps/ci_pipeline/1_set_environment.sh
-	@ MESSAGE "Please activate the conda environment and source your environment variables:"
+	@ INFO "Please activate the conda environment and source your environment variables:"
 	@ MESSAGE "- conda activate ${CONDA_ENV_NAME}"
 	@ MESSAGE "- source .env"
 
@@ -40,15 +40,8 @@ pre-commit:
 lint: 
 	@ ./build_steps/ci_pipeline/2_lint_code.sh
 
-tests-local: 
-	@ cd app && pytest --cov=. --cov-report=term-missing && cd -
-
-tests-docker: tests-rebuild-dependencies
+tests:
 	@ ./build_steps/ci_pipeline/3_run_pytest.sh
-
-tests-rebuild-dependencies:
-	@ docker build -f deployment/docker-build/tests.Dockerfile -t ${IMAGE_REPOSITORY}:tests .
-	@ SUCCESS "${IMAGE_REPOSITORY}:tests built successfully"
 
 # ----------------------------------------------------
 #

@@ -176,18 +176,14 @@ Unit-tests and integration tests are run with `pytest-django` to cover the follo
 * Form validation and processing
 * Template rendering
 
-There are ~70 tests which cover ~98% of the application code. The tests will require the app to read/write to a Postgres test database, therefore two distinct commands are available.
-
-To run the tests using a local Postgres database:
+There are ~70 tests which cover ~98% of the application code, which can be run with:
 ```
-make tests-local
+make tests
 ```
 
-To run the tests using a Postgres docker container:
-```
-make tests-docker
-```
-
+**Note:** The tests will require the app to read/write to a Postgres test database. Therefore tests can be run in two different ways:
+* Locally, if `POSTGRES_HOST` is set to `localhost` (`BAREMETAL_DEPLOYMENT=True`)
+* Inside containers, if `POSTGRES_HOST` is set to `postgres` (`BAREMETAL_DEPLOYMENT=False`)
 
 
 ### Versioning

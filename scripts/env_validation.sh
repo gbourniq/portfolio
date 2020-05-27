@@ -107,15 +107,19 @@ VALIDATION_FAILED=False
 validate_env
 validate_functions
 if [[ $BAREMETAL_DEPLOYMENT == False ]]; then
-    INFO "BAREMETAL_DEPLOYMENT is set to False. Run app with Docker!"
+    INFO "Please run app using Docker! (BAREMETAL_DEPLOYMENT=False)"
     validate_docker_compose_env
+elif [[ $BAREMETAL_DEPLOYMENT == True ]]; then
+    INFO "Please run app locally! (BAREMETAL_DEPLOYMENT=True)"
+else
+    set_as_failed "$BAREMETAL_DEPLOYMENT not set correctly! Aborting."
 fi
 
 # Success message if set_as_failed() not called
 if [[ $BUILD == prod ]] && [[ $VALIDATION_FAILED != True ]]; then
-    MESSAGE "✅ [PROD build] Secret environment variables are all set!"
+    SUCCESS "[PROD build] Secret environment variables are all set!"
 elif [[ $BUILD == dev ]] && [[ $VALIDATION_FAILED != True ]]; then
-    MESSAGE "✅ [DEV build] Secret environment variables are all set!"
+    SUCCESS "[DEV build] Secret environment variables are all set!"
 else
-    ERROR "❌ Oops.. Environment validation has failed!"
+    ERROR "Oops.. Environment validation has failed!"
 fi
