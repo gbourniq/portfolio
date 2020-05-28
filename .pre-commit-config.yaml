@@ -34,16 +34,12 @@ repos:
         entry: black
         types: [python]
 
-      # - id: append-id
-      #   name: append-id
-      #   stages: [commit-msg]
-      #   language: system
-      #   entry: scripts/append_id_to_commit_message.sh
-
       - id: pytest
         name: pytest
-        stages: [push]
+        stages: [commit]
         language: system
-        entry: pytest
-        args: ["-qx", "-Wignore", "--testmon"]
+        entry: ./build_steps/ci_pipeline/3_run_pytest.sh
         types: [python]
+
+
+        
