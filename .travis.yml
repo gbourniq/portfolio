@@ -1,15 +1,28 @@
 ---
 sudo: required
 
+# We need the systemd for kubeadm, which is default from 16.04+
+dist: xenial
+
+env:
+  global:
+    - CHANGE_MINIKUBE_NONE_USER=true
+    - MINIKUBE_WANTUPDATENOTIFICATION=false
+    - MINIKUBE_WANTREPORTERRORPROMPT=false
+    - MINIKUBE_HOME=$HOME
+    - CHANGE_MINIKUBE_NONE_USER=true
+    - KUBECONFIG=$HOME/.kube/config
+    - DOCKER_COMPOSE_VERSION=1.23.2
+
 services:
   - docker
 
-env:
-  DOCKER_COMPOSE_VERSION: 1.23.2
-
 before_install:
+  # Ensures $BAREMETAL_DEPLOYMENT set to False
   - source .dev.env
   - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo BAREMETAL_DEPLOYMENT must be set to False for Travis CI; exit 1; fi
+  # Required for Kubernetes
+  - sudo apt-get -qq -y install conntrack
 
 install:
   # Install docker-compose
@@ -17,7 +30,7 @@ install:
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
-  # Install conda
+  # Install Miniconda
   - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
   - bash miniconda.sh -b -p $HOME/miniconda
   - source "$HOME/miniconda/etc/profile.d/conda.sh"
@@ -25,15 +38,20 @@ install:
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
   - conda info -a
-  # install sshpass on Travis instance for Ansible to use ssh password authentication
-  # macOS: brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
+  # Install sshpass on Travis instance for Ansible to use ssh password authentication
   - sudo apt-get install sshpass make
-
+  # Install kubectl, which is a requirement for using minikube.
+  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.18.1/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+  # Install Minikube
+  - curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.8.1/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+  - mkdir -p $HOME/.kube $HOME/.minikube
+  - touch $KUBECONFIG
+  - sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v1.18.1
+  - minikube update-context --profile=minikube
+  - "sudo chown -R travis: /home/travis/.minikube/"
+  - eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
 
 script:
+  - ./deployment/kubernetes/run_redis_pod.sh
   - make run-ci-cd-pipeline
-
-
-
-
 
