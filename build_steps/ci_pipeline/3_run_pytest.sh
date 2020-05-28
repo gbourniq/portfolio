@@ -40,8 +40,8 @@ function run_test_with_docker() {
   build_test_image
   remove_services
   start_services
-  source ./scripts/check_services_health.sh
-  if ! (docker exec -it app-tests sh -c "cd app && pytest --cov=. --cov-report=term-missing -vx")
+  # source ./scripts/check_services_health.sh
+  if ! (docker exec -it app-tests sh -c "cd app && pytest --cov=. --cov-report=term-missing -x")
   then
       exit_error "Some tests have failed! Aborting."
   fi
@@ -59,7 +59,7 @@ function run_test_locally() {
   fi
   conda activate ${CONDA_ENV_NAME}
 
-  if ! (pytest --cov=. --cov-report=term-missing -vx)
+  if ! (pytest --cov=. --cov-report=term-missing -x)
   then
       exit_error "Some tests have failed! Aborting."
   fi

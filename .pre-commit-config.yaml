@@ -36,7 +36,7 @@ repos:
 
       - id: pytest
         name: pytest
-        stages: [commit]
+        stages: [push]
         language: system
         entry: ./build_steps/ci_pipeline/3_run_pytest.sh
         types: [python]

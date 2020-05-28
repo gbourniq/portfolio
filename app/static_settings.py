@@ -42,7 +42,6 @@ ENABLE_S3_FOR_DJANGO_FILES = os.getenv("ENABLE_S3_FOR_DJANGO_FILES") == "True"
 
 # ======================= CHECK ENV VARIABLES ARE SET =========================
 
-
 ENV_VARS = [
     "SECRET_KEY",
     "ALLOWED_HOSTS",
