@@ -26,12 +26,12 @@ install:
   - sudo apt-get install sshpass make
 
 before_script:
-  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI" && exit 1; fi
-  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI" && travis_terminate 1; fi
+  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI"; exit 1; fi
+  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI"; travis_terminate 1; fi
 
 script:
-  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI" && exit 1; fi
-  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI" && travis_terminate 1; fi
+  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI"; exit 1; fi
+  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI"; travis_terminate 1; fi
   - make run-ci-cd-pipeline
 
 
