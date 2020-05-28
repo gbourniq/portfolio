@@ -32,6 +32,8 @@ before_script:
 script:
   - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI"; exit 1; fi
   - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI"; travis_terminate 1; fi
+  - exit 1
+  - travis_terminate 1
   - make run-ci-cd-pipeline
 
 
