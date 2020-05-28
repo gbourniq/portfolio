@@ -7,9 +7,6 @@ services:
 env:
   DOCKER_COMPOSE_VERSION: 1.23.2
 
-before_install:
-  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI" && exit 1; fi
-
 install:
   # Install docker-compose
   - sudo rm /usr/local/bin/docker-compose
@@ -27,6 +24,9 @@ install:
   # install sshpass on Travis instance for Ansible to use ssh password authentication
   # macOS: brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb
   - sudo apt-get install sshpass make
+
+before_script:
+  - if [[ $BAREMETAL_DEPLOYMENT == "True" ]]; then echo "BAREMETAL_DEPLOYMENT must be set to False for Travis CI" && exit 1; fi
 
 script:
   - make run-ci-cd-pipeline
