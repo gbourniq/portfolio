@@ -1,9 +1,14 @@
+import sys
 from typing import List
 
 from main.models import Category, Item
 
 
 class MockCategory:
+    """
+    Class to create Mock Category objects for testing
+    """
+
     DEFAULT_ID = 1
     DEFAULT_CATEGORY_NAME = "Category "
     DEFAULT_SUMMARY = "summary for category "
@@ -13,7 +18,28 @@ class MockCategory:
 
     @staticmethod
     def default_category(_id: int = DEFAULT_ID, **kwargs) -> Category:
-
+        """
+        Generates a default mock Category object when
+        calling MockCategory.default_category().
+        
+        Distincts Category objects can be created:
+        - By providing unique `_id` values.
+        - And/or by providing a number of custom kwargs.
+        
+        Eg.
+        custom_category=MockCategory.default_category(
+            _id=235,
+            category_name="Super Category "
+            category_slug="supercat-"
+        )
+        will generates a Category object with the following
+        attributes:
+            * id = 235
+            * category_name = "Super Category 235"
+            * summary = "summary for category 235"
+            * image = "img-url-235.png"
+            * category_slug = "cat-slug-235"
+        """
         category_data = {
             "id": _id,
             "category_name": kwargs.get(
@@ -33,12 +59,22 @@ class MockCategory:
 
         dummy_category = Category.create(category_data)
 
-        # create_dummy_png_image(dummy_category.image.name)
-
         return dummy_category
 
     @staticmethod
     def default_categories(categories_count: int, **kwargs) -> List[Category]:
+        """
+        Generates a list of default mock Category objects.
+        
+        In the same way as MockCategory.default_category(),
+        the default Category attribute can be overriden.        
+        Eg.
+        custom_categories=MockCategory.default_categories(
+            categories_count=5
+            category_name="Super Category "
+            category_slug="supercat-"
+        )
+        """
         default_categories = []
         for idx in range(categories_count):
             default_categories.append(
@@ -50,6 +86,10 @@ class MockCategory:
 
 
 class MockItem:
+    """
+    Class to create Mock Item objects for testing
+    """
+
     DEFAULT_ID = 1
     DEFAULT_ITEM_NAME = "Item "
     DEFAULT_SUMMARY = "summary for item "
@@ -62,6 +102,21 @@ class MockItem:
     def default_item(
         parent_category: Category, item_id: int = DEFAULT_ID, **kwargs
     ) -> Item:
+        """
+        Generates a default mock Item object when
+        calling MockItem.default_item().
+        
+        In a similar way as the Category class,
+        distincts Item objects can be created:
+        - By providing unique `_id` values.
+        - And/or by providing a number of custom kwargs.
+        
+        One thing to note is the `parent_category` argument,
+        which is the Category object the Item "belong to".
+        
+        If the given category object does not exist in the database,
+        then the item creation fails with an error message.
+        """
 
         if parent_category.category_name not in [
             cat.category_name for cat in Category.objects.all()
@@ -70,6 +125,7 @@ class MockItem:
                 f"""Parent category {parent_category} does not exist in the databse.\n
                   Please creating it prior to running this function."""
             )
+            sys.exit()
 
         _id = f"{parent_category.id}-{item_id}"
 
@@ -101,7 +157,7 @@ class MockItem:
         items_count: int, parent_category: Category, **kwargs
     ) -> List[Item]:
         """
-        Creates list of default items, with Category ID = 1 as parent
+        Generates a list of default items
         """
         default_items = []
         for idx in range(items_count):

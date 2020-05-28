@@ -7,13 +7,17 @@ from app.portfolio import settings
 
 
 class TestDjangoSettingsRedis:
+    """
+    Class to test that settings.py is configured correctly
+    when running the app with Celery/Redis
+    """
 
     static_settings.REDIS_HOST = "redis"
     importlib.reload(settings)
 
     def test_cache_settings(self):
         """
-        Test category created with the expected attributes
+        Test the cache settings are loaded
         """
         assert settings.CACHES == {
             "default": {
@@ -28,7 +32,7 @@ class TestDjangoSettingsRedis:
 
     def test_celery_settings(self):
         """
-        Test category created with the expected attributes
+        Test the celery settings are loaded
         """
         assert all(
             hasattr(settings, attr)
@@ -47,13 +51,17 @@ class TestDjangoSettingsRedis:
 
 
 class TestDjangoSettingsS3:
+    """
+    Class to test that settings.py is configured correctly
+    when running the app using S3 for file storage (static/media files)
+    """
 
     static_settings.ENABLE_S3_FOR_DJANGO_FILES = True
     importlib.reload(settings)
 
-    def test_cache_settings(self):
+    def test_aws_settings(self):
         """
-        Test category created with the expected attributes
+        Test the AWS settings are loaded
         """
         assert settings.AWS_ACCESS_KEY_ID == getenv("AWS_ACCESS_KEY_ID")
         assert settings.AWS_SECRET_ACCESS_KEY == getenv("AWS_SECRET_ACCESS_KEY")
@@ -77,15 +85,14 @@ class TestDjangoSettingsS3:
 
 
 class TestDjangoSettingsLogging:
+    """
+    Class to test that settings.py is configured correctly
+    when enabling logging
+    """
 
     static_settings.LOGGING_ENABLED = True
     importlib.reload(settings)
 
     def test_cache_settings(self):
-        """
-        Test category created with the expected attributes
-        """
-
         assert all(hasattr(settings, attr) for attr in ["LOGGING",])
-
         assert isinstance(settings.LOGGING, Dict)

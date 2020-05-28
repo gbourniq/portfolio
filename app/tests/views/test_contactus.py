@@ -11,7 +11,7 @@ from main.forms import ContactForm
 class TestViewCategory:
     def test_view_contact_us_page(self, client):
         """
-        Test the view Category page when database contains one category object
+        Test the view Category us page is rendered with the Contact Form
         """
 
         response = client.get(reverse("viewContactUs"))
@@ -20,9 +20,11 @@ class TestViewCategory:
         assert response.status_code == 200
         assert isinstance(response.context["form"], ContactForm)
 
-    def test_post_valid_form(self, monkeypatch, client, mock_contact_form):
+    def test_post_valid_form(
+        self, monkeypatch, client, mock_contact_form: ContactForm
+    ):
         """
-        Test the view Category page when database contains one category object
+        Test the `Go Back Home` page is rendered when user submit valid form
         """
 
         create_contact_form = Mock(return_value=mock_contact_form)
@@ -40,7 +42,9 @@ class TestViewCategory:
 
     def test_post_empty_form(self, monkeypatch, client):
         """
-        Test the view Category page when database contains one category object
+        Ensure that, when a user submits an empty form:
+        - Redirect to the current page
+        - Email function not called
         """
 
         send_email = Mock()
@@ -67,10 +71,17 @@ class TestViewCategory:
         ],
     )
     def test_post_invalid_form(
-        self, monkeypatch, client, name, contact_email, subject, message
+        self,
+        monkeypatch,
+        client,
+        name: str,
+        contact_email: str,
+        subject: str,
+        message: str,
     ):
         """
-        Test the view Category page when database contains one category object
+        When invalid forms are submitted, ensures we have a page rediction
+        (return code 302) and that the email function is not called,
         """
 
         send_email = Mock()
@@ -94,9 +105,11 @@ class TestViewCategory:
         assert len(response.templates) == 0
         assert response.status_code == 302
 
-    def test_send_email(self, monkeypatch, client, mock_contact_form):
+    def test_send_email(
+        self, monkeypatch, client, mock_contact_form: ContactForm
+    ):
         """
-        Test the view Category page when database contains one category object
+        Test the send_mail_function is called when a valid form is submitted
         """
 
         send_email = Mock()

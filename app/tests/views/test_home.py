@@ -6,7 +6,7 @@ from django.urls import reverse
 class TestViewCategory:
     def test_view_homepage(self, client):
         """
-        Test the view Category page when database contains one category object
+        Test the view Homepage is rendered
         """
 
         response = client.get(reverse("viewHome"))

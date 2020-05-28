@@ -3,6 +3,10 @@ from django import forms
 
 
 class ContactForm(forms.Form):
+    """
+    Contact Form allowing a user to send a message
+    """
+
     name = forms.CharField(required=True)
     contact_email = forms.EmailField(required=True)
     subject = forms.CharField(required=True)

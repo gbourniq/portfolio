@@ -1,14 +1,16 @@
 import pytest
 
 from app.tests.mocks import MockItem
-from main.models import Category
+from main.models import Category, Item
 
 
 @pytest.mark.django_db(transaction=True)
 class TestItems:
-    def test_create_item(self, mock_default_category, mock_default_item):
+    def test_create_item(
+        self, mock_default_category: Category, mock_default_item: Item
+    ):
         """
-        Test category created with the expected attributes
+        Test item created with the expected attributes
         """
 
         _id = f"{mock_default_category.id}-{MockItem.DEFAULT_ID}"
@@ -27,15 +29,15 @@ class TestItems:
             for cat_attr, dummy_var in attr_mapping.items()
         )
 
-    def test_item_str_cast(self, mock_default_item):
+    def test_item_str_cast(self, mock_default_item: Item):
         """
-        Test category created with the expected attributes
+        Test Item str() method is overridden
         """
         assert str(mock_default_item) == mock_default_item.item_name
 
-    def test_item_json_cast(self, mock_default_item):
+    def test_item_json_cast(self, mock_default_item: Item):
         """
-        Test category created with the expected attributes
+        Test item .json() method
         """
         expected_dict = {
             "item_name": mock_default_item.item_name,
@@ -47,9 +49,9 @@ class TestItems:
         }
         assert mock_default_item.json() == expected_dict
 
-    def test_attr_types(self, mock_default_category, mock_default_item):
+    def test_attr_types(self, mock_default_item: Item):
         """
-        Test category created with the expected attributes types
+        Test item created with the expected attributes types
         """
 
         MockItem.DEFAULT_ID

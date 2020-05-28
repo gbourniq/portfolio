@@ -11,7 +11,8 @@ def create_dummy_png_image(
     image_name: str, IMAGE_SIZE: Tuple[int, int] = (300, 300)
 ) -> None:
     """
-    Create dummy_media_dir if not already present and dummy image
+    Creates a dummy PNG image (and dummy_media_dir if not already present)
+    for testing purposes
     """
     Path(MEDIA_URL).mkdir(parents=True, exist_ok=True)
     Image.new("RGB", IMAGE_SIZE, (255, 255, 255)).save(
@@ -21,7 +22,8 @@ def create_dummy_png_image(
 
 def create_dummy_file(filename: str) -> None:
     """
-    Create dummy_media_dir if not already present and dummy image
+    Creates a dummy file (and dummy_media_dir if not already present)
+    for testing purposes
     """
     Path(MEDIA_URL).mkdir(parents=True, exist_ok=True)
     media_filepath = Path(MEDIA_URL) / filename
@@ -32,5 +34,8 @@ def create_dummy_file(filename: str) -> None:
 def check_image_attributes(
     image: ImageFieldFile, size_check: Tuple[int, int], ext_check: str
 ):
+    """
+    Asserts the given image has the expected size and extension.
+    """
     assert Image.open(image).size == size_check
     assert Path(image.name).suffix == ext_check

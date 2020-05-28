@@ -11,14 +11,24 @@ from main.models import Category, Item
 
 # Helpers functions
 def existing_categories() -> Union[List[Category], None]:
+    """
+    Returns category names for existing categories in the database
+    """
     return [cat.category_name for cat in Category.objects.all()]
 
 
 def existing_items() -> Union[List[Item], None]:
+    """
+    Returns item names for existing items in the database
+    """
     return [itm.item_name for itm in Item.objects.all()]
 
 
 def save_mock_category(monkeypatch, category: Category) -> None:
+    """
+    Mock the resizeImage() function to prevent the need of creating and 
+    processing dummy images when saving Category objects.
+    """
     mock_resize_image = Mock(return_value=category.image)
     monkeypatch.setattr("main.models.resizeImage", mock_resize_image)
     category.save()
@@ -32,13 +42,15 @@ def save_mock_category(monkeypatch, category: Category) -> None:
 ##########################
 @pytest.fixture
 def mock_default_category() -> Category:
-    """Return a default category object (unsaved)"""
+    """Returns a default category object (unsaved)"""
     return MockCategory.default_category()
 
 
 @pytest.fixture
-def load_default_category(mock_default_category: Category, monkeypatch) -> None:
-    """Save a default category object, and return the object"""
+def load_default_category(
+    mock_default_category: Category, monkeypatch
+) -> Category:
+    """Saves a default category object, and return the object"""
     if mock_default_category.category_name not in existing_categories():
         save_mock_category(monkeypatch, mock_default_category)
     return mock_default_category
@@ -46,7 +58,7 @@ def load_default_category(mock_default_category: Category, monkeypatch) -> None:
 
 @pytest.fixture
 def mock_default_categories() -> List[Category]:
-    """Create, save, and return default category objects"""
+    """Returns a default category objects (unsaved)"""
     return MockCategory.default_categories(categories_count=5)
 
 
@@ -54,6 +66,7 @@ def mock_default_categories() -> List[Category]:
 def load_default_categories(
     mock_default_categories: List[Category], monkeypatch
 ) -> List[Category]:
+    """Saves default category objects, and return objects"""
     for mock_default_category in mock_default_categories:
         if mock_default_category.category_name not in existing_categories():
             save_mock_category(monkeypatch, mock_default_category)
@@ -72,8 +85,8 @@ def mock_default_item(load_default_category) -> Item:
 
 
 @pytest.fixture
-def load_default_item(mock_default_item: Item) -> None:
-    """Save a default item object, and the category it belongs to and return the object"""
+def load_default_item(mock_default_item: Item) -> Item:
+    """Save a default item object, and return the object"""
     if mock_default_item.item_name not in existing_items():
         mock_default_item.save()
     return mock_default_item
@@ -89,6 +102,7 @@ def mock_default_items(load_default_category) -> List[Item]:
 
 @pytest.fixture
 def load_default_items(mock_default_items: List[Item]) -> List[Item]:
+    """Save default item objects, and return the objects"""
     [
         mock_default_item.save()
         for mock_default_item in mock_default_items
@@ -101,6 +115,14 @@ def load_default_items(mock_default_items: List[Item]) -> List[Item]:
 def load_default_items_and_categories(
     monkeypatch, categories_count=5, items_count=5
 ) -> List[Item]:
+    """
+    Creates and save a given number of category objects, and for each one,
+    it creates/saves a given number of (children) item objects.
+    
+    Eg. By setting categories_count=5; and items_count=5;
+    This will create and load a total of 5 categories,
+    and 25 items into the database.
+    """
     created_categories = MockCategory.default_categories(categories_count)
     created_items = []
     for category in created_categories:
@@ -120,6 +142,7 @@ def load_default_items_and_categories(
 
 @pytest.fixture
 def mock_contact_form() -> ContactForm:
+    """Fixture for a valid ContactForm"""
     mock_form = ContactForm()
     mock_form.name = "dummy name"
     mock_form.contact_email = "dummy@mail.com"

@@ -60,7 +60,7 @@ class Category(models.Model):
     @classmethod
     def create(cls, dictionary):
         """
-        Class method to instantiate a Category objects with dictionaries.
+        Class method to instantiate a Category objects using dictionaries.
         """
         return cls(**dictionary)
 
@@ -76,7 +76,9 @@ class Category(models.Model):
         }
 
     def save(self, *args, **kwargs):
-        # if not self.id:
+        """
+        Override the save method to resize the image on category.save()
+        """
         self.image = resizeImage(self.image)
         super(Category, self).save(*args, **kwargs)
 
@@ -85,6 +87,9 @@ class Category(models.Model):
         app_label = "main"
 
     def __str__(self):
+        """
+        Override method to have str(category_object) returning category_name
+        """
         return self.category_name
 
 
@@ -106,7 +111,7 @@ class Item(models.Model):
     @classmethod
     def create(cls, dictionary):
         """
-        Class method to instantiate Item objects with dictionaries.
+        Class method to instantiate Item objects using dictionaries.
         """
         return cls(**dictionary)
 
@@ -123,12 +128,12 @@ class Item(models.Model):
             "category_name": self.category_name,
         }
 
-    def save(self, *args, **kwargs):
-        super(Item, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name_plural = "Items"
         app_label = "main"
 
     def __str__(self):
+        """
+        Override method to have str(item_object) returning category_name
+        """
         return self.item_name

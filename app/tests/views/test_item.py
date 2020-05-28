@@ -1,3 +1,5 @@
+from typing import List
+
 import pytest
 from django.db.models.query import QuerySet
 from django.urls import reverse
@@ -9,22 +11,19 @@ from main.models import Category, Item
 class TestViewItems:
     def test_view_items_no_data(self, client):
         """
-        Test that 404 is handled when no item exist
+        Test that 404 is handled when no Category object exist in the database
         """
 
         response = client.get(
-            reverse(
-                "viewItems",
-                kwargs={"category_slug": "sent-your-non-existent-cat"},
-            )
+            reverse("viewItems", kwargs={"category_slug": "cat-slug-1"},)
         )
         assert "main/go_back_home.html" in (t.name for t in response.templates)
         assert response.status_code == 200
         assert response.context["code_handled"] == 404
 
-    def test_view_items_valid_url(self, client, load_default_item):
+    def test_view_items_valid_url(self, client, load_default_item: Item):
         """
-        Test the view Items page when database contains item objects
+        Test that requests to /<category>/ are redirected to /<category>/<first_item>/
         """
 
         response = client.get(
@@ -35,9 +34,9 @@ class TestViewItems:
         assert response.status_code == 302
         assert len(response.templates) == 0
 
-    def test_view_items_invalid_url(self, client, load_default_item):
+    def test_view_items_invalid_url(self, client, load_default_item: Item):
         """
-        Test the view Items page when database contains item objects
+        Test that 404 is handled when category_slug does not correspond to any Category
         """
 
         response = client.get(
@@ -53,7 +52,8 @@ class TestViewItems:
 class TestViewItem:
     def test_view_item_no_data(self, client):
         """
-        Test that 404 is handled when no item exist
+        Test that 404 is handled when no Item object exists in the database
+        No endpoints are available because no category/item exists
         """
 
         response = client.get(
@@ -74,10 +74,15 @@ class TestViewItem:
         "category_slug, item_slug", [("cat-slug-1", "item-slug-1-1"),],
     )
     def test_view_item_valid_url_single_item(
-        self, client, category_slug, item_slug, load_default_item
+        self,
+        client,
+        category_slug: str,
+        item_slug: str,
+        load_default_item: Item,
     ):
         """
-        Test the view Items page when database contains item objects
+        Test the view Item page is rendered with a valid /<category>/<first_item>/ endpoint
+        Valid endpoints are: `/cat-slug-1/item-slug-1-1/`
         """
 
         response = client.get(
@@ -111,10 +116,15 @@ class TestViewItem:
         ],
     )
     def test_view_item_invalid_url_single_item(
-        self, client, category_slug, item_slug, load_default_item
+        self,
+        client,
+        category_slug: str,
+        item_slug: str,
+        load_default_item: Item,
     ):
         """
-        Test the view Items page when database contains item objects
+        Test 404 in handled with invalid /<category>/<first_item>/ endpoints
+        Valid endpoints are: `/cat-slug-1/item-slug-1-1/`
         """
 
         response = client.get(
@@ -133,17 +143,18 @@ class TestViewItem:
 
     @pytest.mark.parametrize(
         "category_slug, item_slug",
-        [
-            # ("cat-slug-1", "item-slug-1-1"),
-            ("cat-slug-1", "item-slug-1-2"),
-            ("cat-slug-1", "item-slug-1-3"),
-        ],
+        [("cat-slug-1", "item-slug-1-2"), ("cat-slug-1", "item-slug-1-3"),],
     )
     def test_view_item_valid_url_multiple_items(
-        self, client, category_slug, item_slug, load_default_items
+        self,
+        client,
+        category_slug: str,
+        item_slug: str,
+        load_default_items: List[Item],
     ):
         """
-        Test the view Items page when database contains item objects
+        Test the view Item page is rendered with valid /<category>/<first_item>/ endpoints
+        Valid endpoints are: `/cat-slug-<1>/item-slug-<1>-<1:5>/`
         """
 
         response = client.get(
@@ -179,10 +190,15 @@ class TestViewItem:
         ],
     )
     def test_view_item_invalid_url_multiple_items(
-        self, client, category_slug, item_slug, load_default_items
+        self,
+        client,
+        category_slug: str,
+        item_slug: str,
+        load_default_items: List[Item],
     ):
         """
-        Test the view Items page when database contains item objects
+        Test 404 in handled with invalid /<category>/<first_item>/ endpoints
+        Valid endpoints are: `/cat-slug-<1>/item-slug-<1>-<1:5>/`
         """
 
         response = client.get(
@@ -212,12 +228,13 @@ class TestViewItem:
     def test_view_item_valid_url_multiple_categories(
         self,
         client,
-        category_slug,
-        item_slug,
-        load_default_items_and_categories,
+        category_slug: str,
+        item_slug: str,
+        load_default_items_and_categories: List[Item],
     ):
         """
-        Test the view Items page when database contains item objects
+        Test the view Item page is rendered with valid /<category>/<first_item>/ endpoints
+        Valid endpoints are: `/cat-slug-<1:5>/item-slug-<1:5>-<1:5>/`
         """
 
         response = client.get(
@@ -255,12 +272,13 @@ class TestViewItem:
     def test_view_item_invalid_url_multiple_categories(
         self,
         client,
-        category_slug,
-        item_slug,
-        load_default_items_and_categories,
+        category_slug: str,
+        item_slug: str,
+        load_default_items_and_categories: List[Item],
     ):
         """
-        Test the view Items page when database contains item objects
+        Test 404 in handled with invalid /<category>/<first_item>/ endpoints
+        Valid endpoints are: `/cat-slug-<1:5>/item-slug-<1:5>-<1:5>/`
         """
 
         response = client.get(

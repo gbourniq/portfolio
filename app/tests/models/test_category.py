@@ -1,5 +1,6 @@
 import shutil
 from pathlib import Path
+from typing import List, Tuple
 from unittest.mock import Mock
 
 import pytest
@@ -13,12 +14,12 @@ from app.tests.utils import (
     create_dummy_file,
     create_dummy_png_image,
 )
-from main.models import CROP_SIZE
+from main.models import CROP_SIZE, Category
 
 
 @pytest.mark.django_db(transaction=True)
 class TestCategory:
-    def test_create_category(self, mock_default_category):
+    def test_create_category(self, mock_default_category: Category):
         """
         Test category created with the expected attributes
         """
@@ -37,15 +38,15 @@ class TestCategory:
             for cat_attr, dummy_var in attr_mapping.items()
         )
 
-    def test_category_str_cast(self, mock_default_category):
+    def test_category_str_cast(self, mock_default_category: Category):
         """
-        Test category created with the expected attributes
+        Test category str method is overridden
         """
         assert str(mock_default_category) == mock_default_category.category_name
 
-    def test_category_json_cast(self, mock_default_category):
+    def test_category_json_cast(self, mock_default_category: Category):
         """
-        Test category created with the expected attributes
+        Test category .json() method
         """
         expected_dict = {
             "category_name": mock_default_category.category_name,
@@ -55,7 +56,7 @@ class TestCategory:
         }
         assert mock_default_category.json() == expected_dict
 
-    def test_attr_types(self, client, mock_default_category):
+    def test_attr_types(self, mock_default_category: Category):
         """
         Test category created with the expected attributes types
         """
@@ -72,9 +73,11 @@ class TestCategory:
             for attr, attr_type in type_mapping.items()
         )
 
-    def test_image_resize_called(self, monkeypatch, mock_default_category):
+    def test_image_resize_called(
+        self, monkeypatch, mock_default_category: Category
+    ):
         """
-        Ensures the resizeImage function is called when saving category
+        Ensures the resizeImage function is called when saving a category
         """
         mock_resize_image = Mock(return_value=mock_default_category.image)
         monkeypatch.setattr("main.models.resizeImage", mock_resize_image)
@@ -103,10 +106,13 @@ class TestCategory:
         ],
     )
     def test_image_resize_success(
-        self, mock_default_category, INITIAL_SIZE, FILE_EXTENTION
+        self,
+        mock_default_category: Category,
+        INITIAL_SIZE: Tuple[int, int],
+        FILE_EXTENTION: str,
     ):
         """
-        Ensures the resizeImage function returns the expected image
+        Test that the resizeImage function works as expected
         when saving a Category object
         """
 
@@ -140,10 +146,14 @@ class TestCategory:
         ],
     )
     def test_image_resize_failed(
-        self, mock_default_category, FILE_EXTENTION, EXCEPTION
+        self,
+        mock_default_category: Category,
+        FILE_EXTENTION: str,
+        EXCEPTION: Exception,
     ):
         """
-        Simulate what happens when user upload an invalid file format
+        Test the expected Exception is raised when an invalid file format is submitted.
+        Clean up created test images
         """
 
         mock_default_category.image = f"dummy_image_base_name.{FILE_EXTENTION}"
@@ -153,3 +163,11 @@ class TestCategory:
             mock_default_category.save()
 
         shutil.rmtree(Path(MEDIA_URL))
+
+    def test_load_categories(self, load_default_categories: List[Category]):
+        """
+        Test that load_default_categories insert the expected number
+        of Category objects into the database
+        """
+
+        assert Category.objects.all().count() == len(load_default_categories)

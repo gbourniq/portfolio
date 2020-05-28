@@ -176,7 +176,7 @@ Unit-tests and integration tests are run with `pytest-django` to cover the follo
 * Form validation and processing
 * Template rendering
 
-There are ~70 tests which cover ~98% of the application code, which can be run with:
+There are ~70 tests which cover ~95% of the application code, which can be run with:
 ```
 make tests
 ```

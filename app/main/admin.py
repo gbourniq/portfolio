@@ -2,10 +2,16 @@ from django.contrib import admin
 from django.db import models
 from tinymce.widgets import TinyMCE
 
+# from .models import Category, Item
 from .models import Category, Item
 
 
 class ItemAdmin(admin.ModelAdmin):
+    """
+    Class to add an Item from the Django admin page.
+    Features the TinyMCE plugin to provide text formatting options
+    """
+
     fieldsets = [
         ("Title/date", {"fields": ["item_name", "date_published"]}),
         ("URL", {"fields": ["item_slug"]}),
@@ -19,6 +25,10 @@ class ItemAdmin(admin.ModelAdmin):
 
 
 class CategoryAdmin(admin.ModelAdmin):
+    """
+    Class to add an Item from the Django admin page.
+    """
+
     fieldsets = [
         (
             "Category details",
@@ -27,6 +37,6 @@ class CategoryAdmin(admin.ModelAdmin):
     ]
 
 
-# Register your models here.
+# Register models
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category, CategoryAdmin)

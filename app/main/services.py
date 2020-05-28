@@ -4,7 +4,7 @@ from typing import List, Union
 from django.core.mail import BadHeaderError, send_mail
 from django.http import Http404
 
-from app.static_settings import REDIS_HOST
+from app import static_settings
 
 from .forms import ContactForm
 from .models import Category, Item
@@ -16,8 +16,7 @@ logger = logging.getLogger(__name__)
 
 def _is_category_exist(category_slug: str) -> bool:
     """
-    Returns True if category object exists for a given slug.
-    Returns False otherwose
+    Returns True if category object exists for a given slug, False otherwise
     """
     return (
         True
@@ -47,7 +46,7 @@ def get_items_by_category_slug(
 ) -> Union[List[Item], None]:
     """
     Returns Item objects by the given category_slug.
-    May return None is given category does not contain any item.
+    May return None is given (parent) category is not associated to any (child) item.
     """
     if not _is_category_exist(category_slug):
         logger.warning(f"Category {category_slug} does not exist.")
@@ -64,9 +63,9 @@ def send_email(
     request, to_emails: List[str], from_email: str
 ) -> Union[None, ContactForm]:
     """
-    Send email from the contact page, using the fromemail specified.
-    ToEmail variable is defined as an environment variable in .env
-    Task may be Asynchronous depending on whether running with celery
+    Send an email from the contact page.
+    Task may be Asynchronous depending on whether running with celery.
+    Returns None is the form is invalid.
     """
     form = ContactForm(request.POST)
 
@@ -95,7 +94,11 @@ def send_email(
 
 
 def send_email_function():
-    if REDIS_HOST:
+    """
+    Set the email function to be either django.core.mail.send_mail, if REDIS_HOST
+    exists, or a celery task which calls django.core.mail.send_email otherwise.
+    """
+    if static_settings.REDIS_HOST:
         return send_email_celery.delay
     else:
         return send_mail
