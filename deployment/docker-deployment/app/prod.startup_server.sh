@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd /home/portfolio/app
+cd /home/portfoliouser/portfolio/app
 
 echo "Collecting static files"
 python manage.py collectstatic --no-input -v 0

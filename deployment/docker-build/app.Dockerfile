@@ -2,11 +2,10 @@ FROM python:3.8-slim-buster as base_build
 
 LABEL author="Guillaume Bournique <gbournique@gmail.com>"
 
-ARG DOCKER_PORTFOLIO_HOME
-ARG DOCKER_APP_CODE
-ENV HOME="/home" \
-    PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
-    PYTHONPATH=${PORTFOLIO_HOME}
+ARG USERNAME="portfoliouser"
+ENV PORTFOLIO_HOME="/home/${USERNAME}" \
+    PYTHONPATH=${PORTFOLIO_HOME} \
+    USERNAME=${USERNAME}
 
 # Add additional basic packages.
 # * gcc libpq-dev python3-dev: psycopg2 source dependencies
@@ -18,30 +17,30 @@ RUN apt-get update \
     && apt-get install -yq --no-install-recommends gcc libpq-dev python3-dev curl vim procps \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user
-ARG USERNAME="app_user"
-RUN adduser --disabled-password --gecos "" $USERNAME \ 
-    && usermod -o -u 0 $USERNAME
-# Sets default user for docker containers
-USER $USERNAME
+# Add non-root user
+RUN adduser --disabled-password --gecos "" $USERNAME
 
-# Set work directory
+# Set working directory
 WORKDIR ${PORTFOLIO_HOME}
 
 # Copy dependencies files
-ARG POETRY_LOCK_FILE
-ARG PYPROJECT_FILE
+ARG POETRY_LOCK_FILE=poetry.lock
+ARG PYPROJECT_FILE=pyproject.toml
 COPY $POETRY_LOCK_FILE $PYPROJECT_FILE ./
 
-# Install Poetry and project dependencies
-ARG POETRY_VERSION
-RUN pip install "poetry==$POETRY_VERSION"
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi
+# Install poetry and app dependencies
+ARG POETRY_VERSION=1.0.5
+RUN pip install "poetry==$POETRY_VERSION" \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-dev --no-interaction --no-ansi \
+    && rm $POETRY_LOCK_FILE $PYPROJECT_FILE
 
-# Add project source code
+# Add project source code to /home/portfolio
 ARG PORTFOLIO_TARBALL
-ADD $PORTFOLIO_TARBALL ${HOME}
+ADD $PORTFOLIO_TARBALL /home/portfoliouser/
 
-# Informs Docker that the container listens on 8000 at runtime
-EXPOSE 8080
+# Change ownership of /home/portfolio to portfoliouser
+RUN chown -R ${USERNAME}:${USERNAME} ${PORTFOLIO_HOME}
+
+# Set default user to be non-root portfoliouser
+USER $USERNAME

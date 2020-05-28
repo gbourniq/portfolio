@@ -46,8 +46,7 @@ function package_app() {
 function build_image() {
   INFO "Building docker image ${IMAGE_REPOSITORY}:${TAG}"
   docker build -f ${DOCKERFILE_PATH} -t ${IMAGE_REPOSITORY}:${TAG} \
-    --build-arg DOCKER_PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
-    --build-arg DOCKER_APP_CODE=${DOCKER_APP_CODE} \
+    --build-arg PORTFOLIO_HOME=${DOCKER_PORTFOLIO_HOME} \
     --build-arg PORTFOLIO_TARBALL=./bin/portfolio.tar.gz . \
     --build-arg POETRY_VERSION=${POETRY_VERSION} \
     --build-arg POETRY_LOCK_FILE=./poetry.lock \

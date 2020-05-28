@@ -1,5 +1,5 @@
 #!/bin/sh
 
-cd /home/portfolio/app
+cd /home/portfoliouser/portfolio/app
 
 celery --app=portfolio.celeryconf worker --loglevel=info --concurrency=10 -n worker1.%h
