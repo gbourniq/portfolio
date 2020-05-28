@@ -16,7 +16,7 @@ exclude = '''
 '''
 
 [tool.poetry]
-name = "portfolio"
+name = "app"
 version = "1.0.0"
 description = "Personal Portfolio Project"
 authors = ["Guillaume Bournique <gbournique@gmail.com>"]
