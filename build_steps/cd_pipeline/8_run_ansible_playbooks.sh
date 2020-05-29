@@ -68,13 +68,12 @@ function run_qa_playbook() {
 
 
 # Start script
-validate_environment_variables
 if [ "$RUN_ANSIBLE_PLAYBOOK" != True ]; then
   INFO "RUN_ANSIBLE_PLAYBOOK is not set to True. Aborting."
   playbook_success=ExitNoTidyUp
   exit 0
 fi
-
+validate_environment_variables
 activate_environment
 INFO "Run the Ansible QA playbook..."
 cd ansible
