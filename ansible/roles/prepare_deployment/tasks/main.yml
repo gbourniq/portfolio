@@ -64,6 +64,15 @@
     path: /tmp/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE }}.tar.gz
     state: absent
 
+- name: Create certs/ directory if not exists
+  become: yes
+  file:
+    path: "{{ PORTFOLIO_ROOT_DIR }}/deployment/docker-deployment/nginx/certs"
+    state: directory
+    recurse: yes
+    owner: ubuntu
+    group: ubuntu
+    
 - name: Download SSL CA signed certificate from S3
   become: yes
   aws_s3:
