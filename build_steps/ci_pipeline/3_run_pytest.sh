@@ -40,7 +40,7 @@ function run_test_with_docker() {
   build_test_image
   remove_services
   start_services
-  # source ./scripts/check_services_health.sh
+  source ./scripts/check_services_health.sh
   if ! (docker exec -it app-tests sh -c "cd app && pytest --cov=. --cov-report=term-missing -x")
   then
       exit_error "Some tests have failed! Aborting."
