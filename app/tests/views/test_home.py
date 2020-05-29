@@ -4,6 +4,7 @@ from django.urls import reverse
 
 @pytest.mark.django_db(transaction=True)
 class TestViewCategory:
+    @pytest.mark.integration
     def test_view_homepage(self, client):
         """
         Test the view Homepage is rendered

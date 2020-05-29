@@ -9,6 +9,7 @@ from main.forms import ContactForm
 
 @pytest.mark.django_db(transaction=True)
 class TestViewCategory:
+    @pytest.mark.integration
     def test_view_contact_us_page(self, client):
         """
         Test the view Category us page is rendered with the Contact Form
@@ -20,6 +21,7 @@ class TestViewCategory:
         assert response.status_code == 200
         assert isinstance(response.context["form"], ContactForm)
 
+    @pytest.mark.integration
     def test_post_valid_form(
         self, monkeypatch, client, mock_contact_form: ContactForm
     ):
@@ -40,6 +42,7 @@ class TestViewCategory:
         assert "main/go_back_home.html" in (t.name for t in response.templates)
         assert response.status_code == 200
 
+    @pytest.mark.integration
     def test_post_empty_form(self, monkeypatch, client):
         """
         Ensure that, when a user submits an empty form:
@@ -60,6 +63,7 @@ class TestViewCategory:
         assert len(response.templates) == 0
         assert response.status_code == 302
 
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "name, contact_email, subject, message",
         [
@@ -105,6 +109,7 @@ class TestViewCategory:
         assert len(response.templates) == 0
         assert response.status_code == 302
 
+    @pytest.mark.integration
     def test_send_email(
         self, monkeypatch, client, mock_contact_form: ContactForm
     ):

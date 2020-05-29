@@ -87,24 +87,9 @@ class TestCategory:
         mock_resize_image.assert_called_once_with(mock_default_category.image)
 
     @pytest.mark.parametrize(
-        "INITIAL_SIZE, FILE_EXTENTION",
-        [
-            ((800, 1280), "png"),
-            ((2000, 200), "png"),
-            ((200, 2000), "png"),
-            ((100, 100), "png"),
-            ((800, 1280), "jpeg"),
-            ((2000, 200), "jpeg"),
-            ((200, 2000), "jpeg"),
-            ((100, 100), "jpeg"),
-            ((800, 1280), "bmp"),
-            ((2000, 200), "bmp"),
-            ((200, 2000), "bmp"),
-            ((500, 500), "bmp"),
-            ((800, 1280), "tiff"),
-            ((500, 500), "tiff"),
-        ],
+        "INITIAL_SIZE", [(800, 1280), (2000, 200), (200, 2000), (100, 100)]
     )
+    @pytest.mark.parametrize("FILE_EXTENTION", ["png", "jpeg", "bmp", "tiff"])
     def test_image_resize_success(
         self,
         mock_default_category: Category,

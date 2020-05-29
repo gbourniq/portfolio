@@ -9,6 +9,7 @@ from main.models import Category, Item
 
 @pytest.mark.django_db(transaction=True)
 class TestViewItems:
+    @pytest.mark.integration
     def test_view_items_no_data(self, client):
         """
         Test that 404 is handled when no Category object exist in the database
@@ -21,6 +22,7 @@ class TestViewItems:
         assert response.status_code == 200
         assert response.context["code_handled"] == 404
 
+    @pytest.mark.integration
     def test_view_items_valid_url(self, client, load_default_item: Item):
         """
         Test that requests to /<category>/ are redirected to /<category>/<first_item>/
@@ -34,6 +36,7 @@ class TestViewItems:
         assert response.status_code == 302
         assert len(response.templates) == 0
 
+    @pytest.mark.integration
     def test_view_items_invalid_url(self, client, load_default_item: Item):
         """
         Test that 404 is handled when category_slug does not correspond to any Category
@@ -50,6 +53,7 @@ class TestViewItems:
 
 @pytest.mark.django_db(transaction=True)
 class TestViewItem:
+    @pytest.mark.integration
     def test_view_item_no_data(self, client):
         """
         Test that 404 is handled when no Item object exists in the database
@@ -70,6 +74,7 @@ class TestViewItem:
         assert response.status_code == 200
         assert response.context["code_handled"] == 404
 
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "category_slug, item_slug", [("cat-slug-1", "item-slug-1-1"),],
     )
@@ -107,6 +112,7 @@ class TestViewItem:
         assert isinstance(response.context["category_slug"], str)
         assert isinstance(response.context["category_name"], Category)
 
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "category_slug, item_slug",
         [
@@ -141,6 +147,7 @@ class TestViewItem:
         assert response.context["code_handled"] == 404
         assert "main/go_back_home.html" in (t.name for t in response.templates)
 
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "category_slug, item_slug",
         [("cat-slug-1", "item-slug-1-2"), ("cat-slug-1", "item-slug-1-3"),],
@@ -179,6 +186,7 @@ class TestViewItem:
         assert isinstance(response.context["category_slug"], str)
         assert isinstance(response.context["category_name"], Category)
 
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "category_slug, item_slug",
         [
@@ -215,6 +223,7 @@ class TestViewItem:
         assert response.context["code_handled"] == 404
         assert "main/go_back_home.html" in (t.name for t in response.templates)
 
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "category_slug, item_slug",
         [
@@ -259,6 +268,7 @@ class TestViewItem:
         assert isinstance(response.context["category_slug"], str)
         assert isinstance(response.context["category_name"], Category)
 
+    @pytest.mark.integration
     @pytest.mark.parametrize(
         "category_slug, item_slug",
         [
