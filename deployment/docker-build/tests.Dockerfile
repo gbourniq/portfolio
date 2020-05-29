@@ -22,10 +22,7 @@ RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 
 RUN mkdir portfolio/ \
-    && chown -R ${USERNAME}:${USERNAME} ${PORTFOLIO_HOME} \
-    # Create empty app/ dir with non-root permission,
-    # to prevent permission denied when mounting app/ with compose file
-    && mkdir portfolio/app/ \
-    && chown ${USERNAME}:${USERNAME} portfolio/app/
+    && chown -R ${USERNAME}:${USERNAME} ${PORTFOLIO_HOME}
 
-USER $USERNAME
+# USER $USERNAME
+USER root
