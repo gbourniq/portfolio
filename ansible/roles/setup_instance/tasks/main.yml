@@ -1,6 +1,7 @@
 # Install Packages
 
 - name: Install packages
+  become: yes
   apt:
     name: ['awscli', 'python3', 'python3-pip', 'make', 'curl']
     update_cache: true
