@@ -1,0 +1,180 @@
+# Yaml file
+# Configuration file for Portfolio App pod
+# used by Helm for Kubernetes deployment
+
+# ----------------------------------------------------
+# 
+# portfolio-app configuration
+#
+# ----------------------------------------------------
+
+replicaCount: 1
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+resources:
+  limits:
+    cpu: "300m"
+    memory: "500Mi"
+  requests:
+    cpu: "300m"
+    memory: "500Mi"
+
+# Wait for postgres containers
+# Wait 30s before starting webserver
+initialStartupDelay: "50"
+# Wait 60s before starting probes
+initialDelaySeconds: "60"
+
+readinessProbe:
+  periodSeconds: 20
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 2
+
+livenessProbe:
+  periodSeconds: 20
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 2
+
+service:
+  type: NodePort
+  ports:
+    - name: webserver
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 31435
+
+ingress:
+  enabled: false
+  # annotations:
+  #   kubernetes.io/ingress.class: nginx
+  # host: ""
+  # path: ""
+  # service: "{{ .Release.Name }}-{{ .Chart.Name }}"
+  # port: 8080
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+
+env: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "portfoliouser"
+
+
+# ----------------------------------------------------
+# 
+# Global configuration
+#
+# ----------------------------------------------------
+
+global:
+  # Build type (dev/prod)
+  # ----------------------------------------------------
+  build: dev
+
+  # Image
+  # ----------------------------------------------------
+  image:
+    pullPolicy: IfNotPresent
+    repository: gbournique/portfolio_app_demo
+    tag: latest
+
+  # Configmaps
+  # ----------------------------------------------------
+  portfolio_file:
+    - name: start-server-script
+      mountPath: /home/portfoliouser/portfolio/app/{{ .Values.global.build }}.startup_server.sh
+      subPath: "{{ .Values.global.build }}.startup_server.sh"
+      readOnly: true
+      sourceFilepath: config/{{ .Values.global.build }}.startup_server.sh
+    - name: start-celery-script
+      mountPath: /home/portfoliouser/portfolio/app/startup_celery.sh
+      subPath: "startup_celery.sh"
+      readOnly: true
+      sourceFilepath: config/startup_celery.sh
+  portfolio_env:
+    - name: portfolio-env
+      data:
+        PYTHONPATH: "/home/portfoliouser/portfolio/"
+        DEBUG: "True"
+        ALLOWED_HOSTS: "*"
+        LOGGING_ENABLED: "True"
+        # Postgres
+        POSTGRES_DB: "portfoliodb"
+        POSTGRES_USER: "postgres"
+        POSTGRES_HOST: "{{ .Release.Name }}-postgres-portfolio"
+        POSTGRES_PORT: "5432"
+        # Redis
+        REDIS_HOST: "{{ .Release.Name }}-redis-portfolio-master"
+        REDIS_PORT: "6379"
+        # Email Contact page
+        EMAIL_HOST_USER: "dummy@email.com"
+        EMAIL_HOST_PASSWORD: "dummypass"
+        # aws s3
+        ENABLE_S3_FOR_DJANGO_FILES: "True"
+        AWS_STORAGE_BUCKET_NAME: "portfoliogb"
+        AWS_DEFAULT_REGION: "eu-west-2"
+
+  # Secrets
+  # ----------------------------------------------------
+  portfolio_secret:
+    - name: portfolio-secrets
+      data:
+        SECRET_KEY: "azxey(r8ieohsd1qc93j*%@+1+@-c&kwbgugz2ojvb@sj=!4*c"
+        POSTGRES_PASSWORD: "postgres"
+        AWS_ACCESS_KEY_ID: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        AWS_SECRET_ACCESS_KEY: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+
+# ----------------------------------------------------
+#
+#  Databases
+#
+# ----------------------------------------------------
+
+postgres-portfolio:
+  enabled: true
+  postgresqlUsername: postgres
+  postgresqlPassword: postgres
+  postgresqlDatabase: portfoliodb
+  resources:
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+    requests:
+      cpu: "300m"
+      memory: "500Mi"
+  persistence:
+    size:
+      4Gi
+
+redis-portfolio:
+  enabled: true
+  usePassword: false
+  cluster:
+    enabled: False
+  master:
+    resources:
+      limits:
+        cpu: "300m"
+        memory: "500Mi"
+      requests:
+        cpu: "300m"
+        memory: "500Mi"
+    persistence:
+      size:
+        4Gi

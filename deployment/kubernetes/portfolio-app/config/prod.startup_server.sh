@@ -1,0 +1,1 @@
+../../../docker-deployment/app/prod.startup_server.sh
