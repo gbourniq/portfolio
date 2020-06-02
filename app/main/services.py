@@ -93,12 +93,14 @@ def send_email(
         return None
 
 
-def send_email_function():
+def send_email_function(
+    subject: str, body: str, from_email: str, to_emails: List[str]
+):
     """
     Set the email function to be either django.core.mail.send_mail, if REDIS_HOST
     exists, or a celery task which calls django.core.mail.send_email otherwise.
     """
     if static_settings.REDIS_HOST:
-        return send_email_celery.delay
+        send_email_celery.delay(subject, body, from_email, to_emails)
     else:
-        return send_mail
+        send_mail(subject, body, from_email, to_emails)
