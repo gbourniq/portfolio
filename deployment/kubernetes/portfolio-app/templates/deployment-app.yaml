@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "portfolio-app.labels" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCountApp }}
   selector:
     matchLabels:
       {{- include "portfolio-app.selectorLabels" . | nindent 6 }}

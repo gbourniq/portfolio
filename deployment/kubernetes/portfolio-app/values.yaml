@@ -8,7 +8,9 @@
 #
 # ----------------------------------------------------
 
-replicaCount: 1
+replicaCountApp: 1
+
+replicaCountWorker: 1
 
 podSecurityContext:
   fsGroup: 1000
@@ -122,9 +124,6 @@ global:
         # Redis
         REDIS_HOST: "{{ .Release.Name }}-redis-portfolio-master"
         REDIS_PORT: "6379"
-        # Email Contact page
-        EMAIL_HOST_USER: "dummy@email.com"
-        EMAIL_HOST_PASSWORD: "dummypass"
         # aws s3
         ENABLE_S3_FOR_DJANGO_FILES: "True"
         AWS_STORAGE_BUCKET_NAME: "portfoliogb"
@@ -137,8 +136,11 @@ global:
       data:
         SECRET_KEY: "azxey(r8ieohsd1qc93j*%@+1+@-c&kwbgugz2ojvb@sj=!4*c"
         POSTGRES_PASSWORD: "postgres"
-        AWS_ACCESS_KEY_ID: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-        AWS_SECRET_ACCESS_KEY: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        AWS_ACCESS_KEY_ID: "<insert-here>"
+        AWS_SECRET_ACCESS_KEY: "<insert-here>"
+        # Email Contact page
+        EMAIL_HOST_USER: "<insert-here>"
+        EMAIL_HOST_PASSWORD: "<insert-here>"
 
 # ----------------------------------------------------
 #
