@@ -63,5 +63,5 @@ install:
   - PATH=`pwd`/linux-amd64/:$PATH
 
 script:
-  - make run-ci-cd-pipeline
-
+  # - make run-ci-cd-pipeline
+  - make helm-deploy
