@@ -42,7 +42,9 @@ function run_test() {
   fi
 
   INFO "Installing and testing ${RELEASE_NAME} release..."
-  helm install ${RELEASE_NAME} "${CHART_DIR}" --wait --timeout=15m --debug -v=4
+  # helm install ${RELEASE_NAME} "${CHART_DIR}" --wait --timeout=15m --debug -v=4
+  helm install ${RELEASE_NAME} "${CHART_DIR}" --wait --timeout=15m
+
   are_all_deployments_ready
   helm test ${RELEASE_NAME}
   helm uninstall ${RELEASE_NAME}
