@@ -61,7 +61,6 @@ install:
   - wget ${HELM_URL}/${HELM_TGZ}
   - tar xzfv ${HELM_TGZ}
   - PATH=`pwd`/linux-amd64/:$PATH
-  - helm init --client-only
 
 script:
   - make run-ci-cd-pipeline
