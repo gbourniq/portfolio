@@ -20,8 +20,7 @@ function are_commands_available() {
   done
 }
 
-function update_chart_dependencies()
-{
+function update_chart_dependencies() {
   MESSAGE "Add community Bitnami Helm Chart repo and get updates from repo"
   helm repo add "${HELM_BITNAMI_REPO_NAME}" "${HELM_BITNAMI_REPO_URL}"
   helm repo update
@@ -29,7 +28,7 @@ function update_chart_dependencies()
   MESSAGE "Updating chart dependencies..."
   remove_chart_dependencies
   helm dependency update "${CHART_DIR}"
-
+}
 
 function get_deployments() {
 # Get status of the deployments
@@ -40,9 +39,12 @@ function get_deployments() {
 function are_all_deployments_ready() {
 # Check if deployments are ready
   until [[ get_deployments \
-            && ($(get_deployments | wc -l) -eq $(get_deployments | grep True | wc -l)) ]]
-  do
-  printf "\r Waiting for all deployments to be ready...\n"
-  sleep 10
+            && ($(get_deployments | wc -l) -eq $(get_deployments | grep True | wc -l)) ]]; do
+    printf "\r Waiting for all deployments to be ready...\n"
+    sleep 10
   done
 }
+
+
+
+
