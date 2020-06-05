@@ -64,4 +64,4 @@ install:
 
 script:
   # - make run-ci-cd-pipeline
-  - make helm-deploy
+  - make helm-test

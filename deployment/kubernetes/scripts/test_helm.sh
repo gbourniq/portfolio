@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # exit with error status on first failure
-set -ex
+set -e
 
 # Set directory paths
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )
@@ -42,7 +42,7 @@ function run_test() {
   fi
 
   INFO "Installing and testing ${RELEASE_NAME} release..."
-  helm install ${RELEASE_NAME} "${CHART_DIR}" --wait
+  helm install ${RELEASE_NAME} "${CHART_DIR}" --wait --timeout=15m --debug -v=4
   are_all_deployments_ready
   helm test ${RELEASE_NAME}
   helm uninstall ${RELEASE_NAME}

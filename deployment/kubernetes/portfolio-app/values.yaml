@@ -76,7 +76,7 @@ global:
 
 replicaCountApp: 1
 
-replicaCountWorker: 2
+replicaCountWorker: 1
 
 podSecurityContext:
   fsGroup: 1000
@@ -89,18 +89,18 @@ securityContext:
 resources:
   app:
     limits:
-      cpu: "300m"
-      memory: "500Mi"
+      cpu: "200m"
+      memory: "200Mi"
     requests:
-      cpu: "300m"
-      memory: "500Mi"
+      cpu: "200m"
+      memory: "200Mi"
   worker:
     limits:
-      cpu: "300m"
-      memory: "500Mi"
+      cpu: "200m"
+      memory: "200Mi"
     requests:
-      cpu: "300m"
-      memory: "500Mi"
+      cpu: "200m"
+      memory: "200Mi"
 
 # Wait for postgres containers
 # Wait 30s before starting webserver
@@ -158,11 +158,11 @@ postgres-portfolio:
   postgresqlDatabase: portfoliodb
   resources:
     limits:
-      cpu: "300m"
-      memory: "500Mi"
+      cpu: "200m"
+      memory: "200Mi"
     requests:
-      cpu: "300m"
-      memory: "500Mi"
+      cpu: "200m"
+      memory: "200Mi"
   persistence:
     size:
       4Gi
@@ -181,11 +181,11 @@ redis-portfolio:
   master:
     resources:
       limits:
-        cpu: "300m"
-        memory: "500Mi"
+        cpu: "200m"
+        memory: "200Mi"
       requests:
-        cpu: "300m"
-        memory: "500Mi"
+        cpu: "200m"
+        memory: "200Mi"
     persistence:
       size:
         4Gi

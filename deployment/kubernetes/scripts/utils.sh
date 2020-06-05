@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # exit with error status on first failure
-set -ex
+set -e
 
 function remove_chart_dependencies()
 {
