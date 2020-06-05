@@ -1,5 +1,1 @@
-### Playbook for a fresh (not an upgrade) kubernetes deployment
-# - hosts: kubernetes_qa
-#   remote_user: ubuntu
-#   become: yes
-#   roles:
+### To be coming

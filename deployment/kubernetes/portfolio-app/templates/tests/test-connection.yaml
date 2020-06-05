@@ -13,16 +13,8 @@ spec:
       image: busybox
       command: ['sh', '-c']
       args: ['echo e | telnet {{ .Release.Name }}-postgres-portfolio 5432']
-    {{- if .Values.ingress.enabled }}
-    - name: 'wget-web-ui-ingress'
+    - name: 'ping-redis'
       image: busybox
-      command: ['wget']
-      args: ['{{ tpl .Values.ingress.host $ }}']
-    {{- else if contains "NodePort" .Values.service.type }}
-    - name: 'wget-web-ui-nodeport'
-      image: busybox
-      command: ['wget']
-      # to be made dynamic
-      args: ['http://192.168.99.102:31435']
-    {{- end }}
+      command: ['sh', '-c']
+      args: ['echo PING | nc {{ .Release.Name }}-redis-portfolio-master 6379']
   restartPolicy: Never

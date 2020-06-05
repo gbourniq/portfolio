@@ -29,7 +29,7 @@ spec:
           {{- include "portfolio-app.portfolio-env" . | nindent 10 }}
           {{- include "portfolio-app.portfolio-secret" . | nindent 10 }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.resources.worker | nindent 12 }}
           volumeMounts:
             {{- include "portfolio-app.volMounts" . | nindent 12 }}
           command: ["/bin/bash", "-c"]

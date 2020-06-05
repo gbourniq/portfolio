@@ -77,8 +77,20 @@ publish-tagged:
 docker-deploy-tarball-custom:
 	@ ./build_steps/cd_pipeline/7_build_and_push_docker_compose_tarball.sh ${S3_DOCKER_DEPLOY_TARBALL_CUSTOM}
 
+helm-lint:
+	@ ./deployment/kubernetes/scripts/lint_helm.sh
+
+helm-test:
+	@ ./deployment/kubernetes/scripts/test_helm.sh
+
+helm-deploy:
+	@ ./deployment/kubernetes/scripts/deploy_helm.sh
+
+helm-generate-k8s-files:
+	@ ./deployment/kubernetes/scripts/generate_helm_templates.sh
+
 run-ansible-playbook:
-	@ ./build_steps/cd_pipeline/8_run_ansible_playbooks.sh
+	@ ./build_steps/cd_pipeline/9_run_ansible_playbooks.sh
 
 
 # ----------------------------------------------------

@@ -1,4 +1,4 @@
-### Playbook to test docker deployment scripts
+### Playbook to test docker deployment scripts on fresh ec2 instance
 
 - name: Start AWS instance
   hosts: localhost

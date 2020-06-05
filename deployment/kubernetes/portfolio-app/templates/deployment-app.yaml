@@ -20,7 +20,7 @@ spec:
       volumes:
         {{- include "portfolio-app.volumes" . | nindent 8 }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-app
           securityContext:
             {{- include "portfolio-app.securityContext" . | nindent 12 }}
           image: {{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}
@@ -39,7 +39,7 @@ spec:
           readinessProbe:
             {{- include "portfolio-app.readiness-probe" . | nindent 12 }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml .Values.resources.app | nindent 12 }}
           volumeMounts:
             {{- include "portfolio-app.volMounts" . | nindent 12 }}
           command: ["/bin/bash", "-c"]
@@ -52,4 +52,4 @@ spec:
           {{- else -}}
             - >
               . /home/portfoliouser/portfolio/app/{{ .Values.global.build }}.startup_server.sh
-          {{- end -}}
+          {{- end }}

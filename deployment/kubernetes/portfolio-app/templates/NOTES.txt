@@ -1,6 +1,8 @@
-Congratulations! You have just deployed the Portfolio app composed of
-- Django webserver
-- Postgres database
+Congratulations! You have just deployed the Portfolio app composed of the following Pods:
+- Django webserver (x{{ .Values.replicaCountApp }})
+- Celery workers (x{{ .Values.replicaCountWorker }})
+- Postgres (x1)
+- Redis (x1)
 
 {{- if .Values.ingress.enabled }}
 

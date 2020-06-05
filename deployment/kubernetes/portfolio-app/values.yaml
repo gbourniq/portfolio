@@ -10,7 +10,7 @@
 
 replicaCountApp: 1
 
-replicaCountWorker: 1
+replicaCountWorker: 2
 
 podSecurityContext:
   fsGroup: 1000
@@ -21,16 +21,31 @@ securityContext:
   runAsGroup: 1000
 
 resources:
-  limits:
-    cpu: "300m"
-    memory: "500Mi"
-  requests:
-    cpu: "300m"
-    memory: "500Mi"
+  app:
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+    requests:
+      cpu: "300m"
+      memory: "500Mi"
+  worker:
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+    requests:
+      cpu: "300m"
+      memory: "500Mi"
+  nginx:
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+    requests:
+      cpu: "300m"
+      memory: "500Mi"
 
 # Wait for postgres containers
 # Wait 30s before starting webserver
-initialStartupDelay: "50"
+initialStartupDelay: "0"
 # Wait 60s before starting probes
 initialDelaySeconds: "60"
 
