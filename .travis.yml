@@ -15,7 +15,7 @@ env:
     - KUBECONFIG=$HOME/.kube/config
     - DOCKER_COMPOSE_VERSION=1.23.2
     # Helm variables
-    - HELM_URL=https://get.helm.sh/
+    - HELM_URL=https://get.helm.sh
     - HELM_TGZ=helm-v3.2.2-linux-amd64.tar.gz
     - CHART_FOLDER=charts
     - HELM_BITNAMI_REPO_NAME=bitnami
