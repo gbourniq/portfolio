@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "portfolio-app.fullname" . }}
+  labels:
+    {{- include "portfolio-app.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCountApp }}
+  selector:
+    matchLabels:
+      {{- include "portfolio-app.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "portfolio-app.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "portfolio-app.serviceAccountName" . }}
+      securityContext:
+        {{- include "portfolio-app.podSecurityContext" . | nindent 8 }}
+      volumes:
+        {{- include "portfolio-app.volumes" . | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-app
+          securityContext:
+            {{- include "portfolio-app.securityContext" . | nindent 12 }}
+          image: {{ .Values.global.image.repository }}:{{ .Values.global.image.tag }}
+          imagePullPolicy: {{ .Values.global.image.pullPolicy }}
+          envFrom:
+          {{- include "portfolio-app.portfolio-env" . | nindent 10 }}
+          {{- include "portfolio-app.portfolio-secret" . | nindent 10 }}
+          ports:
+          {{- range .Values.service.ports }}
+            - name: {{ .name | quote }}
+              protocol: {{ .protocol }}
+              containerPort: {{ .targetPort }}
+          {{- end }}
+          livenessProbe:
+            {{- include "portfolio-app.liveness-probe" . | nindent 12 }}
+          readinessProbe:
+            {{- include "portfolio-app.readiness-probe" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources.app | nindent 12 }}
+          volumeMounts:
+            {{- include "portfolio-app.volMounts" . | nindent 12 }}
+          command: ["/bin/bash", "-c"]
+          args:
+          {{- if .Values.initialStartupDelay }}
+            - >
+              echo 'waiting {{ .Values.initialStartupDelay }}s...' &&
+              sleep {{ .Values.initialStartupDelay }} &&
+              . /home/portfoliouser/portfolio/app/{{ .Values.global.build }}.startup_server.sh
+          {{- else -}}
+            - >
+              . /home/portfoliouser/portfolio/app/{{ .Values.global.build }}.startup_server.sh
+          {{- end }}

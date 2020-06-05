@@ -2,7 +2,7 @@
 SHELL=/bin/bash -e -o pipefail
 
 
-.PHONY: up down postgres-dump-to-s3 postgres-restore-from-s3
+.PHONY: up down postgres-dump-to-s3 postgres-restore-from-s3 helm-deploy
 
 up: env-validation
 	@ cd docker-deployment/ && docker-compose ${COMPOSE_ARGS} up -d
@@ -21,6 +21,8 @@ postgres-restore-from-s3: env-validation
 	@ INFO "Download postgres dump from S3 and restore database"
 	@ ../scripts/postgres_restore_from_s3.sh postgres ${POSTGRES_DB} ${S3_POSTGRES_BACKUP_URI}
 
+helm-deploy:
+	@ ./kubernetes/scripts/deploy_helm.sh
 
 .PHONY: env-validation
 

@@ -1,5 +1,4 @@
 # Add any directories, files, or patterns you don't want to be tracked by version control
-/bin/*
 /dist/*
 app/mediafiles/
 app/staticfiles/
@@ -24,6 +23,12 @@ cov_html/
 
 # ignore logs 
 app/info.log
+
+# ignore helm dependencies and generate packages
+**/Chart.lock
+**/charts/*
+**/portfolio_kubernetes_*.tar.gz
+**/bin/*
 
 # ignore sensitive information: certs and keys
 deployment/docker-deployment/nginx/certs/*

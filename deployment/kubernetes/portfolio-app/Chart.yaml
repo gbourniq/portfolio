@@ -1,0 +1,16 @@
+apiVersion: v2
+name: portfolio-app
+description: A Helm chart for the Portfolio App Pod
+type: application
+version: 0.1.0
+dependencies:
+  - name: postgresql
+    version: 8.3.3
+    repository: "@bitnami"
+    condition: postgres-portfolio.enabled 
+    alias: postgres-portfolio
+  - name: redis
+    version: 10.5.14
+    repository: "@bitnami"
+    condition: redis-portfolio.enabled 
+    alias: redis-portfolio

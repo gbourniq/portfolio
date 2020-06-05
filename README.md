@@ -16,6 +16,7 @@ This repository features of the following:
 - [Repository Setup](#repository-setup)
 - [Local Development](#local-development)
 - [Docker Deployment](#docker-deployment)
+- [Kubernetes Deployment](#kubernetes-deployment)
 - [CI/CD Pipeline](#ci-cd-pipeline)
 - [Appendix: Environment variables](#appendix-environment-variables)
 
@@ -333,6 +334,46 @@ Extensive instruction to deploy the app on AWS can be found in the <DEPLOYMENT> 
 
 > Note: Instructions to deploy the app on AWS can be found from the [ec2 docker deployment guide](https://portfoliogb.s3.eu-west-2.amazonaws.com/documentation/ec2_deployment_guide.html) 
 
+
+## Kubernetes Deployment
+
+The Kubernetes deployment of the application is managed via a Helm Chart `portfolio-app`. 
+
+Deployments can be easily configured via the `deployment/kubernetes/portfolio-app/values.yaml` file, for e.g, to increase the number of celery worker pods available across the Kubernetes cluster.
+
+By default, the Portfolio app deployment consist of the following Pods:
+- Django webserver (x1)
+- Celery workers (x2)
+- Postgres (x1)
+- Redis (x1)
+
+### Prerequisites:
+- Install [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/) to run a single-node Kubernetes cluster on your machine
+- Install [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/) to run commands against the Kubernetes cluster
+- Install the [Helm](https://helm.sh/docs/intro/install/) package manager to deploy our application
+
+### Kubernetes commands
+To easily manage our Kubernetes application via the `portfolio-app` Chart, the following make commands are available from the project root directory:
+
+Examine the chart for possible issues, and verify that the chart is well-formed:
+```
+make helm-lint
+```
+
+Run Helm tests for a release to ensure the application works as expected:
+```
+make helm-test
+```
+
+Deploy a release of the chart:
+```
+make helm-deploy
+```
+
+Generate Kubernetes yaml files from the chart templates:
+```
+make helm-generate-k8s-files
+```
 
 
 ## CI-CD Pipeline

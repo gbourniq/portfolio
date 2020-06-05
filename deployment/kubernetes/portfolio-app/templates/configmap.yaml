@@ -1,0 +1,29 @@
+{{- $portfolioAppFullname := include "portfolio-app.fullname" . -}}
+
+{{- range .Values.global.portfolio_file }}
+{{- $subPath := tpl .subPath $ -}}
+{{- $sourceFilepath := tpl .sourceFilepath $ -}}
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $portfolioAppFullname }}-{{ .name }}
+data:
+  {{ $subPath }}: |
+  {{ range $.Files.Lines (printf "%s" $sourceFilepath) }}
+    {{ . }}
+  {{ end }}    
+---
+{{- end}}
+
+{{- range .Values.global.portfolio_env }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $portfolioAppFullname }}-{{ .name }}
+data:
+{{- range $key, $value := .data -}}
+{{ $key | nindent 2 }}: {{ tpl $value $ | quote }}
+{{- end }}
+---
+{{- end}}
