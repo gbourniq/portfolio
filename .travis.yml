@@ -16,7 +16,7 @@ env:
     - DOCKER_COMPOSE_VERSION=1.23.2
     # Helm variables
     - HELM_URL=https://storage.googleapis.com/kubernetes-helm
-    - HELM_TGZ=helm-v2.4.2-linux-amd64.tar.gz
+    - HELM_TGZ=helm-v3.0.1-linux-amd64.tar.gz
     - CHART_FOLDER=charts
     - HELM_BITNAMI_REPO_NAME=bitnami
     - HELM_BITNAMI_REPO_URL=https://charts.bitnami.com/bitnami
