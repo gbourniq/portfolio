@@ -1,96 +1,6 @@
 # Yaml file
-# Configuration file for Portfolio App pod
+# Configuration file for tbe Portfolio App Chart
 # used by Helm for Kubernetes deployment
-
-# ----------------------------------------------------
-# 
-# portfolio-app configuration
-#
-# ----------------------------------------------------
-
-replicaCountApp: 1
-
-replicaCountWorker: 2
-
-podSecurityContext:
-  fsGroup: 1000
-
-securityContext:
-  runAsNonRoot: true
-  runAsUser: 1000
-  runAsGroup: 1000
-
-resources:
-  app:
-    limits:
-      cpu: "300m"
-      memory: "500Mi"
-    requests:
-      cpu: "300m"
-      memory: "500Mi"
-  worker:
-    limits:
-      cpu: "300m"
-      memory: "500Mi"
-    requests:
-      cpu: "300m"
-      memory: "500Mi"
-  nginx:
-    limits:
-      cpu: "300m"
-      memory: "500Mi"
-    requests:
-      cpu: "300m"
-      memory: "500Mi"
-
-# Wait for postgres containers
-# Wait 30s before starting webserver
-initialStartupDelay: "0"
-# Wait 60s before starting probes
-initialDelaySeconds: "60"
-
-readinessProbe:
-  periodSeconds: 20
-  timeoutSeconds: 1
-  successThreshold: 1
-  failureThreshold: 2
-
-livenessProbe:
-  periodSeconds: 20
-  timeoutSeconds: 1
-  successThreshold: 1
-  failureThreshold: 2
-
-service:
-  type: NodePort
-  ports:
-    - name: webserver
-      protocol: TCP
-      port: 8080
-      targetPort: 8080
-      nodePort: 31435
-
-ingress:
-  enabled: false
-  # annotations:
-  #   kubernetes.io/ingress.class: nginx
-  # host: ""
-  # path: ""
-  # service: "{{ .Release.Name }}-{{ .Chart.Name }}"
-  # port: 8080
-
-nodeSelector: {}
-
-affinity: {}
-
-tolerations: []
-
-env: []
-
-serviceAccount:
-  create: true
-  annotations: {}
-  name: "portfoliouser"
 
 
 # ----------------------------------------------------
@@ -157,12 +67,90 @@ global:
         EMAIL_HOST_USER: "<insert-here>"
         EMAIL_HOST_PASSWORD: "<insert-here>"
 
+
 # ----------------------------------------------------
-#
-#  Databases
+# 
+# portfolio-app configuration
 #
 # ----------------------------------------------------
 
+replicaCountApp: 1
+
+replicaCountWorker: 2
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+resources:
+  app:
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+    requests:
+      cpu: "300m"
+      memory: "500Mi"
+  worker:
+    limits:
+      cpu: "300m"
+      memory: "500Mi"
+    requests:
+      cpu: "300m"
+      memory: "500Mi"
+
+# Wait for postgres containers
+# Wait 30s before starting webserver
+initialStartupDelay: "0"
+# Wait 60s before starting probes
+initialDelaySeconds: "60"
+
+readinessProbe:
+  periodSeconds: 20
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 2
+
+livenessProbe:
+  periodSeconds: 20
+  timeoutSeconds: 1
+  successThreshold: 1
+  failureThreshold: 2
+
+service:
+  type: NodePort
+  ports:
+    - name: webserver
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 31435
+
+ingress:
+  enabled: false
+
+nodeSelector: {}
+
+affinity: {}
+
+tolerations: []
+
+env: []
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: "portfoliouser"
+
+
+# ----------------------------------------------------
+#
+#  postgres configuration
+#
+# ----------------------------------------------------
 postgres-portfolio:
   enabled: true
   postgresqlUsername: postgres
@@ -179,6 +167,12 @@ postgres-portfolio:
     size:
       4Gi
 
+
+# ----------------------------------------------------
+#
+#  redis configuration
+#
+# ----------------------------------------------------
 redis-portfolio:
   enabled: true
   usePassword: false
