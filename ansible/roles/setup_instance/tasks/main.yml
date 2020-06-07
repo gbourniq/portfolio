@@ -4,7 +4,7 @@
   become: yes
   apt:
     name: ['awscli', 'python3', 'python3-pip', 'make', 'curl']
-    update_cache: true
+    update_cache: yes
     state: present
 
 # sudo apt-get autoclean
