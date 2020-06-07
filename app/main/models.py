@@ -1,14 +1,19 @@
 import logging
 import sys
 from io import BytesIO
+from typing import List, Union
 
+from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.mail import BadHeaderError, send_mail
 from django.db import models
 from django.db.models.fields.files import ImageFieldFile
 from django.utils import timezone
 from PIL import Image
 
-# This retrieves a Python logging instance (or creates it)
+from app.static_settings import EMAIL_HOST_USER
+
+# Retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
 
 # Global variables
@@ -50,6 +55,43 @@ def resizeImage(uploadedImage: ImageFieldFile) -> ImageFieldFile:
     return uploadedImage
 
 
+def get_registered_emails() -> Union[List[str], None]:
+    """
+    Retrives email addresses of registered users.
+    """
+    registered_email_addresses = [
+        user.email for user in User.objects.all() if user.email
+    ]
+    if registered_email_addresses is not None:
+        return registered_email_addresses
+    return None
+
+
+def send_email_notification_to_users(
+    subject: str, message: str, from_email: str = EMAIL_HOST_USER
+) -> None:
+    """
+    Send an email notification to registered users.
+    """
+
+    registered_emails = get_registered_emails()
+
+    if not registered_emails:
+        logger.warning(f"No registered emails found")
+        return None
+
+    try:
+        [
+            send_mail(subject, message, from_email, [to_email])
+            for to_email in registered_emails
+        ]
+        logger.info(
+            f"Email notification sent successfully to {registered_emails}"
+        )
+    except BadHeaderError:
+        logger.warning(f"Email function {send_mail} returned BadHeaderError")
+
+
 # Create your models here.\
 class Category(models.Model):
     category_name = models.CharField(max_length=200, unique=True)
@@ -78,19 +120,24 @@ class Category(models.Model):
     def save(self, *args, **kwargs):
         """
         Override the save method to resize the image on category.save()
+        and notify all registered users that a new category has been added
         """
         self.image = resizeImage(self.image)
         super(Category, self).save(*args, **kwargs)
-
-    class Meta:
-        verbose_name_plural = "Categories"
-        app_label = "main"
+        send_email_notification_to_users(
+            subject=f"[Portfolio App Demo] New Category added!",
+            message=f"A new category '{self.category_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_name}",
+        )
 
     def __str__(self):
         """
         Override method to have str(category_object) returning category_name
         """
         return self.category_name
+
+    class Meta:
+        verbose_name_plural = "Categories"
+        app_label = "main"
 
 
 class Item(models.Model):
@@ -128,12 +175,23 @@ class Item(models.Model):
             "category_name": self.category_name,
         }
 
-    class Meta:
-        verbose_name_plural = "Items"
-        app_label = "main"
+    def save(self, *args, **kwargs):
+        """
+        Overrides the save method to notify all registered users
+        that a new item has been added
+        """
+        super(Item, self).save(*args, **kwargs)
+        send_email_notification_to_users(
+            subject=f"[Portfolio App Demo] New Item added!",
+            message=f"A new item '{self.item_name}' has been added! Check it out here... https://www.gbournique.com/items/{str(self.category_name)}/{self.item_name}",
+        )
 
     def __str__(self):
         """
         Override method to have str(item_object) returning category_name
         """
         return self.item_name
+
+    class Meta:
+        verbose_name_plural = "Items"
+        app_label = "main"

@@ -21,7 +21,11 @@ This repository features of the following:
 - [Appendix: Environment variables](#appendix-environment-variables)
 
 ## Portfolio App Overview
-The web application is using Django for the backend, and the frontend is based on the [Materialize CSS](https://materializecss.com) framework. The portfolio app can be used to displays any items (articles, medias, etc.), conveniently grouped into categories. A demo of the app can be viewed at https://gbournique.com. 
+The web application is using Django for the backend, and the frontend is based on the [Materialize CSS](https://materializecss.com) framework. 
+
+The portfolio app is a simple website that may be utilised to showcase any sort of items (articles, medias, etc.), conveniently grouped into categories. A User registration system is implemented so that users may receive notifications when new content is added to the website.
+
+A demo of the web app can be viewed at https://gbournique.com. 
 
 * App Homepage
 
@@ -35,9 +39,13 @@ The web application is using Django for the backend, and the frontend is based o
 
 ![Items](documentation/images/app_item_page.png)
 
-* Mobile view: Items and Contact Us pages
+* Items and Contact Us pages (Mobile view)
 
 ![Items](documentation/images/app_mobile_view.png)    ![Items](documentation/images/app_contactus_mobile_view.png)
+
+* Register and Login pages (Mobile view)
+
+![Items](documentation/images/app_register.png)    ![Items](documentation/images/app_login.png)
 
 * Django admin page to manage website content (`/admin`) and [django-tinymce](https://pypi.org/project/django-tinymce4-lite/) widget to insert formatted text and media files
 
@@ -177,7 +185,7 @@ Unit-tests and integration tests are run with `pytest-django` to cover the follo
 * Form validation and processing
 * Template rendering
 
-There are ~70 tests which cover ~95% of the application code, which can be run with:
+There are ~90 tests which cover ~95% of the application code, which can be run with:
 ```
 make tests
 ```

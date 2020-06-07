@@ -1,8 +1,9 @@
 # from unittest.mock import Mock
-from typing import List, Union
+from typing import Dict, List, Union
 from unittest.mock import Mock
 
 import pytest
+from django.contrib.auth.models import User
 
 from app.tests.mocks import MockCategory, MockItem
 from main.forms import ContactForm
@@ -135,7 +136,7 @@ def load_default_items_and_categories(
 
 ##########################
 #
-#   Email Fixtures
+#   Other Fixtures
 #
 ##########################
 
@@ -149,3 +150,33 @@ def mock_contact_form() -> ContactForm:
     mock_form.subject = "dummy subject"
     mock_form.message = "dummy content"
     return mock_form
+
+
+@pytest.fixture
+def mock_user_data() -> Dict:
+    """Fixture to create the default user data"""
+    mock_user_data = {
+        "username": "mock_user_data",
+        "email": "mydummy@mail.com",
+        "password": "dummypass",
+    }
+    return mock_user_data
+
+
+@pytest.fixture
+def mock_user(mock_user_data) -> Dict:
+    """Fixture to create the default user"""
+    mock_user = User.objects.create_user(**mock_user_data)
+    return mock_user
+
+
+@pytest.fixture
+def mock_user_form_data() -> Dict:
+    """Fixture to create a default user form data"""
+    mock_user_form_data = {
+        "username": "mock_user_form_data",
+        "email": "mydummy@mail.com",
+        "password1": "dummypass",
+        "password2": "dummypass",
+    }
+    return mock_user_form_data

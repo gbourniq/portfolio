@@ -8,7 +8,7 @@ from main.forms import ContactForm
 
 
 @pytest.mark.django_db(transaction=True)
-class TestViewCategory:
+class TestViewContactUs:
     @pytest.mark.integration
     def test_view_contact_us_page(self, client):
         """

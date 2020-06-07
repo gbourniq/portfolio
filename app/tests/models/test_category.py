@@ -156,3 +156,22 @@ class TestCategory:
         """
 
         assert Category.objects.all().count() == len(load_default_categories)
+
+    def test_send_notification_is_called_on_save(
+        self, monkeypatch, mock_default_category: Category
+    ):
+        """
+        Ensures the send_email_notification_to_users function is called when saving a category
+        """
+        mock_resize_image = Mock(return_value=mock_default_category.image)
+        monkeypatch.setattr("main.models.resizeImage", mock_resize_image)
+
+        mock_send_email_notification = Mock()
+        monkeypatch.setattr(
+            "main.models.send_email_notification_to_users",
+            mock_send_email_notification,
+        )
+
+        mock_default_category.save()
+
+        mock_send_email_notification.assert_called_once()

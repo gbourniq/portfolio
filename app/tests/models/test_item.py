@@ -1,3 +1,5 @@
+from unittest.mock import Mock
+
 import pytest
 
 from app.tests.mocks import MockItem
@@ -69,3 +71,20 @@ class TestItems:
             isinstance(attr, attr_type)
             for attr, attr_type in type_mapping.items()
         )
+
+    def test_send_notification_is_called_on_save(
+        self, monkeypatch, mock_default_item: Item
+    ):
+        """
+        Ensures the send_email_notification_to_users function is called when saving an item
+        """
+
+        mock_send_email_notification = Mock()
+        monkeypatch.setattr(
+            "main.models.send_email_notification_to_users",
+            mock_send_email_notification,
+        )
+
+        mock_default_item.save()
+
+        mock_send_email_notification.assert_called_once()

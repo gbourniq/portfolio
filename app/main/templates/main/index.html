@@ -19,7 +19,6 @@
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
 	gtag('js', new Date());
-
 	gtag('config', 'G-KGHMSNB4ND');
 	</script>
 
@@ -39,18 +38,23 @@
 	<link href="{% static 'css/style.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 	<link rel="shortcut icon" href="{% static 'favicon.ico' type='image/x-icon' %}">
 
+	<!-- Load JS files in head for MaterializeCSS Toasts -->
+	<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
+	<script src="{% static 'js/materialize.js' %}"></script>
+	<script src="{% static 'js/init.js' %}"></script>
+
 </head>
 
 <body>
 
 	<header>
 		{% include "main/includes/navbar.html" %}
-		{% include "main/includes/messages.html" %}
 		{% block header %}
 		{% endblock %}
 	</header>
 
 	<main>
+		{% include "main/includes/messages.html" %}
 		{% block content %}
 		{% endblock %}
 	</main>
@@ -60,14 +64,9 @@
 		{% endblock %}
 	</footer>
 
-
-  
 </body>
 
 <!-- Compiled and minified JavaScript -->
-<script src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
-<script src="{% static 'js/materialize.js' %}"></script>
-<script src="{% static 'js/init.js' %}"></script>
 <script src="{% static 'tinymce/js/prism.js' %}"></script>
 <script>M.AutoInit();</script>
 

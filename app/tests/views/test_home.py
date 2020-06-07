@@ -3,7 +3,7 @@ from django.urls import reverse
 
 
 @pytest.mark.django_db(transaction=True)
-class TestViewCategory:
+class TestViewHome:
     @pytest.mark.integration
     def test_view_homepage(self, client):
         """
