@@ -1,12 +1,15 @@
 import logging
+from typing import Union
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import Http404
 from django.shortcuts import redirect, render
 from django.views.decorators.cache import cache_page
 
-from .forms import ContactForm
+from .forms import ContactForm, NewUserForm
 from .models import Category
 from .services import (
     _is_category_exist,
@@ -23,6 +26,87 @@ logger = logging.getLogger(__name__)
 def viewHome(request):
     """View home page"""
     return render(request, "main/home.html")
+
+
+@cache_page(settings.CACHE_TTL)
+def register(request) -> Union[render, redirect]:
+    """View to register a new user, /register"""
+    if request.method == "POST":
+
+        form = NewUserForm(request.POST)
+
+        if not form.is_valid():
+            [
+                messages.error(request, f"{msg}: {form.error_messages[msg]}")
+                for msg in form.error_messages
+            ]
+            return render(
+                request,
+                template_name="main/register.html",
+                context={"form": form},
+            )
+        user = form.save()
+        messages.success(
+            request, f"New account created: {form.cleaned_data.get('username')}"
+        )
+        logger.info(
+            f"User {form.cleaned_data.get('username')} successfully registered."
+        )
+        login(request, user)
+        return redirect(viewHome)
+
+    return render(
+        request,
+        template_name="main/register.html",
+        context={"form": NewUserForm()},
+    )
+
+
+@cache_page(settings.CACHE_TTL)
+def logout_request(request) -> redirect:
+    """Logout an authenticated user, /logout"""
+    logout(request)
+    messages.info(request, "Logged out successfully!")
+    return redirect(viewHome)
+
+
+@cache_page(settings.CACHE_TTL)
+def login_request(request) -> render:
+    """Render a custom form for a user to authenticate, /login"""
+
+    if request.method == "POST":
+        form = AuthenticationForm(request=request, data=request.POST)
+
+        if not form.is_valid():
+            messages.error(request, "Invalid username or password.")
+            return render(
+                request,
+                template_name="main/login.html",
+                context={"form": form},
+            )
+
+        user = authenticate(
+            username=form.cleaned_data.get("username"),
+            password=form.cleaned_data.get("password"),
+        )
+
+        if user is not None:
+            login(request, user)
+            messages.info(
+                request,
+                f"You are now logged in as {form.cleaned_data.get('username')}",
+            )
+            logger.info(
+                f"User {form.cleaned_data.get('username')} successfully logged in."
+            )
+            return redirect(viewHome)
+
+        messages.error(request, "Invalid username or password.")
+
+    form = AuthenticationForm()
+    return render(
+        request=request, template_name="main/login.html", context={"form": form}
+    )
 
 
 @cache_page(settings.CACHE_TTL)

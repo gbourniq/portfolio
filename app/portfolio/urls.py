@@ -18,22 +18,27 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-import main.views
+from main import views
+
+app_name = "main"  # here for namespacing of urls.
 
 urlpatterns = [
-    path("", main.views.viewHome, name="viewHome"),
-    re_path(r"^items/$", main.views.viewCategories, name="viewCategories"),
-    re_path(r"^contact/$", main.views.viewContactUs, name="viewContactUs"),
+    path("", views.viewHome, name="viewHome"),
+    path("register/", views.register, name="register"),
+    path("logout", views.logout_request, name="logout"),
+    path("login", views.login_request, name="login"),
+    re_path(r"^items/$", views.viewCategories, name="viewCategories"),
+    re_path(r"^contact/$", views.viewContactUs, name="viewContactUs"),
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
     re_path(
         r"^items/(?P<category_slug>[\w\-]+)/$",
-        main.views.viewItems,
+        views.viewItems,
         name="viewItems",
     ),
     re_path(
         r"^items/(?P<category_slug>[\w\-]+)/(?P<item_slug>[\w\-]+)/$",
-        main.views.viewItem,
+        views.viewItem,
         name="viewItem",
     ),
 ]

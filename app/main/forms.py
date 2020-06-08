@@ -1,5 +1,7 @@
 # sendemail/forms.py
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 
 class ContactForm(forms.Form):
@@ -9,3 +11,32 @@ class ContactForm(forms.Form):
     message = forms.CharField(
         widget=forms.Textarea(), required=True, max_length=2048,
     )
+
+
+class NewUserForm(UserCreationForm):
+    """
+    Extends the UserCreationForm class to add an Email field
+    for user registration form
+    """
+
+    email = forms.EmailField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Removes ugly fields hints (help_text) for username, and password fields
+        """
+        super(NewUserForm, self).__init__(*args, **kwargs)
+
+        for fieldname in ["username", "password1", "password2"]:
+            self.fields[fieldname].help_text = None
+
+    def save(self, commit=True):
+        user = super(NewUserForm, self).save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
