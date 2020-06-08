@@ -124,10 +124,11 @@ class Category(models.Model):
         """
         self.image = resizeImage(self.image)
         super(Category, self).save(*args, **kwargs)
-        send_email_notification_to_users(
-            subject=f"[Portfolio App Demo] New Category added!",
-            message=f"A new category '{self.category_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_name}",
-        )
+        if EMAIL_HOST_USER:
+            send_email_notification_to_users(
+                subject=f"[Portfolio App Demo] New Category added!",
+                message=f"A new category '{self.category_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_slug}",
+            )
 
     def __str__(self):
         """
@@ -181,10 +182,11 @@ class Item(models.Model):
         that a new item has been added
         """
         super(Item, self).save(*args, **kwargs)
-        send_email_notification_to_users(
-            subject=f"[Portfolio App Demo] New Item added!",
-            message=f"A new item '{self.item_name}' has been added! Check it out here... https://www.gbournique.com/items/{str(self.category_name)}/{self.item_name}",
-        )
+        if EMAIL_HOST_USER:
+            send_email_notification_to_users(
+                subject=f"[Portfolio App Demo] New Item added!",
+                message=f"A new item '{self.item_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_name.category_slug}/{self.item_slug}",
+            )
 
     def __str__(self):
         """

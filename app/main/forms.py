@@ -54,13 +54,3 @@ class NewUserForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2")
-
-
-data = {
-    "username": "testclient",
-    "password1": "test123",
-    "password2": "test123",
-}
-form = UserCreationForm(
-    {"username": "testclient", "password1": "test123", "password2": "test123"}
-)
