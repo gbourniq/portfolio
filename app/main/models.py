@@ -79,16 +79,21 @@ def send_email_notification_to_users(
         logger.warning(f"No registered emails found")
         return None
 
-    try:
-        [
-            send_mail(subject, message, from_email, [to_email])
-            for to_email in registered_emails
-        ]
-        logger.info(
-            f"Email notification sent successfully to {registered_emails}"
-        )
-    except BadHeaderError:
-        logger.warning(f"Email function {send_mail} returned BadHeaderError")
+    if EMAIL_HOST_USER:
+        try:
+            [
+                send_mail(subject, message, from_email, [to_email])
+                for to_email in registered_emails
+            ]
+            logger.info(
+                f"Email notification sent successfully to {registered_emails}"
+            )
+        except BadHeaderError:
+            logger.warning(
+                f"Email function {send_mail} returned BadHeaderError"
+            )
+    else:
+        logger.info("Email notification not sent, EMAIL_HOST_USER is None.")
 
 
 # Create your models here.\
@@ -110,7 +115,7 @@ class Category(models.Model):
         super(Category, self).save(*args, **kwargs)
         send_email_notification_to_users(
             subject=f"[Tari Kitchen] New Category added!",
-            message=f"A new category '{self.category_name}' has been added! Check it out here... https://www.tari.kitchen/items/{self.category_name}",
+            message=f"A new category '{self.category_name}' has been added! Check it out here... https://www.tari.kitchen/items/{self.category_slug}",
         )
 
     class Meta:
@@ -143,10 +148,16 @@ class Item(models.Model):
         that a new item has been added
         """
         super(Item, self).save(*args, **kwargs)
-        send_email_notification_to_users(
-            subject=f"[Tari Kitchen] New Item added!",
-            message=f"A new item '{self.item_name}' has been added! Check it out here... https://www.tari.kitchen/items/{str(self.category_name)}/{self.item_name}",
-        )
+        import pdb
+
+        pdb.set_trace()
+        if EMAIL_HOST_USER:
+            send_email_notification_to_users(
+                subject=f"[Tari Kitchen] New Item added!",
+                message=f"A new item '{self.item_name}' has been added! Check it out here... https://www.tari.kitchen/items/{self.category_name.category_slug}/{self.item_slug}",
+            )
+        else:
+            logger.info("Email notification not sent, EMAIL_HOST_USER is None.")
 
     class Meta:
         verbose_name_plural = "Items"
