@@ -148,9 +148,7 @@ class Item(models.Model):
         that a new item has been added
         """
         super(Item, self).save(*args, **kwargs)
-        import pdb
 
-        pdb.set_trace()
         if EMAIL_HOST_USER:
             send_email_notification_to_users(
                 subject=f"[Tari Kitchen] New Item added!",
