@@ -93,14 +93,13 @@ VALIDATION_FAILED=False
 validate_env
 validate_functions
 if [[ $BUILD == prod ]]; then
-    INFO "`Please run` app using Docker!"
-    INFO "S3 will be used for django files storage."
-    INFO "Postgres container used as the database backend."
     validate_docker_compose_env
+    INFO "Loaded Django settings for production environment"
+    INFO "Docker deployment: make image-latest && make up"
 elif [[ $BUILD == dev ]]; then
-    INFO "Please run app locally!"
-    INFO "Local storage used for django static and media files."
-    INFO "Local Postgres used as the database backend."
+    INFO "Loaded Django settings for development environment"
+    INFO "Baremetal deployment: cd app && python manage.py runserver"
+    INFO "Docker deployment: make image-latest && make up"
 fi
 
 # Success message if set_as_failed() not called

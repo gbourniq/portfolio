@@ -46,8 +46,6 @@ if [[ ${BUILD} == dev ]]; then
     services=(postgres redis app worker)
 elif [[ ${BUILD} == prod ]]; then
     services=(postgres redis app worker nginx)
-elif [[ ${BUILD} == tests ]]; then
-    services=(postgres)
 else
     exit_error "Unknown build type: ${BUILD}"
 fi
