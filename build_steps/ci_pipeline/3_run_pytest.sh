@@ -29,7 +29,7 @@ function start_services() {
 
 function run_test_with_docker() {
 
-  INFO "Running tests with containers... (POSTGRES_HOST=postgres)"
+  INFO "Running tests inside containers..."
 
   ### Set environment variables for testing with docker
   BUILD=tests
@@ -50,7 +50,7 @@ function run_test_with_docker() {
 
 function run_test_locally() {
 
-  INFO "Running tests locally... (POSTGRES_HOST=localhost)"
+  INFO "Running tests locally..."
 
   source $(conda info --base)/etc/profile.d/conda.sh
 
@@ -67,15 +67,15 @@ function run_test_locally() {
 
 
 # Start script
-  if [[ $POSTGRES_HOST == "localhost" ]]; then
+  if [[ $RUN_TESTS_WITH_DOCKER == "False" ]]; then
     cd app
     run_test_locally
     cd -
-  elif [[ $POSTGRES_HOST == "postgres" ]]; then
+  elif [[ $RUN_TESTS_WITH_DOCKER == "True" ]]; then
     run_test_with_docker
     SUCCESS "Congrats! All tests passed successfully! 💯" 
   else
-    exit_error "$POSTGRES_HOST not set! Aborting."
+    exit_error "$RUN_TESTS_WITH_DOCKER not set! Aborting."
   fi
 
 

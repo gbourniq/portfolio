@@ -9,9 +9,8 @@ is renamed or removed.
 # ======================= SETTINGS.PY =========================
 
 # General settings
+BUILD = os.getenv("BUILD")
 SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = os.getenv("DEBUG") == "True"
-ALLOWED_HOSTS = [os.getenv("ALLOWED_HOSTS")]
 MEDIA_URL = os.getenv("MEDIA_URL", "mediafiles")
 
 # Postgres
@@ -38,13 +37,12 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
 AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION")
-ENABLE_S3_FOR_DJANGO_FILES = os.getenv("ENABLE_S3_FOR_DJANGO_FILES") == "True"
 
 # ======================= CHECK ENV VARIABLES ARE SET =========================
 
 ENV_VARS = [
+    "BUILD",
     "SECRET_KEY",
-    "ALLOWED_HOSTS",
     "POSTGRES_HOST",
     "POSTGRES_PORT",
     "POSTGRES_DB",
@@ -54,7 +52,7 @@ ENV_VARS = [
     "EMAIL_HOST_PASSWORD",
 ]
 
-if ENABLE_S3_FOR_DJANGO_FILES:
+if BUILD == "prod":
     ENV_VARS += [
         "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY",

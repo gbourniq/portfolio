@@ -8,15 +8,7 @@ function set_as_failed() {
 
 # Required environment variables for dev build
 function secret_env_check_dev() {
-    if [[ ! $DOCKER_USER || ! $DOCKER_PASSWORD ]]; then
-        set_as_failed "DOCKER_USER and DOCKER_PASSWORD environment variables are not set!"
-    fi
-    if [[ ! $AWS_ACCESS_KEY_ID && $AWS_ENABLED == True ]]; then
-        set_as_failed "AWS_ACCESS_KEY_ID not set, but AWS_ENABLED=True!"
-    fi
-    if [[ ! $AWS_SECRET_ACCESS_KEY && $AWS_ENABLED == True ]]; then
-        set_as_failed "AWS_SECRET_ACCESS_KEY not set, but AWS_ENABLED=True!"
-    fi
+    secret_env_check_prod
     if [[ $RUN_ANSIBLE_PLAYBOOK == True && $AWS_ENABLED != True ]]; then
         set_as_failed "If RUN_ANSIBLE_PLAYBOOK set to True, then AWS_ENABLED must also be to True"
     fi
@@ -30,6 +22,9 @@ function secret_env_check_dev() {
 
 # Required environment variables for prod build
 function secret_env_check_prod() {
+    if [[ ! $DOCKER_USER || ! $DOCKER_PASSWORD ]]; then
+        set_as_failed "DOCKER_USER and DOCKER_PASSWORD environment variables are not set!"
+    fi
     if [[ ! $AWS_ACCESS_KEY_ID && $AWS_ENABLED == True ]]; then
         set_as_failed "AWS_ACCESS_KEY_ID not set, but AWS_ENABLED=True!"
     fi
@@ -42,12 +37,6 @@ function secret_env_check_prod() {
 function validate_docker_compose_env() {
     if [[ ! $DOCKER_PORTFOLIO_HOME ]]; then
         set_as_failed "DOCKER_PORTFOLIO_HOME not set"
-    fi
-    if [[ ! $DEBUG ]]; then
-        set_as_failed "DEBUG not set"
-    fi
-    if [[ ! $ALLOWED_HOSTS ]]; then
-        set_as_failed "ALLOWED_HOSTS not set"
     fi
     if [[ ! $SECRET_KEY ]]; then
         set_as_failed "SECRET_KEY not set"
@@ -63,9 +52,6 @@ function validate_docker_compose_env() {
     fi
     if [[ ! $EMAIL_HOST_USER || ! $EMAIL_HOST_USER ]]; then
         set_as_failed "EMAIL_HOST_USER and EMAIL_HOST_USER not set"
-    fi
-    if [[ ! $ENABLE_S3_FOR_DJANGO_FILES ]]; then
-        set_as_failed "ENABLE_S3_FOR_DJANGO_FILES not set"
     fi
     if [[ ! $AWS_STORAGE_BUCKET_NAME ]]; then
         set_as_failed "AWS_STORAGE_BUCKET_NAME not set"
@@ -106,18 +92,22 @@ function validate_functions() {
 VALIDATION_FAILED=False
 validate_env
 validate_functions
-if [[ $BAREMETAL_DEPLOYMENT == False ]]; then
-    INFO "Please run app using Docker! (BAREMETAL_DEPLOYMENT=False)"
+if [[ $BUILD == prod ]]; then
+    INFO "Please run app using Docker!"
+    INFO "S3 will be used for django files storage."
+    INFO "Postgres container used as the database backend."
     validate_docker_compose_env
-elif [[ $BAREMETAL_DEPLOYMENT == True ]]; then
-    INFO "Please run app locally! (BAREMETAL_DEPLOYMENT=True)"
+elif [[ $BUILD == dev ]]; then
+    INFO "Please run app locally!"
+    INFO "Local storage used for django static and media files."
+    INFO "Local Postgres used as the database backend."
 fi
 
 # Success message if set_as_failed() not called
 if [[ $BUILD == prod ]] && [[ $VALIDATION_FAILED != True ]]; then
-    SUCCESS "[PROD build] Secret environment variables are all set!"
+    SUCCESS "[[BUILD=prod] Secret environment variables are all set!"
 elif [[ $BUILD == dev ]] && [[ $VALIDATION_FAILED != True ]]; then
-    SUCCESS "[DEV build] Secret environment variables are all set!"
+    SUCCESS "[BUILD=dev] Secret environment variables are all set!"
 else
     ERROR "BUILD=$BUILD, VALIDATION_FAILED=$VALIDATION_FAILED - Oops.. Environment validation has failed!"
 fi

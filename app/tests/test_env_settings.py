@@ -56,7 +56,7 @@ class TestDjangoSettingsS3:
     when running the app using S3 for file storage (static/media files)
     """
 
-    static_settings.ENABLE_S3_FOR_DJANGO_FILES = True
+    static_settings.BUILD = "prod"
     importlib.reload(settings)
 
     def test_aws_settings(self):

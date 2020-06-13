@@ -1,10 +1,9 @@
 import logging
 from typing import List, Union
 
+from django.conf import settings
 from django.core.mail import BadHeaderError, send_mail
 from django.http import Http404
-
-from app import static_settings
 
 from .forms import ContactForm
 from .models import Category, Item
@@ -97,10 +96,10 @@ def send_email_function(
     subject: str, body: str, from_email: str, to_emails: List[str]
 ) -> None:
     """
-    Set the email function to be either django.core.mail.send_mail, if REDIS_HOST
-    exists, or a celery task which calls django.core.mail.send_email otherwise.
+    Use django.core.mail.send_mail, if BUILD=dev (celery not enabled),
+    or a celery task which calls django.core.mail.send_email otherwise.
     """
-    if static_settings.REDIS_HOST:
+    if settings.BUILD == "prod":
         send_email_celery.delay(subject, body, from_email, to_emails)
     else:
         send_mail(subject, body, from_email, to_emails)

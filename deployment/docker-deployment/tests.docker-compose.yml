@@ -8,8 +8,6 @@ services:
     environment:
       # Settings.py
       PYTHONPATH: ${DOCKER_PORTFOLIO_HOME:?}
-      DEBUG: ${DEBUG:?}
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:?}
       SECRET_KEY: ${SECRET_KEY:?}
       LOGGING_ENABLED: ${LOGGING_ENABLED:?}
       # Postgres

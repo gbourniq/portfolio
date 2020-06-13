@@ -38,8 +38,6 @@ global:
     - name: portfolio-env
       data:
         PYTHONPATH: "/home/portfoliouser/portfolio/"
-        DEBUG: "True"
-        ALLOWED_HOSTS: "*"
         LOGGING_ENABLED: "True"
         # Postgres
         POSTGRES_DB: "portfoliodb"
@@ -50,7 +48,6 @@ global:
         REDIS_HOST: "{{ .Release.Name }}-redis-portfolio-master"
         REDIS_PORT: "6379"
         # aws s3
-        ENABLE_S3_FOR_DJANGO_FILES: "True"
         AWS_STORAGE_BUCKET_NAME: "portfoliogb"
         AWS_DEFAULT_REGION: "eu-west-2"
 

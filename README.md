@@ -143,7 +143,7 @@ All environment variables are listed with a short description, in the [Appendix]
 conda activate portfolio
 ```
 
-2. Ensure that `BAREMETAL_DEPLOYMENT` is set to `True` in `.dev.env` and run the following commands:
+2. Source environment variables for `dev` build:
 ```bash
 cd portfolio/  # if not already at the root of the repository.
 source .dev.env
@@ -191,8 +191,8 @@ make tests
 ```
 
 **Note:** The tests will require the app to read/write to a Postgres test database. Therefore tests can be run in two different ways:
-* Locally, if `POSTGRES_HOST` is set to `localhost` (`BAREMETAL_DEPLOYMENT=True`)
-* Inside containers, if `POSTGRES_HOST` is set to `postgres` (`BAREMETAL_DEPLOYMENT=False`)
+* Locally, if `RUN_TESTS_WITH_DOCKER` is set to `False`
+* Inside containers, if `RUN_TESTS_WITH_DOCKER` is set to `True`
 
 
 ### Versioning
@@ -260,7 +260,7 @@ make up
 ```
 This django webserver will be running at `localhost:8080`
 
-> Note: To run the application using docker, `BAREMETAL_DEPLOYMENT` must be set to `False` in `.dev.env`.
+> Note: To run the application using docker, run `export BUILD=prod` in your terminal.
 
 To check that all services are up and healthy, run:
 ```bash
@@ -470,10 +470,7 @@ Main variables in `deployment/.env`:
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
 |`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `prod`         |
-|`DEBUG`                       | Should be set to False (production)                                          |
-|`ALLOWED_HOSTS`               | Hosts names the Django site can serve to prevent HTTP Host header attacks    |
 |`SECRET_KEY`                  | For a particular Django installation to provide cryptographic signing        |
-|`ENABLE_S3_FOR_DJANGO_FILES`  | `True` for S3 to store and serve Django files, `False` to use Filesystem     |
 |`POSTGRES_*`                  | Variables for Django app container to connect to Postgres container          |
 |`REDIS_*`                     | Variables for Django app container to connect to the Redis container         |
 |`AWS_ENABLED`                 | Must be set to `False` if AWS S3 is not used                                 |
@@ -494,11 +491,8 @@ Main variables in `.dev.env`:
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
 |`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `dev`          |
-|`BAREMETAL_DEPLOYMENT`        | `True` to run django server locally, and `False` for any docker deployment   |
 |`RUN_ANSIBLE_PLAYBOOK`        | Set to `False` to skip the Ansible playbook in the CD pipeline               |
 |`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name               |
-|`DEBUG`                       | Set to `True` to see detailed logs during development                        |
-|`ENABLE_S3_FOR_DJANGO_FILES`  | Can be set to `False` to prevent Django using S3 for media/static files      |
 |`DOCKER_DEPLOY_FOLDER`        | Folder in `AWS_STORAGE_BUCKET_NAME` to store docker deploy tarballs          |
 |`S3_DOCKER_DEPLOY_CD_PIPELINE`| Basename of docker deployment tarball used by ci/cd pipeline and Ansible     |
 |`S3_DOCKER_DEPLOY_CUSTOM`     | Basename of docker deployment tarball used by user to manually deploy app    |
