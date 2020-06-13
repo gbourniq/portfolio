@@ -37,6 +37,7 @@ global:
   portfolio_env:
     - name: portfolio-env
       data:
+        BUILD: "{{ .Values.global.build }}"
         PYTHONPATH: "/home/portfoliouser/portfolio/"
         LOGGING_ENABLED: "True"
         # Postgres
@@ -93,11 +94,11 @@ resources:
       memory: "200Mi"
   worker:
     limits:
-      cpu: "200m"
-      memory: "200Mi"
+      cpu: "400m"
+      memory: "400Mi"
     requests:
-      cpu: "200m"
-      memory: "200Mi"
+      cpu: "400m"
+      memory: "400Mi"
 
 # Wait for postgres containers
 # Wait 30s before starting webserver
