@@ -27,6 +27,7 @@ services:
     restart: "no"
     environment:
       # Settings.py
+      BUILD: ${BUILD:?}
       PYTHONPATH: ${DOCKER_PORTFOLIO_HOME:?}
       SECRET_KEY: ${SECRET_KEY:?}
       LOGGING_ENABLED: ${LOGGING_ENABLED:?}
@@ -72,6 +73,7 @@ services:
     restart: "no"
     environment:
       # Settings.py
+      BUILD: ${BUILD:?}
       PYTHONPATH: ${DOCKER_PORTFOLIO_HOME:?}
       SECRET_KEY: ${SECRET_KEY:?}
       LOGGING_ENABLED: ${LOGGING_ENABLED:?}

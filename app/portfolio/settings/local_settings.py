@@ -1,5 +1,14 @@
 from .base import *
 
+"""
+Local settings are suitable for a baremetal deployment:
+- DEBUG = True
+- Local postgres
+- No cache settings (redis)
+- No celery settings
+- Local storage for django files (media/static)
+"""
+
 print(f"Loading Django {static_settings.BUILD} settings")
 
 DEBUG = True

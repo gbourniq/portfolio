@@ -67,16 +67,13 @@ function run_test_locally() {
 
 
 # Start script
-  if [[ $RUN_TESTS_WITH_DOCKER == "False" ]]; then
-    cd app
-    run_test_locally
-    cd -
-  elif [[ $RUN_TESTS_WITH_DOCKER == "True" ]]; then
-    run_test_with_docker
-    SUCCESS "Congrats! All tests passed successfully! 💯" 
-  else
-    exit_error "$RUN_TESTS_WITH_DOCKER not set! Aborting."
-  fi
+  # if [[ $RUN_TESTS_WITH_DOCKER == "False" ]]; then
+  #   cd app
+  #   run_test_locally
+  #   cd -
+  # fi
 
+  run_test_with_docker
+  SUCCESS "Congrats! All tests passed successfully! 💯" 
 
 

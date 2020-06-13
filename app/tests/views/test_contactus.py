@@ -1,9 +1,9 @@
 from unittest.mock import Mock
 
 import pytest
+from django.conf import settings
 from django.urls import reverse
 
-from app.portfolio import settings
 from main.forms import ContactForm
 
 

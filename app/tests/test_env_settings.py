@@ -1,25 +1,21 @@
-import importlib
-from os import getenv
 from typing import Dict
 
-from app import static_settings
-from app.portfolio import settings
+from django.conf import settings
 
 
-class TestDjangoSettingsRedis:
+class TestDjangoDevSettings:
     """
-    Class to test that settings.py is configured correctly
-    when running the app with Celery/Redis
+    Class to test that settings.py is configured correctly for dev environments
+    - ensures Celery/Redis not configured
+    - ensures S3 variables not configured
     """
-
-    static_settings.REDIS_HOST = "redis"
-    importlib.reload(settings)
 
     def test_cache_settings(self):
         """
-        Test the cache settings are loaded
+        Test the cache settings are not loaded
         """
-        assert settings.CACHES == {
+
+        assert settings.CACHES != {
             "default": {
                 "BACKEND": "django_redis.cache.RedisCache",
                 "LOCATION": "redis://redis:6379/1",
@@ -32,10 +28,11 @@ class TestDjangoSettingsRedis:
 
     def test_celery_settings(self):
         """
-        Test the celery settings are loaded
+        Test the celery settings are not loaded
         """
+
         assert all(
-            hasattr(settings, attr)
+            not hasattr(settings, attr)
             for attr in [
                 "CELERY_RESULT_BACKEND",
                 "CELERY_REDIS_MAX_CONNECTIONS",
@@ -49,50 +46,28 @@ class TestDjangoSettingsRedis:
             ]
         )
 
-
-class TestDjangoSettingsS3:
-    """
-    Class to test that settings.py is configured correctly
-    when running the app using S3 for file storage (static/media files)
-    """
-
-    static_settings.BUILD = "prod"
-    importlib.reload(settings)
-
     def test_aws_settings(self):
         """
-        Test the AWS settings are loaded
+        Test the AWS settings are not loaded
         """
-        assert settings.AWS_ACCESS_KEY_ID == getenv("AWS_ACCESS_KEY_ID")
-        assert settings.AWS_SECRET_ACCESS_KEY == getenv("AWS_SECRET_ACCESS_KEY")
-        assert settings.AWS_STORAGE_BUCKET_NAME == getenv(
-            "AWS_STORAGE_BUCKET_NAME"
-        )
-        assert settings.AWS_DEFAULT_REGION == getenv("AWS_DEFAULT_REGION")
 
         assert all(
-            hasattr(settings, attr)
+            not hasattr(settings, attr)
             for attr in [
+                "AWS_ACCESS_KEY_ID",
+                "AWS_SECRET_ACCESS_KEY",
+                "AWS_STORAGE_BUCKET_NAME",
+                "AWS_DEFAULT_REGION",
                 "AWS_DEFAULT_ACL",
                 "AWS_S3_OBJECT_PARAMETERS",
                 "AWS_S3_CUSTOM_DOMAIN",
-                "STATIC_URL",
-                "STATICFILES_STORAGE",
-                "MEDIA_URL",
-                "DEFAULT_FILE_STORAGE",
             ]
         )
 
+    def test_logging_settings(self):
+        """
+        Test the LOGGING settings are loaded
+        """
 
-class TestDjangoSettingsLogging:
-    """
-    Class to test that settings.py is configured correctly
-    when enabling logging
-    """
-
-    static_settings.LOGGING_ENABLED = True
-    importlib.reload(settings)
-
-    def test_cache_settings(self):
         assert all(hasattr(settings, attr) for attr in ["LOGGING",])
         assert isinstance(settings.LOGGING, Dict)

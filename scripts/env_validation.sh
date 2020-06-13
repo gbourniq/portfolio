@@ -93,7 +93,7 @@ VALIDATION_FAILED=False
 validate_env
 validate_functions
 if [[ $BUILD == prod ]]; then
-    INFO "Please run app using Docker!"
+    INFO "`Please run` app using Docker!"
     INFO "S3 will be used for django files storage."
     INFO "Postgres container used as the database backend."
     validate_docker_compose_env

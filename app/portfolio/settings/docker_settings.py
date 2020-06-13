@@ -1,5 +1,14 @@
 from .base import *
 
+"""
+Docker settings are suitable for a docker deployment of the webserver
+- DEBUG = False
+- Postgres containers as database backend
+- Cache settings (Redis)
+- Celery settings
+- AWS S3 storage for django files (media/static)
+"""
+
 print(f"Loading Django {static_settings.BUILD} settings")
 
 DEBUG = False
@@ -33,6 +42,7 @@ CACHES = {
 # CELERY CONFIGURATION
 # https://blog.syncano.rocks/configuring-running-django-celery-docker-containers-pt-1/
 # Set Redis as Broker URL
+print("Loading Celery settings")
 BROKER_URL = (
     f"redis://{static_settings.REDIS_HOST}:{static_settings.REDIS_PORT}/2"
 )
@@ -63,6 +73,7 @@ CELERY_DEFAULT_QUEUE = "default"
 
 # FILE STORAGE
 # aws s3 settings for django
+print("Loading AWS S3 settings")
 AWS_ACCESS_KEY_ID = static_settings.AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY = static_settings.AWS_SECRET_ACCESS_KEY
 AWS_STORAGE_BUCKET_NAME = static_settings.AWS_STORAGE_BUCKET_NAME

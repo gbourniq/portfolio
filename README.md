@@ -191,8 +191,8 @@ make tests
 ```
 
 **Note:** The tests will require the app to read/write to a Postgres test database. Therefore tests can be run in two different ways:
-* Locally, if `RUN_TESTS_WITH_DOCKER` is set to `False`
-* Inside containers, if `RUN_TESTS_WITH_DOCKER` is set to `True`
+* Locally: `cd app && pytest .`
+* Inside containers, from the root directory, `make tests`
 
 
 ### Versioning

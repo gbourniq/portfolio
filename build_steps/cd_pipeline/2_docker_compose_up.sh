@@ -20,10 +20,6 @@ function validate_environment_variables() {
     exit_error "Some of the following environment variables are not set: \
 BUILD, IMAGE_REPOSITORY, COMPOSE_ARGS. Aborting."
   fi
-  if [[ $BUILD != "prod" ]]
-  then
-    exit_error "BUILD must be set to `prod`"
-  fi
 }
 
 function remove_services() {
