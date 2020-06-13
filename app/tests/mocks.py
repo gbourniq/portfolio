@@ -40,6 +40,7 @@ class MockCategory:
             * image = "img-url-235.png"
             * category_slug = "cat-slug-235"
         """
+
         category_data = {
             "id": _id,
             "category_name": kwargs.get(
@@ -75,13 +76,15 @@ class MockCategory:
             category_slug="supercat-"
         )
         """
-        default_categories = []
-        for idx in range(categories_count):
-            default_categories.append(
-                MockCategory.default_category(
-                    MockCategory.DEFAULT_ID + idx, **kwargs
-                ),
-            )
+
+        category_ids = [
+            MockCategory.DEFAULT_ID + i for i in range(categories_count)
+        ]
+        default_categories = [
+            MockCategory.default_category(_id, **kwargs)
+            for _id in category_ids
+            if _id > 0
+        ]
         return default_categories
 
 
@@ -159,11 +162,15 @@ class MockItem:
         """
         Generates a list of default items
         """
-        default_items = []
-        for idx in range(items_count):
-            default_items.append(
-                MockItem.default_item(
-                    parent_category, MockItem.DEFAULT_ID + idx, **kwargs
+
+        item_ids = [MockItem.DEFAULT_ID + i for i in range(items_count)]
+        default_items = list(
+            map(
+                lambda _id: MockItem.default_item(
+                    parent_category, _id, **kwargs
                 ),
+                item_ids,
             )
+        )
+
         return default_items

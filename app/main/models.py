@@ -1,5 +1,6 @@
 import logging
 import sys
+from collections import namedtuple
 from io import BytesIO
 from typing import List, Union
 
@@ -18,8 +19,11 @@ logger = logging.getLogger(__name__)
 
 # Global variables
 UPLOADS_FOLDER_PATH = "images/"
-THUMBNAIL_SIZE = (500, 500)
-CROP_SIZE = (300, 300)
+
+Dimensions = namedtuple("Dimensions", "width height")
+
+THUMBNAIL_SIZE = Dimensions(500, 500)
+CROP_SIZE = Dimensions(300, 300)
 
 
 def resizeImage(uploadedImage: ImageFieldFile) -> ImageFieldFile:
@@ -35,10 +39,10 @@ def resizeImage(uploadedImage: ImageFieldFile) -> ImageFieldFile:
     # Preprocess
     img_temp.thumbnail(THUMBNAIL_SIZE)
     width, height = img_temp.size
-    left = (width - CROP_SIZE[0]) / 2
-    top = (height - CROP_SIZE[1]) / 2
-    right = (width + CROP_SIZE[0]) / 2
-    bottom = (height + CROP_SIZE[1]) / 2
+    left = (width - CROP_SIZE.width) / 2
+    top = (height - CROP_SIZE.height) / 2
+    right = (width + CROP_SIZE.width) / 2
+    bottom = (height + CROP_SIZE.height) / 2
     img_temp = img_temp.crop((left, top, right, bottom))
 
     # Save
