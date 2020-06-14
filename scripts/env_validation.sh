@@ -22,9 +22,6 @@ function secret_env_check_dev() {
 
 # Required environment variables for prod build
 function secret_env_check_prod() {
-    if [[ ! $DOCKER_USER || ! $DOCKER_PASSWORD ]]; then
-        set_as_failed "DOCKER_USER and DOCKER_PASSWORD environment variables are not set!"
-    fi
     if [[ ! $AWS_ACCESS_KEY_ID && $AWS_ENABLED == True ]]; then
         set_as_failed "AWS_ACCESS_KEY_ID not set, but AWS_ENABLED=True!"
     fi
@@ -95,7 +92,7 @@ validate_functions
 if [[ $BUILD == prod ]]; then
     validate_docker_compose_env
     INFO "Loaded Django settings for production environment"
-    INFO "Docker deployment: make image-latest && make up"
+    INFO "Docker deployment: make up"
 elif [[ $BUILD == dev ]]; then
     INFO "Loaded Django settings for development environment"
     INFO "Baremetal deployment: cd app && python manage.py runserver"
