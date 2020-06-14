@@ -73,7 +73,7 @@ class TestItems:
         )
 
     def test_send_notification_is_called_on_save(
-        self, monkeypatch, mock_default_item: Item
+        self, monkeypatch, mock_default_item: Item, mock_email_host_user: str
     ):
         """
         Ensures the send_email_notification_to_users function is called when saving an item
