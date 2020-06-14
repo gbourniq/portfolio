@@ -22,7 +22,7 @@ coverage_html_report/
 cov_html/
 
 # ignore logs 
-app/info.log
+**/info.log
 
 # ignore helm dependencies and generate packages
 **/Chart.lock

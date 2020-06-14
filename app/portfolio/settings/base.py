@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     "main",
     "tinymce",
     "materializecssform",
+    "rest_framework",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -127,8 +129,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Cache configuration
-# Cache time to live is 15 mn.
+# Cache configuration - set in dev/prod settings
 CACHE_TTL = None
 
 # Database
@@ -172,3 +173,10 @@ if static_settings.LOGGING_ENABLED:
             "": {"handlers": ["file"], "level": "INFO", "propagate": True},
         },
     }
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.permissions.AllowAny",
+    ]
+}

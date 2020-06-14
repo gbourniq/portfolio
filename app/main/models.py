@@ -97,10 +97,19 @@ def send_email_notification_to_users(
 
 # Create your models here.\
 class Category(models.Model):
+    id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=200, unique=True)
     summary = models.TextField()
     image = models.ImageField(upload_to=UPLOADS_FOLDER_PATH)
     category_slug = models.CharField(max_length=200, unique=True)
+    views = models.IntegerField(default=0)
+
+    def increment_views(self):
+        """
+        Increment views variable when the category is clicked on
+        """
+        self.views += 1
+        self.save()
 
     @classmethod
     def create(cls, dictionary):
@@ -145,6 +154,7 @@ class Category(models.Model):
 
 
 class Item(models.Model):
+    id = models.AutoField(primary_key=True)
     item_name = models.CharField(max_length=200, unique=True)
     summary = models.CharField(max_length=200)
     content = models.TextField()
@@ -158,6 +168,14 @@ class Item(models.Model):
         verbose_name="Category",
         on_delete=models.SET_DEFAULT,
     )
+    views = models.IntegerField(default=0)
+
+    def increment_views(self):
+        """
+        Increment views variable when the category is clicked on
+        """
+        self.views += 1
+        self.save()
 
     @classmethod
     def create(cls, dictionary):

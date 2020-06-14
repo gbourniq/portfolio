@@ -18,19 +18,32 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 
-from main import views
+from main import api_views, views
 
 app_name = "main"  # here for namespacing of urls.
 
 urlpatterns = [
-    path("", views.viewHome, name="viewHome"),
+    # Django rest framework
+    path("api/v1/categories/", api_views.CategoryList.as_view()),
+    path("api/v1/categories/new", api_views.CategoryCreate.as_view()),
+    path(
+        "api/v1/categories/<int:id>/",
+        api_views.CategoryRetrieveUpdateDestroyAPIView.as_view(),
+    ),
+    path("api/v1/items/", api_views.ItemList.as_view()),
+    path("api/v1/items/new", api_views.ItemCreate.as_view()),
+    path(
+        "api/v1/items/<int:id>/",
+        api_views.ItemRetrieveUpdateDestroyAPIView.as_view(),
+    ),
+    # User management
     path("register/", views.register, name="register"),
     path("logout", views.logout_request, name="logout"),
     path("login", views.login_request, name="login"),
-    re_path(r"^items/$", views.viewCategories, name="viewCategories"),
+    # Views
+    path("", views.viewHome, name="viewHome"),
     re_path(r"^contact/$", views.viewContactUs, name="viewContactUs"),
-    path("admin/", admin.site.urls),
-    path("tinymce/", include("tinymce.urls")),
+    re_path(r"^items/$", views.viewCategories, name="viewCategories"),
     re_path(
         r"^items/(?P<category_slug>[\w\-]+)/$",
         views.viewItems,
@@ -41,6 +54,9 @@ urlpatterns = [
         views.viewItem,
         name="viewItem",
     ),
+    # Extra apps
+    path("admin/", admin.site.urls),
+    path("tinymce/", include("tinymce.urls")),
 ]
 
 urlpatterns = (

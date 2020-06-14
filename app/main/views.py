@@ -135,6 +135,8 @@ def viewItems(request, category_slug: str) -> redirect:
     first_item_object = matching_items.order_by("item_name").first()
     first_item_slug = first_item_object.item_slug
 
+    Category.objects.get(category_slug=category_slug).increment_views()
+
     return redirect(
         viewItem, category_slug=category_slug, item_slug=first_item_slug,
     )
@@ -145,6 +147,7 @@ def viewItem(request, category_slug: str, item_slug: str) -> render:
     """
     View for /<category>/<first_item>
     """
+
     this_item = get_item_in_category(item_slug, category_slug)
     ordered_items_in_category = get_items_by_category_slug(
         category_slug, ordered_by_name=True
@@ -157,6 +160,9 @@ def viewItem(request, category_slug: str, item_slug: str) -> render:
         "category_slug": category_slug,
         "category_name": this_item.category_name,
     }
+
+    this_item.increment_views()
+
     return render(request, "main/items.html", context=render_context,)
 
 
