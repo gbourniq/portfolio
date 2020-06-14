@@ -4,6 +4,7 @@ from .base import *
 Tests settings are suitable for a running pytest inside docker containers
 - DEBUG = True
 - Postgres containers as database backend
+- Email backend configuration
 - No cache settings (redis)
 - No celery settings
 - Local storage for django files (media/static)
@@ -14,6 +15,14 @@ print(f"Loading Django tests settings (docker)")
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = static_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = static_settings.EMAIL_HOST_PASSWORD
+EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = 10
 
 DATABASES = {
     "default": {

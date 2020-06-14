@@ -4,6 +4,7 @@ from collections import namedtuple
 from io import BytesIO
 from typing import List, Union
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.mail import BadHeaderError, send_mail
@@ -11,8 +12,6 @@ from django.db import models
 from django.db.models.fields.files import ImageFieldFile
 from django.utils import timezone
 from PIL import Image
-
-from app.static_settings import EMAIL_HOST_USER
 
 # Retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
@@ -72,7 +71,7 @@ def get_registered_emails() -> Union[List[str], None]:
 
 
 def send_email_notification_to_users(
-    subject: str, message: str, from_email: str = EMAIL_HOST_USER
+    subject: str, message: str, from_email: str = settings.EMAIL_HOST_USER
 ) -> None:
     """
     Send an email notification to registered users.
@@ -128,7 +127,7 @@ class Category(models.Model):
         """
         self.image = resizeImage(self.image)
         super(Category, self).save(*args, **kwargs)
-        if EMAIL_HOST_USER:
+        if settings.EMAIL_HOST_USER:
             send_email_notification_to_users(
                 subject=f"[Portfolio App Demo] New Category added!",
                 message=f"A new category '{self.category_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_slug}",
@@ -186,7 +185,7 @@ class Item(models.Model):
         that a new item has been added
         """
         super(Item, self).save(*args, **kwargs)
-        if EMAIL_HOST_USER:
+        if settings.EMAIL_HOST_USER:
             send_email_notification_to_users(
                 subject=f"[Portfolio App Demo] New Item added!",
                 message=f"A new item '{self.item_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_name.category_slug}/{self.item_slug}",

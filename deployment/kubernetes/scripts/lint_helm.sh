@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # exit with error status on first failure
-set -ex
+set -e
 
 # Set directory paths
 SCRIPT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )

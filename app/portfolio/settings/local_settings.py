@@ -4,6 +4,7 @@ from .base import *
 Local settings are suitable for a baremetal deployment:
 - DEBUG = True
 - Local postgres
+- No Email backend configuration
 - No cache settings (redis)
 - No celery settings
 - Local storage for django files (media/static)

@@ -388,6 +388,17 @@ jsmin = "*"
 
 [[package]]
 category = "main"
+description = "Web APIs for Django, made easy."
+name = "djangorestframework"
+optional = false
+python-versions = ">=3.5"
+version = "3.11.0"
+
+[package.dependencies]
+django = ">=1.11"
+
+[[package]]
+category = "main"
 description = "Docutils -- Python Documentation Utilities"
 name = "docutils"
 optional = false
@@ -982,7 +993,7 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "9ee5fe02dd9e2f80517c1134ed67f6a9633611563650785e1cd2f191a70da2a4"
+content-hash = "ccdf59ebb0e8620d0deca8a908759511351207f1cac3220121c3f82f5e817cf4"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -1158,6 +1169,10 @@ django-storages = [
 django-tinymce4-lite = [
     {file = "django-tinymce4-lite-1.7.5.tar.gz", hash = "sha256:f0958117ddacc72596e80746729e02a727264413ab54b799f3b697a44e054e87"},
     {file = "django_tinymce4_lite-1.7.5-py2.py3-none-any.whl", hash = "sha256:e6776bc5b2c7237705fea18668574bc1c4dff36babc90c99a2bb7b5d636eb5e8"},
+]
+djangorestframework = [
+    {file = "djangorestframework-3.11.0-py3-none-any.whl", hash = "sha256:05809fc66e1c997fd9a32ea5730d9f4ba28b109b9da71fccfa5ff241201fd0a4"},
+    {file = "djangorestframework-3.11.0.tar.gz", hash = "sha256:e782087823c47a26826ee5b6fa0c542968219263fb3976ec3c31edab23a4001f"},
 ]
 docutils = [
     {file = "docutils-0.15.2-py2-none-any.whl", hash = "sha256:9e4d7ecfc600058e07ba661411a2b7de2fd0fafa17d1a7f7361cd47b1175c827"},

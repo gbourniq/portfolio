@@ -4,6 +4,7 @@ from .base import *
 Docker settings are suitable for a docker deployment of the webserver
 - DEBUG = False
 - Postgres containers as database backend
+- Email backend configuration
 - Cache settings (Redis)
 - Celery settings
 - AWS S3 storage for django files (media/static)
@@ -14,6 +15,14 @@ print(f"Loading Django {static_settings.BUILD} settings")
 DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = static_settings.EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = static_settings.EMAIL_HOST_PASSWORD
+EMAIL_USE_TLS = True
+EMAIL_TIMEOUT = 10
 
 DATABASES = {
     "default": {
