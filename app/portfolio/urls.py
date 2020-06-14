@@ -36,6 +36,9 @@ urlpatterns = [
         "api/v1/items/<int:id>/",
         api_views.ItemRetrieveUpdateDestroyAPIView.as_view(),
     ),
+    path(
+        "api/v1/categories/<int:id>/stats/", api_views.CategoryStats.as_view(),
+    ),
     # User management
     path("register/", views.register, name="register"),
     path("logout", views.logout_request, name="logout"),
