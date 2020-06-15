@@ -11,9 +11,9 @@ class TestViewCategory:
         Test that 404 is handled when no category exist
         """
 
-        response = client.get(reverse("viewCategories"))
+        response = client.get(reverse("categories_view"))
 
-        assert "main/go_back_home.html" in (t.name for t in response.templates)
+        assert "main/go_back_home.html" in [t.name for t in response.templates]
         assert response.status_code == 200
         assert response.context["code_handled"] == 404
 
@@ -23,8 +23,9 @@ class TestViewCategory:
         Test the view Category page when database contains one category object
         """
 
-        response = client.get(reverse("viewCategories"))
+        response = client.get(reverse("categories_view"))
 
-        assert "main/categories.html" in (t.name for t in response.templates)
+        assert "main/categories.html" in [t.name for t in response.templates]
         assert response.status_code == 200
-        assert isinstance(response.context["categories"], QuerySet)
+
+        assert isinstance(response.context["all_categories_list"], QuerySet)

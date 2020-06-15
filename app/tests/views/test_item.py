@@ -16,8 +16,9 @@ class TestViewItems:
         """
 
         response = client.get(
-            reverse("viewItems", kwargs={"category_slug": "cat-slug-1"},)
+            reverse("items_view", kwargs={"category_slug": "cat-slug-1"},)
         )
+
         assert "main/go_back_home.html" in (t.name for t in response.templates)
         assert response.status_code == 200
         assert response.context["code_handled"] == 404
@@ -29,10 +30,10 @@ class TestViewItems:
         """
 
         response = client.get(
-            reverse("viewItems", kwargs={"category_slug": "cat-slug-1"})
+            reverse("items_view", kwargs={"category_slug": "cat-slug-1"})
         )
 
-        assert response.url == "/items/cat-slug-1/item-slug-1-1/"
+        assert response.request["PATH_INFO"] == "/items/cat-slug-1/"
         assert response.status_code == 302
         assert len(response.templates) == 0
 
@@ -43,7 +44,7 @@ class TestViewItems:
         """
 
         response = client.get(
-            reverse("viewItems", kwargs={"category_slug": "unknown-cat-slug"})
+            reverse("items_view", kwargs={"category_slug": "unknown-cat-slug"})
         )
 
         assert response.status_code == 200
@@ -62,7 +63,7 @@ class TestViewItem:
 
         response = client.get(
             reverse(
-                "viewItem",
+                "item_view",
                 kwargs={
                     "category_slug": "cat-slug-1",
                     "item_slug": "item-slug-1-1",
@@ -92,7 +93,7 @@ class TestViewItem:
 
         response = client.get(
             reverse(
-                "viewItem",
+                "item_view",
                 kwargs={
                     "category_slug": category_slug,
                     "item_slug": item_slug,
@@ -109,8 +110,37 @@ class TestViewItem:
         assert isinstance(response.context["item"], Item)
         assert isinstance(response.context["sidebar"], QuerySet)
         assert isinstance(response.context["this_item_idx"], int)
-        assert isinstance(response.context["category_slug"], str)
-        assert isinstance(response.context["category_name"], Category)
+        assert isinstance(response.context["category"], Category)
+
+    @pytest.mark.integration
+    @pytest.mark.parametrize(
+        "initial_view_count", [0, 2, 5, 10, 100, 1000],
+    )
+    def test_views_incremented(
+        self, client, initial_view_count: int, mock_default_item: Item,
+    ):
+        """
+        Test the views field is incremented when a valid item url is visited.
+        """
+        mock_default_item.views = initial_view_count
+        mock_default_item.save()
+
+        response = client.get(
+            reverse(
+                "item_view",
+                kwargs={
+                    "category_slug": "cat-slug-1",
+                    "item_slug": "item-slug-1-1",
+                },
+            )
+        )
+
+        assert (
+            response.request["PATH_INFO"] == f"/items/cat-slug-1/item-slug-1-1/"
+        )
+        assert response.status_code == 200
+        assert "main/items.html" in (t.name for t in response.templates)
+        assert response.context["item"].views == initial_view_count + 1
 
     @pytest.mark.integration
     @pytest.mark.parametrize(
@@ -135,7 +165,7 @@ class TestViewItem:
 
         response = client.get(
             reverse(
-                "viewItem",
+                "item_view",
                 kwargs={
                     "category_slug": category_slug,
                     "item_slug": item_slug,
@@ -166,7 +196,7 @@ class TestViewItem:
 
         response = client.get(
             reverse(
-                "viewItem",
+                "item_view",
                 kwargs={
                     "category_slug": category_slug,
                     "item_slug": item_slug,
@@ -183,8 +213,7 @@ class TestViewItem:
         assert isinstance(response.context["item"], Item)
         assert isinstance(response.context["sidebar"], QuerySet)
         assert isinstance(response.context["this_item_idx"], int)
-        assert isinstance(response.context["category_slug"], str)
-        assert isinstance(response.context["category_name"], Category)
+        assert isinstance(response.context["category"], Category)
 
     @pytest.mark.integration
     @pytest.mark.parametrize(
@@ -211,7 +240,7 @@ class TestViewItem:
 
         response = client.get(
             reverse(
-                "viewItem",
+                "item_view",
                 kwargs={
                     "category_slug": category_slug,
                     "item_slug": item_slug,
@@ -248,7 +277,7 @@ class TestViewItem:
 
         response = client.get(
             reverse(
-                "viewItem",
+                "item_view",
                 kwargs={
                     "category_slug": category_slug,
                     "item_slug": item_slug,
@@ -265,8 +294,7 @@ class TestViewItem:
         assert isinstance(response.context["item"], Item)
         assert isinstance(response.context["sidebar"], QuerySet)
         assert isinstance(response.context["this_item_idx"], int)
-        assert isinstance(response.context["category_slug"], str)
-        assert isinstance(response.context["category_name"], Category)
+        assert isinstance(response.context["category"], Category)
 
     @pytest.mark.integration
     @pytest.mark.parametrize(
@@ -293,7 +321,7 @@ class TestViewItem:
 
         response = client.get(
             reverse(
-                "viewItem",
+                "item_view",
                 kwargs={
                     "category_slug": category_slug,
                     "item_slug": item_slug,

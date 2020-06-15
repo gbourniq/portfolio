@@ -30,36 +30,38 @@ urlpatterns = [
         "api/v1/categories/<int:id>/",
         api_views.CategoryRetrieveUpdateDestroyAPIView.as_view(),
     ),
+    path(
+        "api/v1/categories/<int:id>/stats/", api_views.CategoryStats.as_view(),
+    ),
     path("api/v1/items/", api_views.ItemList.as_view()),
     path("api/v1/items/new", api_views.ItemCreate.as_view()),
     path(
         "api/v1/items/<int:id>/",
         api_views.ItemRetrieveUpdateDestroyAPIView.as_view(),
     ),
-    path(
-        "api/v1/categories/<int:id>/stats/", api_views.CategoryStats.as_view(),
-    ),
     # User management
-    path("register/", views.register, name="register"),
-    path("logout", views.logout_request, name="logout"),
-    path("login", views.login_request, name="login"),
+    path("register/", views.SignUpFormView.as_view(), name="register"),
+    path("login/", views.LoginFormView.as_view(), name="login"),
+    path("logout/", views.logout_request, name="logout"),
     # Views
-    path("", views.viewHome, name="viewHome"),
-    re_path(r"^contact/$", views.viewContactUs, name="viewContactUs"),
-    re_path(r"^items/$", views.viewCategories, name="viewCategories"),
-    re_path(
-        r"^items/(?P<category_slug>[\w\-]+)/$",
-        views.viewItems,
-        name="viewItems",
+    path("", views.viewHome, name="home"),
+    path("contact/", views.ContactUsFormView.as_view(), name="contact_us"),
+    path("items/", views.CategoriesView.as_view(), name="categories_view"),
+    path(
+        "items/<category_slug>/<item_slug>/",
+        views.ItemsView.as_view(),
+        name="item_view",
     ),
-    re_path(
-        r"^items/(?P<category_slug>[\w\-]+)/(?P<item_slug>[\w\-]+)/$",
-        views.viewItem,
-        name="viewItem",
+    path(
+        "items/<category_slug>/",
+        views.RedirectToItemView.as_view(),
+        name="items_view",
     ),
     # Extra apps
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
+    # If no url matched
+    re_path(r"^.*/$", views.error_404, name="error404"),
 ]
 
 urlpatterns = (

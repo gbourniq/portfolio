@@ -1,7 +1,6 @@
 from unittest.mock import Mock
 
 import pytest
-from django.conf import settings
 from django.urls import reverse
 
 from main.forms import ContactForm
@@ -15,7 +14,7 @@ class TestViewContactUs:
         Test the view Category us page is rendered with the Contact Form
         """
 
-        response = client.get(reverse("viewContactUs"))
+        response = client.get(reverse("contact_us"))
 
         assert "main/contact_us.html" in (t.name for t in response.templates)
         assert response.status_code == 200
@@ -27,18 +26,17 @@ class TestViewContactUs:
     ):
         """
         Test the `Go Back Home` page is rendered when user submit valid form
+        and that send_mail is called when a valid form is posted
         """
 
-        create_contact_form = Mock(return_value=mock_contact_form)
-        monkeypatch.setattr("main.views.send_email", create_contact_form)
+        mock_send_mail = Mock()
+        monkeypatch.setattr("main.views.send_mail", mock_send_mail)
 
-        response = client.post(reverse("viewContactUs"), data={})
-
-        create_contact_form.assert_called_once_with(
-            response.context["request"],
-            [settings.EMAIL_HOST_USER],
-            settings.EMAIL_HOST_USER,
+        response = client.post(
+            reverse("contact_us"), data=mock_contact_form.json()
         )
+
+        mock_send_mail.assert_called()
         assert "main/go_back_home.html" in (t.name for t in response.templates)
         assert response.status_code == 200
 
@@ -50,18 +48,18 @@ class TestViewContactUs:
         - Email function not called
         """
 
-        send_email = Mock()
-        monkeypatch.setattr("main.services.send_email_function", send_email)
+        mock_send_mail = Mock()
+        monkeypatch.setattr("main.views.send_mail", mock_send_mail)
 
-        contact_us_url = reverse("viewContactUs")
+        contact_us_url = reverse("contact_us")
         response = client.post(
             contact_us_url, data={}, HTTP_REFERER=contact_us_url
         )
 
-        send_email.assert_not_called()
+        mock_send_mail.assert_not_called()
 
-        assert len(response.templates) == 0
-        assert response.status_code == 302
+        assert "main/contact_us.html" in (t.name for t in response.templates)
+        assert response.status_code == 200
 
     @pytest.mark.integration
     @pytest.mark.parametrize(
@@ -88,8 +86,8 @@ class TestViewContactUs:
         (return code 302) and that the email function is not called,
         """
 
-        send_email = Mock()
-        monkeypatch.setattr("main.services.send_email_function", send_email)
+        mock_send_mail = Mock()
+        monkeypatch.setattr("main.views.send_mail", mock_send_mail)
 
         invalid_form = ContactForm()
         invalid_form.name = name
@@ -97,34 +95,14 @@ class TestViewContactUs:
         invalid_form.subject = subject
         invalid_form.message = message
 
-        contact_us_url = reverse("viewContactUs")
+        contact_us_url = reverse("contact_us")
         response = client.post(
             contact_us_url,
             data=invalid_form.json(),
             HTTP_REFERER=contact_us_url,
         )
 
-        send_email.assert_not_called()
+        mock_send_mail.assert_not_called()
 
-        assert len(response.templates) == 0
-        assert response.status_code == 302
-
-    @pytest.mark.integration
-    def test_send_email(
-        self, monkeypatch, client, mock_contact_form: ContactForm
-    ):
-        """
-        Test the send_mail_function is called when a valid form is submitted
-        """
-
-        send_email = Mock()
-        monkeypatch.setattr("main.services.send_email_function", send_email)
-
-        response = client.post(
-            reverse("viewContactUs"), data=mock_contact_form.json()
-        )
-
-        send_email.assert_called()
-
-        assert "main/go_back_home.html" in (t.name for t in response.templates)
+        assert "main/contact_us.html" in (t.name for t in response.templates)
         assert response.status_code == 200
