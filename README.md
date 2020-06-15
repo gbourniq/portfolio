@@ -15,6 +15,7 @@ This repository features of the following:
 - [Portfolio App Overview](#portfolio-app-overview)
 - [Repository Setup](#repository-setup)
 - [Local Development](#local-development)
+- [Rest APIs](#restful-apis)
 - [Docker Deployment](#docker-deployment)
 - [Kubernetes Deployment](#kubernetes-deployment)
 - [CI/CD Pipeline](#ci-cd-pipeline)
@@ -238,6 +239,32 @@ bin/portfolio.tar.gz
 This tarball contains the application code mounted in the docker image.
 
 > The image can be published using either `make publish-latest` or `make publish-tagged`.
+
+
+## RESTful APIs
+
+Web APIs have been developing using the [Django REST framework](https://www.django-rest-framework.org).
+
+* Browse Category and Item model objects (`ListAPIView`):
+```
+api/v1/categories/
+api/v1/categories/<id>/stats
+api/v1/items/
+```
+
+* Add new Category and Item model objects (`CreateAPIView`) :
+```
+api/v1/categories/new
+api/v1/items/new
+```
+
+* Edit and delete existing Category and Item model objects (`RetrieveUpdateDestroyAPIView`):
+```
+api/v1/categories/<id>/
+api/v1/items/<id>/
+```
+
+> Note: Adding and editing objects requires to be logged in.
 
 
 ## Docker Deployment
