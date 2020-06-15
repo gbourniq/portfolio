@@ -12,7 +12,6 @@ from rest_framework.response import Response
 
 from .models import Category, Item
 from .serializers import CategorySerializer, ItemSerializer, StatSerializer
-from .services import get_items_by_category_slug
 
 
 class Pagination(LimitOffsetPagination):
@@ -23,7 +22,7 @@ class Pagination(LimitOffsetPagination):
 class CategoryList(ListAPIView):
     permission_classes = [AllowAny]
 
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by("id")
 
     # Serializer
     serializer_class = CategorySerializer
@@ -51,7 +50,7 @@ class CategoryCreate(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         """
-        Overrides create method to validate user input,
+        Overrides CREATE API method to validate user input,
         E.g: validation of a decimal value
         if request.data.get('price') <= 0.0:
             raise ValidationError({'err_type': 'Must be above £0.00'})
@@ -68,7 +67,7 @@ class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         """
-        Overrides method to update cache
+        Overrides HTTP DELETE method to update cache
         """
         response = super().delete(request, *args, **kwargs)
         # if response.status_code == status.HTTP_204_NO_CONTENT:
@@ -78,7 +77,7 @@ class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
         """
-        Overrides method to update cache
+        Overrides UPDATE API method to update cache
         """
         response = super().update(request, *args, **kwargs)
         # if response.status_code == status.HTTP_200_OK:
@@ -108,21 +107,23 @@ class CategoryStats(GenericAPIView):
 
     def get(self, request, format=None, id=None):
         """
-        returns a stats dictionary response which include
+        Overrides the HTTP GET method to 
+        return a stats dictionary response which include
         the total number of items views for the selected category 
         """
         category = self.get_object()
-        item_in_category = get_items_by_category_slug(category.category_slug)
-        all_views = sum([item.views for item in item_in_category])
-
-        serializer = StatSerializer({"stats": {"all_items_views": all_views,}})
+        items_in_category = Item.objects.filter(category_name=category)
+        all_views_count = sum([item.views for item in items_in_category])
+        serializer = StatSerializer(
+            {"stats": {"all_items_views": all_views_count}}
+        )
         return Response(serializer.data)
 
 
 class ItemList(ListAPIView):
     permission_classes = [AllowAny]
 
-    queryset = Item.objects.all()
+    queryset = Item.objects.all().order_by("id")
 
     # Serializer
     serializer_class = ItemSerializer
@@ -150,7 +151,7 @@ class ItemCreate(CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         """
-        Overrides create method to validate user input,
+        Overrides the CREATE API method to validate user input,
         E.g: validation of a decimal value
         if request.data.get('price') <= 0.0:
             raise ValidationError({'err_type': 'Must be above £0.00'})
@@ -177,7 +178,7 @@ class ItemRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     def update(self, request, *args, **kwargs):
         """
-        Overrides method to update cache
+        Overrides UPDATE API method to update cache
         """
         response = super().update(request, *args, **kwargs)
         # if response.status_code == status.HTTP_200_OK:

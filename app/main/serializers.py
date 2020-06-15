@@ -5,8 +5,9 @@ from main.models import Category, Item
 
 class CategorySerializer(serializers.ModelSerializer):
     """
-    Class to serialize Category model to JSON
-    Category includes their items (chield elements)
+    Class to serialize Category model.
+    Adding child_items SerializeMethod to display
+    Category child elements (Items)
     """
 
     category_name = serializers.CharField(
@@ -53,13 +54,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ItemSerializer(serializers.ModelSerializer):
     """
-    Class to serialize Category model to JSON
-    Category includes their items (chield elements)
+    Class to serialize Item model
     """
 
-    # Overrides field validation
-    # premium_item = serializers.BooleanField(read_only=True)
-    # price = serializers.DecimalField(min_value=1.00, max_value=1000000, max_digits=None, decimal_places=2)
     item_name = serializers.CharField(
         min_length=0,
         max_length=20,
@@ -102,4 +99,8 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class StatSerializer(serializers.Serializer):
+    """
+    Class to serialize CategoryStats
+    """
+
     stats = serializers.DictField(child=serializers.IntegerField())
