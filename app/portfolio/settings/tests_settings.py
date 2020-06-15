@@ -14,7 +14,7 @@ print(f"Loading Django tests settings (docker)")
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ENABLE_LOGIN_REQUIRED_MIXIN = False
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"

@@ -11,6 +11,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View, generic
 
 from .forms import ContactForm, NewUserForm
+from .mixins import RequireLoginMixin
 from .models import Category, Item
 from .tasks import send_email_celery
 
@@ -18,9 +19,15 @@ from .tasks import send_email_celery
 logger = logging.getLogger(__name__)
 
 
-def viewHome(request) -> render:
-    """View for home page, /homepage"""
-    return render(request, "main/home.html")
+class IndexView(RequireLoginMixin, View):
+    """
+    View for home page, /
+    """
+
+    template_name = "main/home.html"
+
+    def get(self, request, *args, **kwargs) -> render:
+        return render(request, self.template_name)
 
 
 class SignUpFormView(View):
@@ -44,7 +51,7 @@ class SignUpFormView(View):
             messages.success(request, f"New account created: {username}")
             logger.info(f"User {username} successfully registered.")
             login(request, user)
-            return redirect(viewHome)
+            return redirect("/")
         [
             messages.error(request, f"{msg}: {form.error_messages[msg]}")
             for msg in form.error_messages
@@ -58,7 +65,7 @@ def logout_request(request) -> redirect:
     """
     logout(request)
     messages.info(request, "Logged out successfully!")
-    return redirect(viewHome)
+    return redirect("/")
 
 
 class LoginFormView(View):
@@ -84,12 +91,15 @@ class LoginFormView(View):
                 login(request, user)
                 messages.info(request, f"You are now logged in as {username}")
                 logger.info(f"User {username} successfully logged in.")
-                return redirect(viewHome)
+                if request.GET.get("next"):
+                    return redirect(request.GET.get("next"))
+                else:
+                    return redirect("/")
         messages.error(request, "Invalid username or password.")
         return render(request, self.template_name, {"form": form})
 
 
-class CategoriesView(generic.ListView):
+class CategoriesView(RequireLoginMixin, generic.ListView):
     """
     View to display category cards
     """
@@ -105,7 +115,7 @@ class CategoriesView(generic.ListView):
         raise Http404("Oops.. No category found!")
 
 
-class RedirectToItemView(generic.base.RedirectView):
+class RedirectToItemView(RequireLoginMixin, generic.base.RedirectView):
     """
     View to redirect the user to the first item of 
     a category when the category card is clicked on.
@@ -125,7 +135,7 @@ class RedirectToItemView(generic.base.RedirectView):
         raise Http404(f"Oops.. Category {category} does not contain any item!")
 
 
-class ItemsView(generic.ListView):
+class ItemsView(RequireLoginMixin, generic.ListView):
     """
     View for items, /<category_slug>/<item_slug>/
     """
@@ -170,7 +180,7 @@ class ItemsView(generic.ListView):
         return super().dispatch(*args, **kwargs)
 
 
-class ContactUsFormView(View):
+class ContactUsFormView(RequireLoginMixin, View):
     """
     View for users to send messages via
     the Contact Us form

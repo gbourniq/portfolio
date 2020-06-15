@@ -44,7 +44,7 @@ urlpatterns = [
     path("login/", views.LoginFormView.as_view(), name="login"),
     path("logout/", views.logout_request, name="logout"),
     # Views
-    path("", views.viewHome, name="home"),
+    path("", views.IndexView.as_view(), name="home"),
     path("contact/", views.ContactUsFormView.as_view(), name="contact_us"),
     path("items/", views.CategoriesView.as_view(), name="categories_view"),
     path(

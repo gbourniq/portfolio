@@ -14,6 +14,8 @@ print(f"Loading Django {static_settings.BUILD} settings")
 
 DEBUG = True
 
+ENABLE_LOGIN_REQUIRED_MIXIN = False
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
