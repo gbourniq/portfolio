@@ -19,7 +19,7 @@ from .tasks import send_email_celery
 logger = logging.getLogger(__name__)
 
 
-class IndexView(RequireLoginMixin, View):
+class IndexView(RequireLoginMixin, generic.base.TemplateView):
     """
     View for home page, /
     """
