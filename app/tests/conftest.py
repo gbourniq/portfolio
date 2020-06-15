@@ -1,5 +1,5 @@
 # from unittest.mock import Mock
-from typing import Dict, List, Union
+from typing import Dict, List
 from unittest.mock import Mock
 
 import pytest
@@ -8,21 +8,6 @@ from django.contrib.auth.models import User
 from app.tests.mocks import MockCategory, MockItem
 from main.forms import ContactForm
 from main.models import Category, Item
-
-
-# Helpers functions
-def existing_categories() -> Union[List[Category], None]:
-    """
-    Returns category names for existing categories in the database
-    """
-    return [cat.category_name for cat in Category.objects.all()]
-
-
-def existing_items() -> Union[List[Item], None]:
-    """
-    Returns item names for existing items in the database
-    """
-    return [itm.item_name for itm in Item.objects.all()]
 
 
 def save_mock_category(monkeypatch, category: Category) -> None:
@@ -52,7 +37,7 @@ def load_default_category(
     mock_default_category: Category, monkeypatch
 ) -> Category:
     """Saves a default category object, and return the object"""
-    if mock_default_category.category_name not in existing_categories():
+    if mock_default_category not in Category.objects.all():
         save_mock_category(monkeypatch, mock_default_category)
     return mock_default_category
 
@@ -69,7 +54,7 @@ def load_default_categories(
 ) -> List[Category]:
     """Saves default category objects, and return objects"""
     for mock_default_category in mock_default_categories:
-        if mock_default_category.category_name not in existing_categories():
+        if mock_default_category not in Category.objects.all():
             save_mock_category(monkeypatch, mock_default_category)
     return mock_default_categories
 
@@ -88,7 +73,7 @@ def mock_default_item(load_default_category) -> Item:
 @pytest.fixture
 def load_default_item(mock_default_item: Item) -> Item:
     """Save a default item object, and return the object"""
-    if mock_default_item.item_name not in existing_items():
+    if mock_default_item not in Item.objects.all():
         mock_default_item.save()
     return mock_default_item
 
@@ -107,7 +92,7 @@ def load_default_items(mock_default_items: List[Item]) -> List[Item]:
     [
         mock_default_item.save()
         for mock_default_item in mock_default_items
-        if mock_default_item.item_name not in existing_items()
+        if mock_default_item.item_name not in Item.objects.all()
     ]
     return mock_default_items
 
