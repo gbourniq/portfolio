@@ -21,8 +21,8 @@ services:
       REDIS_HOST: ${REDIS_HOST:?}
       REDIS_PORT: ${REDIS_PORT:?}
       # Email Contact page
-      EMAIL_HOST_USER: ${EMAIL_HOST_USER:?}
-      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD:?}
+      EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+      EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
     volumes:
       - ../../app/:${DOCKER_APP_CODE:?}/
       - ../../pytest.ini:${DOCKER_PORTFOLIO_HOME:?}/pytest.ini
