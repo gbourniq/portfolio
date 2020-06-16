@@ -218,7 +218,15 @@ class ContactUsFormView(RequireLoginMixin, View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
+
+            if not settings.EMAIL_HOST_USER:
+                logger.warning(
+                    f"User posted ContactForm but EMAIL_HOST_USER not set."
+                )
+                raise Http404("Oops.. Looks like this is not implemented yet.")
+
             self.form = form
+
             try:
                 if hasattr(settings, "BROKER_URL"):
                     send_email_celery.delay(**self.email_data())
