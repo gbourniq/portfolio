@@ -1,126 +1,52 @@
-import logging
-import sys
-from collections import namedtuple
-from io import BytesIO
-from typing import List, Union
-
 from django.conf import settings
-from django.contrib.auth.models import User
-from django.core.files.uploadedfile import InMemoryUploadedFile
-from django.core.mail import BadHeaderError, send_mail
 from django.db import models
-from django.db.models.fields.files import ImageFieldFile
 from django.utils import timezone
-from PIL import Image
 
-# Retrieves a Python logging instance (or creates it)
-logger = logging.getLogger(__name__)
-
-# Global variables
-UPLOADS_FOLDER_PATH = "images/"
-
-Dimensions = namedtuple("Dimensions", "width height")
-
-THUMBNAIL_SIZE = Dimensions(500, 500)
-CROP_SIZE = Dimensions(300, 300)
+from .mixins import BaseModelMixin, JSONifyMixin
 
 
-def resizeImage(uploadedImage: ImageFieldFile) -> ImageFieldFile:
-    """
-    Performs the following operation on a given image:
-    - Thumbmail: returns an image that fits inside of a given size (preserving aspect ratios)
-    - Crop: Cut image borders to fit a given size
-    """
-    # Load
-    img_temp = Image.open(uploadedImage)
-    outputIoStream = BytesIO()
-
-    # Preprocess
-    img_temp.thumbnail(THUMBNAIL_SIZE)
-    width, height = img_temp.size
-    left = (width - CROP_SIZE.width) / 2
-    top = (height - CROP_SIZE.height) / 2
-    right = (width + CROP_SIZE.width) / 2
-    bottom = (height + CROP_SIZE.height) / 2
-    img_temp = img_temp.crop((left, top, right, bottom))
-
-    # Save
-    img_temp.save(outputIoStream, format="JPEG", quality=90)
-    outputIoStream.seek(0)
-    uploadedImage = InMemoryUploadedFile(
-        outputIoStream,
-        "ImageField",
-        "%s.jpg" % uploadedImage.name.split(".")[0],
-        "image/jpeg",
-        sys.getsizeof(outputIoStream),
-        None,
-    )
-    return uploadedImage
-
-
-def get_registered_emails() -> Union[List[str], None]:
-    """
-    Retrives email addresses of registered users.
-    """
-    registered_email_addresses = [
-        user.email for user in User.objects.all() if user.email
-    ]
-    if registered_email_addresses is not None:
-        return registered_email_addresses
-    return None
-
-
-def send_email_notification_to_users(
-    subject: str, message: str, from_email: str = settings.EMAIL_HOST_USER
-) -> None:
-    """
-    Send an email notification to registered users.
-    """
-
-    registered_emails = get_registered_emails()
-
-    if not registered_emails:
-        logger.warning(f"No registered emails found")
-        return None
-
-    try:
-        [
-            send_mail(subject, message, from_email, [to_email])
-            for to_email in registered_emails
-        ]
-        logger.info(
-            f"Email notification sent successfully to {registered_emails}"
-        )
-    except BadHeaderError:
-        logger.warning(f"Email function {send_mail} returned BadHeaderError")
-
-
-# Create your models here.\
-class Category(models.Model):
+class Category(models.Model, BaseModelMixin, JSONifyMixin):
     id = models.AutoField(primary_key=True)
     category_name = models.CharField(max_length=200, unique=True)
     summary = models.TextField()
-    image = models.ImageField(upload_to=UPLOADS_FOLDER_PATH)
+    image = models.ImageField(upload_to=settings.UPLOADS_FOLDER_PATH)
     category_slug = models.CharField(max_length=200, unique=True)
-    views = models.IntegerField(default=0)
 
-    def increment_views(self):
+    # List of all existing categories (property are hidden from other classes)
+    __category_list = None
+
+    @classmethod
+    def get_category_list(cls):
         """
-        Increment views variable when the category is clicked on
+        Class method to return the list of
+        categories that were saved via the .save() method.
+        Usage:
+        > categories = Category.get_category_list()
         """
-        self.views += 1
-        self.save()
+        if Category.__category_list is None:
+            Category.__category_list = []
+        return Category.__category_list
+
+    def __append_to_category_list(self):
+        """
+        Hidden instance method to append the object
+        to the class attribute __category_list
+        """
+        Category.get_category_list().append(self)
 
     @classmethod
     def create(cls, dictionary):
         """
         Class method to instantiate a Category objects using dictionaries.
+        Usage:
+        > new_category = Cateogory.create(datadict)
         """
         return cls(**dictionary)
 
-    def json(self):
+    def to_json(self):
         """
-        Returns class attributes as a dictionary.
+        Overrides JSONify instance method 
+        to return class attributes as a dictionary.
         """
         return {
             "category_name": self.category_name,
@@ -134,26 +60,35 @@ class Category(models.Model):
         Override the save method to resize the image on category.save()
         and notify all registered users that a new category has been added
         """
-        self.image = resizeImage(self.image)
+        self.image = self.resizeImage(self.image)
+        self.__append_to_category_list()
         super(Category, self).save(*args, **kwargs)
         if settings.EMAIL_HOST_USER:
-            send_email_notification_to_users(
+            self.send_email_notification_to_users(
                 subject=f"[Portfolio App Demo] New Category added!",
                 message=f"A new category '{self.category_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_slug}",
             )
 
     def __str__(self):
         """
-        Override method to have str(category_object) returning category_name
+        Override magic method to return a user-friendly string
+        representation of the object on str(category_object)
         """
         return self.category_name
+
+    def __repr__(self):
+        """
+        Override magic method to return a developer-friendly string
+        representation of the object on repr(category_object)
+        """
+        return f"Category=(id={self.id},category_name={self.category_name},category_slug={self.category_slug})"
 
     class Meta:
         verbose_name_plural = "Categories"
         app_label = "main"
 
 
-class Item(models.Model):
+class Item(models.Model, BaseModelMixin, JSONifyMixin):
     id = models.AutoField(primary_key=True)
     item_name = models.CharField(max_length=200, unique=True)
     summary = models.CharField(max_length=200)
@@ -170,13 +105,6 @@ class Item(models.Model):
     )
     views = models.IntegerField(default=0)
 
-    def increment_views(self):
-        """
-        Increment views variable when the category is clicked on
-        """
-        self.views += 1
-        self.save()
-
     @classmethod
     def create(cls, dictionary):
         """
@@ -184,7 +112,7 @@ class Item(models.Model):
         """
         return cls(**dictionary)
 
-    def json(self):
+    def to_json(self):
         """
         Returns class attributes as a dictionary.
         """
@@ -197,6 +125,13 @@ class Item(models.Model):
             "category_name": self.category_name,
         }
 
+    def increment_views(self):
+        """
+        Instance method to increment the views variable
+        """
+        self.views += 1
+        self.save()
+
     def save(self, *args, **kwargs):
         """
         Overrides the save method to notify all registered users
@@ -204,16 +139,44 @@ class Item(models.Model):
         """
         super(Item, self).save(*args, **kwargs)
         if settings.EMAIL_HOST_USER:
-            send_email_notification_to_users(
+            self.send_email_notification_to_users(
                 subject=f"[Portfolio App Demo] New Item added!",
                 message=f"A new item '{self.item_name}' has been added! Check it out here... https://www.gbournique.com/items/{self.category_name.category_slug}/{self.item_slug}",
             )
 
     def __str__(self):
         """
-        Override method to have str(item_object) returning category_name
+        Override magic method to return a user-friendly string
+        representation of the object on str(item_object)
         """
         return self.item_name
+
+    def __repr__(self):
+        """
+        Override magic method to return a developer-friendly string
+        representation of the object on repr(item_object)
+        """
+        return f"Item=(id={self.id},item_name={self.item_name},item_slug={self.item_slug})"
+
+    def __ge__(self, value):
+        """
+        Adds the greater or eq than behavior to compare two Item objects
+        based on the number of views. This allows to sort items 
+        by their number of views with items.sort().
+        """
+        if not isinstance(value, Item):
+            raise ValueError("Can't compare Item to non-Item type")
+        return self.views >= value.views
+
+    def __lt__(self, value):
+        """
+        Adds the less than behavior to compare two Item objects
+        based on the number of views. This allows to sort items 
+        by their number of views with items.sort().
+        """
+        if not isinstance(value, Item):
+            raise ValueError("Can't compare Item to non-Item type")
+        return self.views < value.views
 
     class Meta:
         verbose_name_plural = "Items"

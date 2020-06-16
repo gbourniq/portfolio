@@ -25,7 +25,6 @@ class CategorySerializer(serializers.ModelSerializer):
         style={"input_type": "text", "placeholder": "url-slug-to-category"},
         help_text="Insert the URL slug to redirect to your category. No space allowed!",
     )
-    views = serializers.IntegerField(read_only=True)
     child_items = serializers.SerializerMethodField()
 
     class Meta:
@@ -36,7 +35,6 @@ class CategorySerializer(serializers.ModelSerializer):
             "summary",
             "image",
             "category_slug",
-            "views",
             "child_items",
         )
 

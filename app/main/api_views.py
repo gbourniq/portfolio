@@ -22,6 +22,7 @@ class Pagination(LimitOffsetPagination):
 class CategoryList(ListAPIView):
     permission_classes = [AllowAny]
 
+    # QuerySet
     queryset = Category.objects.all().order_by("id")
 
     # Serializer
@@ -123,6 +124,7 @@ class CategoryStats(GenericAPIView):
 class ItemList(ListAPIView):
     permission_classes = [AllowAny]
 
+    # QuerySet
     queryset = Item.objects.all().order_by("id")
 
     # Serializer
