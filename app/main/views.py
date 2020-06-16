@@ -170,7 +170,9 @@ class ItemsView(RequireLoginMixin, generic.ListView):
         context["item"] = self.item
         context["category"] = self.category
         context["sidebar"] = self.ordered_items_in_category
-        context["this_item_idx"] = self.item.id
+        context["this_item_idx"] = list(self.ordered_items_in_category).index(
+            self.item
+        )
         return context
 
     def dispatch(self, *args, **kwargs):
