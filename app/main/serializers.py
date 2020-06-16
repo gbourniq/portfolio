@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from main.models import Category, Item
@@ -74,7 +75,8 @@ class ItemSerializer(serializers.ModelSerializer):
         help_text="To insert formatted text, please use the django administration site.",
     )
     date_published = serializers.DateTimeField(
-        help_text="Please use the dropdown menu to select a date and time"
+        default=timezone.now,
+        help_text="Leave blank to use current datetime or use the dropdown menu (Google Chrome). ",
     )
     item_slug = serializers.CharField(
         style={"input_type": "text", "placeholder": "url-slug-to-item"},
