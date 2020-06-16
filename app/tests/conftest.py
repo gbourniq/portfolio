@@ -16,7 +16,7 @@ def save_mock_category(monkeypatch, category: Category) -> None:
     processing dummy images when saving Category objects.
     """
     mock_resize_image = Mock(return_value=category.image)
-    monkeypatch.setattr("main.models.resizeImage", mock_resize_image)
+    monkeypatch.setattr(Category, "resizeImage", mock_resize_image)
     category.save()
     mock_resize_image.assert_called_once_with(category.image)
 

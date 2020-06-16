@@ -14,7 +14,8 @@ from app.tests.utils import (
     create_dummy_file,
     create_dummy_png_image,
 )
-from main.models import CROP_SIZE, Category
+from main.mixins import BaseModelMixin
+from main.models import Category
 
 
 @pytest.mark.django_db(transaction=True)
@@ -54,7 +55,7 @@ class TestCategory:
             "image": mock_default_category.image,
             "category_slug": mock_default_category.category_slug,
         }
-        assert mock_default_category.json() == expected_dict
+        assert mock_default_category.to_json() == expected_dict
 
     def test_attr_types(self, mock_default_category: Category):
         """
@@ -80,7 +81,7 @@ class TestCategory:
         Ensures the resizeImage function is called when saving a category
         """
         mock_resize_image = Mock(return_value=mock_default_category.image)
-        monkeypatch.setattr("main.models.resizeImage", mock_resize_image)
+        monkeypatch.setattr(Category, "resizeImage", mock_resize_image)
 
         mock_default_category.save()
 
@@ -115,7 +116,9 @@ class TestCategory:
         mock_default_category.save()
 
         check_image_attributes(
-            mock_default_category.image, size_check=CROP_SIZE, ext_check=".jpg"
+            mock_default_category.image,
+            size_check=BaseModelMixin.CROP_SIZE,
+            ext_check=".jpg",
         )
 
         shutil.rmtree(Path(MEDIA_URL))
@@ -168,11 +171,12 @@ class TestCategory:
         """
 
         mock_resize_image = Mock(return_value=mock_default_category.image)
-        monkeypatch.setattr("main.models.resizeImage", mock_resize_image)
+        monkeypatch.setattr(Category, "resizeImage", mock_resize_image)
 
         mock_send_email_notification = Mock()
         monkeypatch.setattr(
-            "main.models.send_email_notification_to_users",
+            Category,
+            "send_email_notification_to_users",
             mock_send_email_notification,
         )
 

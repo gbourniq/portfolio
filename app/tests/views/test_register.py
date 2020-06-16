@@ -20,32 +20,32 @@ class TestViewRegister:
         assert response.status_code == 200
         assert isinstance(response.context["form"], NewUserForm)
 
-    # @pytest.mark.integration
-    # def test_post_invalid_user(self, monkeypatch, client, mock_user):
-    #     """
-    #     Tests that authenticate and login functions are not called
-    #     Tests it renders the same login.html page
-    #     """
+    @pytest.mark.integration
+    def test_post_invalid_user(self, monkeypatch, client, mock_user):
+        """
+        Tests that authenticate and login functions are not called
+        Tests it renders the same login.html page
+        """
 
-    #     mock_invalid_user = {
-    #         "username": "unknown_user",
-    #         "password": "unknown_pass",
-    #     }
+        mock_invalid_user = {
+            "username": "unknown_user",
+            "password": "unknown_pass",
+        }
 
-    #     mock_authenticate = Mock(return_value=mock_user)
-    #     monkeypatch.setattr(
-    #         "django.contrib.auth.authenticate", mock_authenticate
-    #     )
-    #     mock_login = Mock()
-    #     monkeypatch.setattr("main.views.login", mock_login)
+        mock_authenticate = Mock(return_value=mock_user)
+        monkeypatch.setattr(
+            "django.contrib.auth.authenticate", mock_authenticate
+        )
+        mock_login = Mock()
+        monkeypatch.setattr("main.views.login", mock_login)
 
-    #     response = client.post(reverse("login"), data=mock_invalid_user)
+        response = client.post(reverse("login"), data=mock_invalid_user)
 
-    #     mock_authenticate.assert_not_called()
-    #     mock_login.assert_not_called()
+        mock_authenticate.assert_not_called()
+        mock_login.assert_not_called()
 
-    #     assert "main/login.html" in (t.name for t in response.templates)
-    #     assert response.status_code == 200
+        assert "main/login.html" in (t.name for t in response.templates)
+        assert response.status_code == 200
 
     @pytest.mark.integration
     def test_register_with_valid_form(
