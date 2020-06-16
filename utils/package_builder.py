@@ -30,13 +30,11 @@ GIT_IGNORED = [
 WHITELIST_FILES = []
 
 # EXCLUDE NON-DIRECTORY FILES
-# Exclude all non directory files in root and docker .env
 EXCLUDE_FILES = [
     Path(file)
     for file in ROOT_DIR.iterdir()
     if not file.is_dir() and file.name not in WHITELIST_FILES
 ]
-# EXCLUDE_FILES.append(ROOT_DIR / "docker_deployment/.env")
 
 # EXCLUDE DIRECTORY FILES
 EXCLUDE_MODULES = [

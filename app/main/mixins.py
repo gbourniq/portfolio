@@ -48,7 +48,6 @@ class BaseModelMixin:
     THUMBNAIL_SIZE = Dimensions(500, 500)
     CROP_SIZE = Dimensions(300, 300)
 
-    # Retrieves a Python logging instance (or creates it)
     logger = logging.getLogger(__name__)
 
     def resizeImage(self, uploadedImage: ImageFieldFile) -> ImageFieldFile:
@@ -57,11 +56,9 @@ class BaseModelMixin:
         - Thumbmail: returns an image that fits inside of a given size
         - Crop: Cut image borders to fit a given size
         """
-        # Load
         img_temp = Image.open(uploadedImage)
         outputIoStream = BytesIO()
 
-        # Preprocess
         img_temp.thumbnail(self.THUMBNAIL_SIZE)
         width, height = img_temp.size
         left = (width - self.CROP_SIZE.width) / 2
@@ -70,7 +67,6 @@ class BaseModelMixin:
         bottom = (height + self.CROP_SIZE.height) / 2
         img_temp = img_temp.crop((left, top, right, bottom))
 
-        # Save
         img_temp.save(outputIoStream, format="JPEG", quality=90)
         outputIoStream.seek(0)
         uploadedImage = InMemoryUploadedFile(

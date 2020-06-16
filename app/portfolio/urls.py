@@ -60,7 +60,7 @@ urlpatterns = [
     # Extra apps
     path("admin/", admin.site.urls),
     path("tinymce/", include("tinymce.urls")),
-    # If no url matched
+    # No url matched
     re_path(r"^.*/$", views.error_404, name="error404"),
 ]
 

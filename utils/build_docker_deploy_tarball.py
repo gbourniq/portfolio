@@ -31,13 +31,11 @@ for relative_path in subprocess.check_output(
 
 
 # EXCLUDE NON-DIRECTORY FILES
-# Exclude all non directory files in root and docker .env
 EXCLUDE_FILES = [
     Path(file)
     for file in ROOT_DIR.iterdir()
     if not file.is_dir() and file.name not in WHITELIST_FILES
 ]
-# EXCLUDE_FILES.append(ROOT_DIR / "docker_deployment/.env")
 
 # EXCLUDE DIRECTORY FILES
 EXCLUDE_MODULES = [

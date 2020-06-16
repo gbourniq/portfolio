@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.db import models
 from tinymce.widgets import TinyMCE
 
-# from .models import Category, Item
 from .models import Category, Item
 
 
@@ -18,7 +17,7 @@ class ItemAdmin(admin.ModelAdmin):
         ("Parent Element", {"fields": ["category_name"]}),
         ("Content (Width ~600px)", {"fields": ["summary", "content"]}),
     ]
-    # Overwrite properties for TextFields only
+    # Add TinyMCE Widget to textfield property
     formfield_overrides = {
         models.TextField: {"widget": TinyMCE()},
     }

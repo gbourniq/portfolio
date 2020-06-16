@@ -15,7 +15,6 @@ from .mixins import RequireLoginMixin
 from .models import Category, Item
 from .tasks import send_email_celery
 
-# This retrieves a Python logging instance (or creates it)
 logger = logging.getLogger(__name__)
 
 
@@ -175,7 +174,6 @@ class ItemsView(RequireLoginMixin, generic.ListView):
         return context
 
     def dispatch(self, *args, **kwargs):
-        # import pdb; pdb.set_trace()
         self.get_queryset().increment_views()
         return super().dispatch(*args, **kwargs)
 
