@@ -1,4 +1,6 @@
+from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
 from rest_framework.filters import SearchFilter
 from rest_framework.generics import (
     CreateAPIView,
@@ -71,9 +73,9 @@ class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         Overrides HTTP DELETE method to update cache
         """
         response = super().delete(request, *args, **kwargs)
-        # if response.status_code == status.HTTP_204_NO_CONTENT:
-        #     category_id = request.data.get('id')
-        #     cache.delete(f'category_data_{category_id}')
+        if response.status_code == status.HTTP_204_NO_CONTENT:
+            category_id = request.data.get("id")
+            cache.delete(f"category_data_{category_id}")
         return response
 
     def update(self, request, *args, **kwargs):
@@ -81,17 +83,17 @@ class CategoryRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         Overrides UPDATE API method to update cache
         """
         response = super().update(request, *args, **kwargs)
-        # if response.status_code == status.HTTP_200_OK:
-        #     category = request.data
-        #     cache.set(
-        #         f'category_data_{category["id"]}',
-        #         {
-        #             'category_name': category["category_name"],
-        #             'summary': category["summary"],
-        #             'image': category["image"],
-        #             'category_slug': category["category_slug"],
-        #         }
-        #     )
+        if response.status_code == status.HTTP_200_OK:
+            category = request.data
+            cache.set(
+                f'category_data_{category["id"]}',
+                {
+                    "category_name": category["category_name"],
+                    "summary": category["summary"],
+                    "image": category["image"],
+                    "category_slug": category["category_slug"],
+                },
+            )
         return response
 
 
@@ -173,9 +175,9 @@ class ItemRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         Overrides method to update cache
         """
         response = super().delete(request, *args, **kwargs)
-        # if response.status_code == status.HTTP_204_NO_CONTENT:
-        #     item_id = request.data.get('id')
-        #     cache.delete(f'item_data_{item_id}')
+        if response.status_code == status.HTTP_204_NO_CONTENT:
+            item_id = request.data.get("id")
+            cache.delete(f"item_data_{item_id}")
         return response
 
     def update(self, request, *args, **kwargs):
@@ -183,18 +185,18 @@ class ItemRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         Overrides UPDATE API method to update cache
         """
         response = super().update(request, *args, **kwargs)
-        # if response.status_code == status.HTTP_200_OK:
-        #     item = request.data
-        #     cache.set(
-        #         f'item_data_{item["id"]}',
-        #         {
-        #             'item_name': item["item_name"],
-        #             'summary': item["summary"],
-        #             'content': item["content"],
-        #             'summary': item["summary"],
-        #             'item_slug': item["item_slug"],
-        #             'category_name': item["category_name"],
-        #             'views': item["views"],
-        #         }
-        #     )
+        if response.status_code == status.HTTP_200_OK:
+            item = request.data
+            cache.set(
+                f'item_data_{item["id"]}',
+                {
+                    "item_name": item["item_name"],
+                    "summary": item["summary"],
+                    "content": item["content"],
+                    "summary": item["summary"],
+                    "item_slug": item["item_slug"],
+                    "category_name": item["category_name"],
+                    "views": item["views"],
+                },
+            )
         return response
