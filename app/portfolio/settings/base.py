@@ -140,6 +140,7 @@ DATABASES = {}
 
 # FILE STORAGE
 # To be set in dev/prod settings
+UPLOADS_FOLDER_PATH = "images/"
 STATIC_URL = None
 STATIC_ROOT = None
 MEDIA_URL = None
