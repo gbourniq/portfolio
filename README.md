@@ -1,6 +1,6 @@
 [![Travis Build Status](https://travis-ci.com/gbourniq/portfolio.svg?branch=master)](https://travis-ci.com/gbourniq/portfolio)
 
-
+A demo of the web app can be viewed at https://gbournique.com (username: `demouser`, password: `demopass`).
 
 ## Repository overview
 This repository features of the following:
@@ -25,8 +25,6 @@ This repository features of the following:
 The web application is using Django for the backend, and the frontend is based on the [Materialize CSS](https://materializecss.com) framework. 
 
 The portfolio app is a simple website that may be utilised to showcase any sort of items (articles, medias, etc.), conveniently grouped into categories. A User registration system is implemented so that users may receive notifications when new content is added to the website.
-
-A demo of the web app can be viewed at https://gbournique.com. 
 
 * App Homepage
 
