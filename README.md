@@ -15,7 +15,7 @@ This repository features of the following:
 - [Portfolio App Overview](#portfolio-app-overview)
 - [Repository Setup](#repository-setup)
 - [Local Development](#local-development)
-- [Rest APIs](#restful-apis)
+- [RESTful APIs](#restful-apis)
 - [Docker Deployment](#docker-deployment)
 - [Kubernetes Deployment](#kubernetes-deployment)
 - [CI/CD Pipeline](#ci-cd-pipeline)
@@ -482,7 +482,7 @@ The following sensitive variables must be defined on host (locally in your `~/.b
 |`AWS_SECRET_ACCESS_KEY`       | Programmatic access for AWS EC2 and S3 (see ec2_deployment_guide.html)       |
 |`DOCKER_USER`                 | Docker username to publish and pull portfolio app image                      |
 |`DOCKER_PASSWORD`             | Docker password to publish and pull portfolio app image                      |
-|`EMAIL_HOST_USER`             | Email addr. for website users to send messages via contact page (Optional)   |
+|`EMAIL_HOST_USER`             | Email addr. for web admin to receive user messages and notifications (Opt.)  |
 |`EMAIL_HOST_PASSWORD`         | Email address password (Optional)                                            |
 
 
@@ -496,14 +496,17 @@ Main variables in `deployment/.env`:
 
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
-|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `prod`         |
-|`SECRET_KEY`                  | For a particular Django installation to provide cryptographic signing        |
-|`POSTGRES_*`                  | Variables for Django app container to connect to Postgres container          |
-|`REDIS_*`                     | Variables for Django app container to connect to the Redis container         |
 |`AWS_ENABLED`                 | Must be set to `False` if AWS S3 is not used                                 |
 |`AWS_DEFAULT_REGION`          | Region associated with the S3 bucket. eg. eu-west-2                          |
 |`AWS_STORAGE_BUCKET_NAME`     | S3 bucket storing PG backups, django files, and docker deploy tarballs       |
+|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `prod`         |
+|`DJANGO_SETTINGS_MODULE`      | Path to Django settings module. `prod` -> portfolio.settings.docker_settings |
 |`IMAGE_REPOSITORY`            | Docker repository for the portfolio app image                                |
+|`POSTGRES_*`                  | Variables for Django app container to connect to Postgres container          |
+|`REDIS_*`                     | Variables for Django app container to connect to the Redis container         |
+|`SECRET_KEY`                  | For a particular Django installation to provide cryptographic signing        |
+
+
 
 ### Environment variables for development (*dev build*)
 
@@ -517,21 +520,21 @@ Main variables in `.dev.env`:
 
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
-|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `dev`          |
-|`RUN_ANSIBLE_PLAYBOOK`        | Set to `False` to skip the Ansible playbook in the CD pipeline               |
-|`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name               |
-|`DOCKER_DEPLOY_FOLDER`        | Folder in `AWS_STORAGE_BUCKET_NAME` to store docker deploy tarballs          |
-|`S3_DOCKER_DEPLOY_CD_PIPELINE`| Basename of docker deployment tarball used by ci/cd pipeline and Ansible     |
-|`S3_DOCKER_DEPLOY_CUSTOM`     | Basename of docker deployment tarball used by user to manually deploy app    |
 |`ANSIBLE_INSTANCE_ID`         | To start and stop AWS EC2 instance                                           |
 |`ANSIBLE_HOST_IP`             | Used in Ansible `inventories` to specify ansible_host                        |
 |`ANSIBLE_HOST_NAME`           | Used by docker-compose up role to check if app returns 200                   |
 |`ANSIBLE_HOST_PUBLIC_DNS`     | To start and stop AWS EC2 instance                                           |
-|`PORTFOLIO_ROOT_DIR`          | For ansible roles to navigate on the remote and run commands                 | 
+|`BUILD`                       | Used by deployment scripts and ci-cd pipeline. Must be set to `dev`          |
+|`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name               |
+|`DJANGO_SETTINGS_MODULE`      | Path to Django settings module. `dev` -> portfolio.settings.local_settings   |
+|`DOCKER_DEPLOY_FOLDER`        | Folder in `AWS_STORAGE_BUCKET_NAME` to store docker deploy tarballs          |
+|`ENABLE_SLACK_NOTIFICATION`   | Can be set to `False` to skip slack notification when app is up              |
+|`PORTFOLIO_ROOT_DIR`          | For ansible roles to navigate on the remote and run commands                 |
+|`QA_INSTANCE_TIME_MINUTES`    | Number of minutes the app should be running before the instance is shut down |
+|`RUN_ANSIBLE_PLAYBOOK`        | Set to `False` to skip the Ansible playbook in the CD pipeline               |
+|`S3_DOCKER_DEPLOY_CD_PIPELINE`| Basename of docker deployment tarball used by ci/cd pipeline and Ansible     |
+|`S3_DOCKER_DEPLOY_CUSTOM`     | Basename of docker deployment tarball used by user to manually deploy app    |
+|`SLACK_TOKEN`                 | Token for Ansible to connect to the slack app                                |
 |`SSL_*_S3_OBJECT_PATH`        | S3 paths for SSL private key and certificate (required for nginx)            |
 |`SSL_*_HOST_PATH`             | EC2 host path where SSL private key and certificate are located              |
-|`ENABLE_SLACK_NOTIFICATION`   | Can be set to `False` to skip slack notification when app is up              |
-|`QA_INSTANCE_TIME_MINUTES`    | Number of minutes the app should be running before the instance is shut down | 
-|`SLACK_TOKEN`                 | Token for Ansible to connect to the slack app                                |
-
 
