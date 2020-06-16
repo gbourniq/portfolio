@@ -48,8 +48,6 @@ ENV_VARS = [
     "POSTGRES_DB",
     "POSTGRES_USER",
     "POSTGRES_PASSWORD",
-    "EMAIL_HOST_USER",
-    "EMAIL_HOST_PASSWORD",
 ]
 
 if BUILD == "prod":
