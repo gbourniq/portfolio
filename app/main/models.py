@@ -12,7 +12,7 @@ class Category(models.Model, BaseModelMixin, JSONifyMixin):
     image = models.ImageField(upload_to=settings.UPLOADS_FOLDER_PATH)
     category_slug = models.CharField(max_length=200, unique=True)
 
-    # List of all existing categories (property are hidden from other classes)
+    # List of all saved categories (property hidden from other classes)
     __category_list = None
 
     @classmethod
@@ -105,6 +105,28 @@ class Item(models.Model, BaseModelMixin, JSONifyMixin):
     )
     views = models.IntegerField(default=0)
 
+    # List of all saved categories (property hidden from other classes)
+    __item_list = None
+
+    @classmethod
+    def get_item_list(cls):
+        """
+        Class method to return the list of
+        items that were saved via the .save() method.
+        Usage:
+        > items = Item.get_item_list()
+        """
+        if Item.__item_list is None:
+            Item.__item_list = []
+        return Item.__item_list
+
+    def __append_to_item_list(self):
+        """
+        Hidden instance method to append the object
+        to the class attribute __item_list
+        """
+        Item.get_item_list().append(self)
+
     @classmethod
     def create(cls, dictionary):
         """
@@ -137,6 +159,7 @@ class Item(models.Model, BaseModelMixin, JSONifyMixin):
         Overrides the save method to notify all registered users
         that a new item has been added
         """
+        self.__append_to_item_list()
         super(Item, self).save(*args, **kwargs)
         if settings.EMAIL_HOST_USER:
             self.send_email_notification_to_users(
