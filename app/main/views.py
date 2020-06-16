@@ -257,6 +257,7 @@ def handler404(request, exception) -> render:
 
 def handler500(request):
     """Function to handle any 500 error with a custom page"""
+    logger.error(f"Internal Server Error: {request}")
     return render(
         request,
         "main/go_back_home.html",
