@@ -47,8 +47,8 @@ function validate_docker_compose_env() {
     if [[ ! $REDIS_HOST || ! $REDIS_HOST ]]; then
         set_as_failed "REDIS_HOST and REDIS_HOST not set"
     fi
-    if [[ ! $EMAIL_HOST_USER || ! $EMAIL_HOST_USER ]]; then
-        set_as_failed "EMAIL_HOST_USER and EMAIL_HOST_USER not set"
+    if [[ ! $EMAIL_HOST_USER || ! $EMAIL_HOST_PASSWORD ]]; then
+        INFO "WARNING: Django EMAIL_HOST_USER not set"
     fi
     if [[ ! $AWS_STORAGE_BUCKET_NAME ]]; then
         set_as_failed "AWS_STORAGE_BUCKET_NAME not set"
