@@ -160,7 +160,7 @@ class Item(models.Model, BaseModelMixin, JSONifyMixin):
         that a new item has been added
         """
         super(Item, self).save(*args, **kwargs)
-        if self not in Item.get_item_list():
+        if self not in Item.objects.all():
             # Item newly created
             self.__append_to_item_list()
             if settings.EMAIL_HOST_USER:
