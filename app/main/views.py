@@ -98,7 +98,7 @@ class LoginFormView(View):
         return render(request, self.template_name, {"form": form})
 
 
-class CategoriesView(RequireLoginMixin, generic.ListView):
+class CategoriesView(generic.ListView):
     """
     View to display category cards
     """
@@ -114,7 +114,7 @@ class CategoriesView(RequireLoginMixin, generic.ListView):
         raise Http404("Oops.. No category found!")
 
 
-class RedirectToItemView(RequireLoginMixin, generic.base.RedirectView):
+class RedirectToItemView(generic.base.RedirectView):
     """
     View to redirect the user to the first item of 
     a category when the category card is clicked on.
@@ -134,7 +134,7 @@ class RedirectToItemView(RequireLoginMixin, generic.base.RedirectView):
         raise Http404(f"Oops.. Category {category} does not contain any item!")
 
 
-class ItemsView(RequireLoginMixin, generic.ListView):
+class ItemsView(generic.ListView):
     """
     View for items, /<category_slug>/<item_slug>/
     """
@@ -259,7 +259,7 @@ def handler404(request, exception) -> render:
     return render(
         request,
         "main/go_back_home.html",
-        context={"message": f"{str(exception)}", "code_handled": 404,},
+        context={"message": f"{str(exception)}", "code_handled": 404},
     )
 
 

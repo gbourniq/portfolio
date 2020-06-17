@@ -1,6 +1,6 @@
 [![Travis Build Status](https://travis-ci.com/gbourniq/portfolio.svg?branch=master)](https://travis-ci.com/gbourniq/portfolio)
 
-A demo of the web app can be viewed at https://gbournique.com (username: `demouser`, password: `demopass`).
+A demo of the web app can be viewed at https://gbournique.com
 
 ## Repository overview
 This repository features of the following:
