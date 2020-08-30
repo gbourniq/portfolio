@@ -7,7 +7,7 @@
     - start_instance
 
 - name: Starting docker-compose services
-  hosts: docker_qa
+  hosts: launched
   remote_user: ubuntu
   become: yes
   roles:
@@ -16,23 +16,23 @@
     - docker_compose_up
     - test_postgres_backup
 
-- name: Send slack notification
-  hosts: localhost
-  gather_facts: true
-  roles:
-    - send_slack_notification
-  tags:
-    - slack-notification
+# - name: Send slack notification
+#   hosts: localhost
+#   gather_facts: true
+#   roles:
+#     - send_slack_notification
+#   tags:
+#     - slack-notification
 
 - name: Pause playbook
-  hosts: docker_qa
+  hosts: launched
   remote_user: ubuntu
   become: yes
   roles:
     - pause_playbook
 
 - name: Stopping docker-compose services
-  hosts: docker_qa
+  hosts: launched
   remote_user: ubuntu
   become: yes
   roles:
