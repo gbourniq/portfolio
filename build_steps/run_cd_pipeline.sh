@@ -17,4 +17,4 @@ fi
 #   source "$entry"
 # done
 
-source build_steps/9_run_ansible_playbooks.sh
+source cd_pipeline/9_run_ansible_playbooks.sh
