@@ -47,20 +47,20 @@ install:
   - conda info -a
   # Install sshpass on Travis instance for Ansible to use ssh password authentication
   - sudo apt-get install sshpass make
-  # # Install kubectl, which is a requirement for using minikube.
-  # - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.18.1/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
-  # # Install Minikube
-  # - curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.8.1/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
-  # - mkdir -p $HOME/.kube $HOME/.minikube
-  # - touch $KUBECONFIG
-  # - sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v1.18.1
-  # - minikube update-context --profile=minikube
-  # - "sudo chown -R travis: /home/travis/.minikube/"
-  # - eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
-  # # Installing Helm
-  # - wget ${HELM_URL}/${HELM_TGZ}
-  # - tar xzfv ${HELM_TGZ}
-  # - PATH=`pwd`/linux-amd64/:$PATH
+  # Install kubectl, which is a requirement for using minikube.
+  - curl -Lo kubectl https://storage.googleapis.com/kubernetes-release/release/v1.18.1/bin/linux/amd64/kubectl && chmod +x kubectl && sudo mv kubectl /usr/local/bin/
+  # Install Minikube
+  - curl -Lo minikube https://storage.googleapis.com/minikube/releases/v1.8.1/minikube-linux-amd64 && chmod +x minikube && sudo mv minikube /usr/local/bin/
+  - mkdir -p $HOME/.kube $HOME/.minikube
+  - touch $KUBECONFIG
+  - sudo minikube start --profile=minikube --vm-driver=none --kubernetes-version=v1.18.1
+  - minikube update-context --profile=minikube
+  - "sudo chown -R travis: /home/travis/.minikube/"
+  - eval "$(minikube docker-env --profile=minikube)" && export DOCKER_CLI='docker'
+  # Installing Helm
+  - wget ${HELM_URL}/${HELM_TGZ}
+  - tar xzfv ${HELM_TGZ}
+  - PATH=`pwd`/linux-amd64/:$PATH
 
 script:
   - make run-ci-cd-pipeline
