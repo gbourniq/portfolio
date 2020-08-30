@@ -158,8 +158,10 @@ python manage.py createsuperuser
 4. Apply Django model migrations:
 ```bash
 python manage.py makemigrations
+python manage.py makemigrations main
 python manage.py migrate
 ```
+> Optional: See that `main_category` main `main_item` tables have been created with `psql portfoliodb` and `\d`.
 
 5. Run the Django server locally:
 ```bash
@@ -241,7 +243,7 @@ This tarball contains the application code mounted in the docker image.
 
 ## RESTful APIs
 
-Web APIs have been developing using the [Django REST framework](https://www.django-rest-framework.org).
+Web APIs have been developed using the [Django REST framework](https://www.django-rest-framework.org).
 
 * Browse Category and Item model objects (`ListAPIView`):
 ```
