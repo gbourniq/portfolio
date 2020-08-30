@@ -6,7 +6,7 @@ local_dev:
 
 docker_qa:
   hosts:
-    docker_qa:
+    launched:
       ansible_host: launched
       ansible_user: ubuntu
       ansible_ssh_pass: "{{ lookup('env','ANSIBLE_SSH_PASSWORD') }}"
