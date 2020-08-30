@@ -9,6 +9,6 @@ docker_qa:
   hosts:
     host_1:
       ansible_host: launched
-      ansible_user: ubuntu
+      ansible_user: ec2-user
       ansible_ssh_pass: "{{ lookup('env','ANSIBLE_SSH_PASSWORD') }}"
       ansible_become: true
