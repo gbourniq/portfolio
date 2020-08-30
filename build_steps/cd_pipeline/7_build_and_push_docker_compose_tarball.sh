@@ -36,10 +36,6 @@ CONDA_ENV_NAME, S3_DOCKER_DEPLOY_URI, S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE. Abor
   fi
 }
 
-function activate_environment() {
-  source $(conda info --base)/etc/profile.d/conda.sh
-  conda activate ${CONDA_ENV_NAME}
-}
 
 # Start script
 validate_environment_variables
