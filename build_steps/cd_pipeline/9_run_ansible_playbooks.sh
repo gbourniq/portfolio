@@ -8,26 +8,17 @@ trap "echo 'Exiting script...' && exit_handler" EXIT
 
 function exit_handler() {
   if [ $playbook_success == True ]; then
-    tidy_up
     exit 0
-  elif [ $playbook_success == False ]; then
+  else
     ERROR "Ansible playbook failed. Aborting!" 1>&2
     tidy_up
     exit 1
-  else
-    MESSAGE "Clean exit."
-    exit 0
   fi
 }
 
 function tidy_up() {
   MESSAGE "Tidying up..."
-  ansible-playbook \
-    -i inventories \
-    --vault-id /tmp/ansible-vault-pw \
-    stop_instance.yml \
-    -vv
-  rm -rf /tmp/ansible-vault-pw
+  ansible-playbook stop_instance.yml -vv
 }
 
 function activate_environment() {
@@ -36,10 +27,10 @@ function activate_environment() {
 }
 
 function validate_environment_variables() {
-  if [[ -z $RUN_ANSIBLE_PLAYBOOK || -z $CONDA_ENV_NAME || -z $ANSIBLE_VAULT_PASSWORD ]]
+  if [[ -z $RUN_ANSIBLE_PLAYBOOK || -z $CONDA_ENV_NAME ]]
   then
     exit_error "Some of the following environment variables are not set: \
-RUN_ANSIBLE_PLAYBOOK, CONDA_ENV_NAME, ANSIBLE_VAULT_PASSWORD. Aborting."
+RUN_ANSIBLE_PLAYBOOK, CONDA_ENV_NAME. Aborting."
   fi
 }
 
@@ -48,27 +39,14 @@ function set_ansible_vault() {
 }
 
 function run_qa_playbook() {
-  if [[ $ENABLE_SLACK_NOTIFICATION == True ]]; then
-    ansible-playbook \
-      -i inventories \
-      --vault-id /tmp/ansible-vault-pw \
-      docker_deployment.yml \
-      -vvv
-  else
-    ansible-playbook \
-      -i inventories \
-      --vault-id /tmp/ansible-vault-pw \
-      docker_deployment.yml \
-      --skip-tags="slack-notification" \
-      -vv
-  fi
+    ansible-playbook docker_deployment.yml -vvv
 }
 
 
 # Start script
 if [ "$RUN_ANSIBLE_PLAYBOOK" != True ]; then
   INFO "RUN_ANSIBLE_PLAYBOOK is not set to True. Aborting."
-  playbook_success=ExitNoTidyUp
+  playbook_success=True
   exit 0
 fi
 validate_environment_variables
