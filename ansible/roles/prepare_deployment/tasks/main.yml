@@ -44,19 +44,19 @@
   become: yes
   unarchive:
     src: /tmp/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE }}.tar.gz
-    dest: /home/ubuntu/
+    dest: /home/ec2-user/
     remote_src: yes
 
 - name: Rename root directory
-  command: mv /home/ubuntu/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE}}/ {{ PORTFOLIO_ROOT_DIR }}/
+  command: mv /home/ec2-user/{{ S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE}}/ {{ PORTFOLIO_ROOT_DIR }}/
 
 - name: Recursively change ownership of root directory
   file:
     path: "{{ PORTFOLIO_ROOT_DIR }}/"
     state: directory
     recurse: yes
-    owner: ubuntu
-    group: ubuntu
+    owner: ec2-user
+    group: ec2-user
 
 - name: Delete temporary tarball file
   become: yes
@@ -70,8 +70,8 @@
     path: "{{ PORTFOLIO_ROOT_DIR }}/deployment/docker-deployment/nginx/certs"
     state: directory
     recurse: yes
-    owner: ubuntu
-    group: ubuntu
+    owner: ec2-user
+    group: ec2-user
     
 - name: Download SSL CA signed certificate from S3
   become: yes

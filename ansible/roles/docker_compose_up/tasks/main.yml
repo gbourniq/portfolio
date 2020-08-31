@@ -1,6 +1,6 @@
 
 - name: docker-compose up
-  become_user: ubuntu
+  become_user: ec2-user
   shell: >
     cd {{ PORTFOLIO_ROOT_DIR }} &&
     cd deployment/ &&
@@ -13,7 +13,7 @@
     AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
 
 - name: Check all services are healthy
-  become_user: ubuntu
+  become_user: ec2-user
   shell: >
     cd {{ PORTFOLIO_ROOT_DIR }}/deployment/ &&
     source .env &&

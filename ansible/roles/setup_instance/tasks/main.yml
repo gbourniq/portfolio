@@ -21,7 +21,7 @@
 
 - name: Add python alias
   lineinfile:
-    dest: /home/ubuntu/.bash_aliases
+    dest: /home/ec2-user/.bash_aliases
     line: alias python='python3'
     state: present
     insertafter: EOF

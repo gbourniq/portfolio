@@ -8,7 +8,7 @@
 
 - name: Starting docker-compose services
   hosts: launched
-  remote_user: ubuntu
+  remote_user: ec2-user
   become: yes
   roles:
     - setup_instance
@@ -26,14 +26,14 @@
 
 - name: Pause playbook
   hosts: launched
-  remote_user: ubuntu
+  remote_user: ec2-user
   become: yes
   roles:
     - pause_playbook
 
 - name: Stopping docker-compose services
   hosts: launched
-  remote_user: ubuntu
+  remote_user: ec2-user
   become: yes
   roles:
     - docker_compose_down

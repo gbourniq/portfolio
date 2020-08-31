@@ -1,6 +1,6 @@
 
 - name: docker-compose down
-  become_user: ubuntu
+  become_user: ec2-user
   shell: >
     cd {{ PORTFOLIO_ROOT_DIR }} &&
     cd deployment/ &&

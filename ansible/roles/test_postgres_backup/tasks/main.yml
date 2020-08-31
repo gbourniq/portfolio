@@ -1,5 +1,5 @@
 - name: Create and upload postgres backup to AWS S3
-  become_user: ubuntu
+  become_user: ec2-user
   shell: >
     cd {{ PORTFOLIO_ROOT_DIR }} &&
     cd deployment/ &&
@@ -12,7 +12,7 @@
     AWS_SECRET_ACCESS_KEY: "{{ AWS_SECRET_ACCESS_KEY }}"
 
 - name: Download and restore postgres backup from AWS S3
-  become_user: ubuntu
+  become_user: ec2-user
   shell: >
     cd {{ PORTFOLIO_ROOT_DIR }} &&
     cd deployment/ &&

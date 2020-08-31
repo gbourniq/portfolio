@@ -53,7 +53,7 @@ function run_qa_playbook() {
       -i inventories \
       --vault-id /tmp/ansible-vault-pw \
       docker_deployment.yml \
-      -vv
+      -vvv
   else
     ansible-playbook \
       -i inventories \
