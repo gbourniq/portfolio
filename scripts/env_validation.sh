@@ -7,11 +7,11 @@ function set_as_failed() {
 }
 
 # Required environment variables for dev build
-function secret_env_check_dev() {
-    if [[ $RUN_ANSIBLE_PLAYBOOK == True && ! $AWS_ACCESS_KEY_ID || ! $AWS_SECRET_ACCESS_KEY ]]; then
-        set_as_failed "Please set both `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, or set `RUN_ANSIBLE_PLAYBOOK` to False"
-    fi
-}
+# function secret_env_check_dev() {
+#     if [[ $RUN_ANSIBLE_PLAYBOOK == True && ! $AWS_ACCESS_KEY_ID || ! $AWS_SECRET_ACCESS_KEY ]]; then
+#         set_as_failed "Please set both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY, or set RUN_ANSIBLE_PLAYBOOK to False"
+#     fi
+# }
 
 # Required environment for docker compose up
 function validate_docker_compose_env() {
@@ -46,7 +46,8 @@ function validate_env() {
     if [[ ! $BUILD ]]; then
         set_as_failed "BUILD environment variable not set. Please source .env!"
     elif [[ $BUILD == dev ]]; then
-        secret_env_check_dev
+        # secret_env_check_dev
+        MESSAGE "dev mode!"
     else
         set_as_failed "Unknown build type: ${BUILD}. Expected either dev or prod!"
     fi
