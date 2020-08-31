@@ -1,0 +1,44 @@
+### Playbook leveraging multiple ansible roles to provision and configure qa instance + docker deployment
+
+### /!\ DEPRECATED PLAYBOOK /!\
+### Instance configuration is now done using Amazon AMI + User data script (view README.md)
+### This new approach simply greatly the playbook, as Ansible is now used exclusively to launch a 
+### new instance, start the app and terminate the instance. No SSH access required anymore 
+
+- name: Start AWS instance
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - start_instance
+
+- name: Starting docker-compose services
+  hosts: launched
+  remote_user: ec2-user
+  become: yes
+  roles:
+    - setup_instance
+    - prepare_deployment
+    - docker_compose_up
+    - test_postgres_backup
+
+- name: Send slack notification
+  hosts: localhost
+  gather_facts: true
+  roles:
+    - send_slack_notification
+  tags:
+    - slack-notification
+
+- name: Pause playbook
+  hosts: launched
+  remote_user: ec2-user
+  become: yes
+  roles:
+    - pause_playbook
+
+- name: Stopping docker-compose services
+  hosts: launched
+  remote_user: ec2-user
+  become: yes
+  roles:
+    - docker_compose_down
