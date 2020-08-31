@@ -59,7 +59,6 @@ global:
       data:
         SECRET_KEY: "azxey(r8ieohsd1qc93j*%@+1+@-c&kwbgugz2ojvb@sj=!4*c"
         POSTGRES_PASSWORD: "postgres"
-        AWS_SECRET_ACCESS_KEY: "<insert-here>"
         # Email Contact page
         EMAIL_HOST_USER: "<insert-here>"
         EMAIL_HOST_PASSWORD: "<insert-here>"

@@ -54,8 +54,6 @@ class TestDjangoDevSettings:
         assert all(
             not hasattr(settings, attr)
             for attr in [
-                "AWS_ACCESS_KEY_ID",
-                "AWS_SECRET_ACCESS_KEY",
                 "AWS_STORAGE_BUCKET_NAME",
                 "AWS_DEFAULT_REGION",
                 "AWS_DEFAULT_ACL",

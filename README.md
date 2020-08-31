@@ -477,7 +477,6 @@ The following sensitive variables must be defined on host (locally in your `~/.b
 |**Name**                      |**Description**                                                               |
 |------------------------------|------------------------------------------------------------------------------|
 |`ANSIBLE_VAULT_PASSWORD`      | Passphrase used to encrypt/decrypt secret variables (see /ansible/README.md) |
-|`ANSIBLE_SSH_PASSWORD`        | SSH password for ec2 instance (see documentation/ec2_deployment_guide.html)  |
 |`AWS_ACCESS_KEY_ID`           | Programmatic access for AWS EC2 and S3 (see ec2_deployment_guide.html)       |
 |`AWS_SECRET_ACCESS_KEY`       | Programmatic access for AWS EC2 and S3 (see ec2_deployment_guide.html)       |
 |`DOCKER_USER`                 | Docker username to publish and pull portfolio app image                      |
@@ -528,13 +527,12 @@ Main variables in `.dev.env`:
 |`CONDA_ENV_NAME`              | Name of the conda environment. `portfolio` is the default name               |
 |`DJANGO_SETTINGS_MODULE`      | Path to Django settings module. `dev` -> portfolio.settings.local_settings   |
 |`DOCKER_DEPLOY_FOLDER`        | Folder in `AWS_STORAGE_BUCKET_NAME` to store docker deploy tarballs          |
-|`ENABLE_SLACK_NOTIFICATION`   | Can be set to `False` to skip slack notification when app is up              |
 |`PORTFOLIO_ROOT_DIR`          | For ansible roles to navigate on the remote and run commands                 |
 |`QA_INSTANCE_TIME_MINUTES`    | Number of minutes the app should be running before the instance is shut down |
 |`RUN_ANSIBLE_PLAYBOOK`        | Set to `False` to skip the Ansible playbook in the CD pipeline               |
 |`S3_DOCKER_DEPLOY_CD_PIPELINE`| Basename of docker deployment tarball used by ci/cd pipeline and Ansible     |
 |`S3_DOCKER_DEPLOY_CUSTOM`     | Basename of docker deployment tarball used by user to manually deploy app    |
-|`SLACK_TOKEN`                 | Token for Ansible to connect to the slack app                                |
+|`SLACK_TOKEN`                 | Token for Ansible to connect to the slack app (Optional)                     |
 |`SSL_*_S3_OBJECT_PATH`        | S3 paths for SSL private key and certificate (required for nginx)            |
 |`SSL_*_HOST_PATH`             | EC2 host path where SSL private key and certificate are located              |
 

@@ -32,11 +32,8 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 LOGGING_ENABLED = os.getenv("LOGGING_ENABLED") == "True"
 
 # ==================== AWS ======================
-
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+# Removed AWS_DEFAULT_REGION, AWS_SECRET_KEY, and AWS_ACCESS_KEY on 31.08.2020
 AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-AWS_DEFAULT_REGION = os.getenv("AWS_DEFAULT_REGION")
 
 # ======================= CHECK ENV VARIABLES ARE SET =========================
 
@@ -52,10 +49,7 @@ ENV_VARS = [
 
 if BUILD == "prod":
     ENV_VARS += [
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
         "AWS_STORAGE_BUCKET_NAME",
-        "AWS_DEFAULT_REGION",
     ]
 
 

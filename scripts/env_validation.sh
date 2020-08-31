@@ -8,25 +8,8 @@ function set_as_failed() {
 
 # Required environment variables for dev build
 function secret_env_check_dev() {
-    secret_env_check_prod
-    if [[ $RUN_ANSIBLE_PLAYBOOK == True && $AWS_ENABLED != True ]]; then
-        set_as_failed "If RUN_ANSIBLE_PLAYBOOK set to True, then AWS_ENABLED must also be to True"
-    fi
-    if [[ ! $ANSIBLE_VAULT_PASSWORD && $RUN_ANSIBLE_PLAYBOOK == True ]]; then
-        set_as_failed "ANSIBLE_VAULT_PASSWORD not set, but RUN_ANSIBLE_PLAYBOOK=True!"
-    fi
-    if [[ ! $ANSIBLE_SSH_PASSWORD && $RUN_ANSIBLE_PLAYBOOK == True ]]; then
-        set_as_failed "ANSIBLE_SSH_PASSWORD not set, but RUN_ANSIBLE_PLAYBOOK=True!"
-    fi
-}
-
-# Required environment variables for prod build
-function secret_env_check_prod() {
-    if [[ ! $AWS_ACCESS_KEY_ID && $AWS_ENABLED == True ]]; then
-        set_as_failed "AWS_ACCESS_KEY_ID not set, but AWS_ENABLED=True!"
-    fi
-    if [[ ! $AWS_SECRET_ACCESS_KEY && $AWS_ENABLED == True ]]; then
-        set_as_failed "AWS_SECRET_ACCESS_KEY, but AWS_ENABLED=True!"
+    if [[ $RUN_ANSIBLE_PLAYBOOK == True && ! $AWS_ACCESS_KEY_ID || ! $AWS_SECRET_ACCESS_KEY ]]; then
+        set_as_failed "Please set both `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`, or set `RUN_ANSIBLE_PLAYBOOK` to False"
     fi
 }
 
@@ -56,9 +39,6 @@ function validate_docker_compose_env() {
     if [[ ! $AWS_DEFAULT_REGION ]]; then
         set_as_failed "AWS_DEFAULT_REGION not set"
     fi
-    if [[ ! $AWS_ACCESS_KEY_ID || ! $AWS_SECRET_ACCESS_KEY ]]; then
-        set_as_failed "AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY not set"
-    fi
 }
 
 # Validate environment variables are set
@@ -67,8 +47,6 @@ function validate_env() {
         set_as_failed "BUILD environment variable not set. Please source .env!"
     elif [[ $BUILD == dev ]]; then
         secret_env_check_dev
-    elif [[ $BUILD == prod ]]; then
-        secret_env_check_prod
     else
         set_as_failed "Unknown build type: ${BUILD}. Expected either dev or prod!"
     fi
