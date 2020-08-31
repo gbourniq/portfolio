@@ -4,6 +4,45 @@
 
 ------------------------------------------
 
+## Pre-requisites
+
+### Create an AMI
+
+The Ansible playbooks are expected to launch instances based on an AMI with the following software and packages installed:
+- AWS CLI package
+- Python / Pip
+- Docker and Docker-Compose
+- Logged in to Dockerhub
+
+To create the AMI, please follow the steps below.
+
+1. Launch a new Amazon Linux 2 instance
+
+2. Run the following commands
+```
+sudo yum update -y
+
+sudo yum install awscli python3 python3-pip make curl -y
+sudo alias python='python3'
+sudo pip3 install docker docker-compose boto3 botocore
+
+sudo amazon-linux-extras install docker -y
+sudo service docker start
+sudo systemctl enable docker
+sudo usermod -a -G docker ec2-user
+sudo docker info
+
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose version
+
+sudo docker login --username=<username>
+```
+
+
+3. Create an AMI out of the instance
+
+
 ## Usage
 
 ### Running the playbooks
@@ -48,7 +87,6 @@ var-name: !vault |
 |------------------------------|------------------------------------------------------------------------------|
 |`RUN_ANSIBLE_PLAYBOOK`        | Must be set to `True` to run the Ansible playbook within the CD pipeline     |
 |`ANSIBLE_VAULT_PASSWORD`      | Passphrase used to encrypt/decrypt secret variables (see /ansible/README.md) |
-|`ANSIBLE_SSH_PASSWORD`        | SSH password for ec2 instance (see documentation/ec2_deployment_guide.html)  |
 |`ANSIBLE_INSTANCE_ID`         | To start and stop AWS EC2 instance                                           |
 |`ANSIBLE_HOST_IP`             | Used in Ansible `inventories` to specify ansible_host                        |
 |`ANSIBLE_HOST_NAME`           | Used by docker-compose up role to check if app returns 200                   |
@@ -60,7 +98,6 @@ var-name: !vault |
 |`QA_INSTANCE_TIME_MINUTES`    | Number of minutes the app should be running before the instance is shut down | 
 |`SLACK_TOKEN`                 | Token for Ansible to connect to the slack app                                |
 
-> Note: `ANSIBLE_VAULT_PASSWORD` and `ANSIBLE_SSH_PASSWORD` must be set on the host (eg. `~/.bash_profile` or Travis CI account settings)
 
 
 ## Project setup
