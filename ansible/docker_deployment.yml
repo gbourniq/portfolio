@@ -1,39 +1,99 @@
-### Playbook to test docker deployment scripts on fresh ec2 instance
+### Playbook to start a fresh qa instance and docker compose up the app (DEV mode = without nginx service)
+# "{{ lookup('env','PORTFOLIO_ROOT_DIR') }}"
 
-- name: Start AWS instance
+- name: Launch fresh QA instance
   hosts: localhost
-  gather_facts: true
-  roles:
-    - start_instance
+  gather_facts: False
+  vars:
+    key_name: personal_key_pair
+    instance_type: t2.micro
+    security_group_port_8080: port_8080
+    security_group_ssh: ssh_http_https_sg
+    image: ami-0fde9528d117946f0
+    instance_profile_name: EC2InstanceRoleToAccessS3
+    region: eu-west-2
+    vpc_subnet_id: subnet-706cba3c
+    webapp_dev_port: 8080
+    tag_name_value: "QA temp instance launched by Ansible"
+    playbook_sleep_time_mn: 5
+    slack_token: T011F2R0WMA/B011F2YNEDS/W4CTrFJ2VGXeE84pAqwUUzi9
+    s3_docker_deploy_uri: "{{ lookup('env','S3_DOCKER_DEPLOY_URI') }}"
+    s3_docker_deploy_tarball_base_name: "{{ lookup('env','S3_DOCKER_DEPLOY_TARBALL_CD_PIPELINE') }}"
+  tasks:
+    - name: Launch new instance
+      ec2:
+        image: ami-0fde9528d117946f0
+        instance_profile_name: "{{ instance_profile_name }}"
+        user_data: |
+                    #!/bin/bash
+                    sudo aws s3 cp {{ s3_docker_deploy_uri }}/{{ s3_docker_deploy_tarball_base_name }}.tar.gz .
+                    sudo tar -xvf {{ s3_docker_deploy_tarball_base_name }}.tar.gz
+                    cd {{ s3_docker_deploy_tarball_base_name }}/deployment
+                    export BUILD=dev
+                    source .env
+                    make up
+                    make check-services-health
+        key_name: "{{ key_name }}"
+        group:
+          - "{{ security_group_port_8080 }}"
+          - "{{ security_group_ssh }}"
+        instance_type: "{{ instance_type }}"
+        region: "{{ region }}"
+        vpc_subnet_id: "{{ vpc_subnet_id }}"
+        assign_public_ip: yes
+        instance_tags:
+          Name: "{{ tag_name_value }}"
+        wait: true
+        wait_timeout: 600
+      register: ec2
 
-- name: Starting docker-compose services
-  hosts: launched
-  remote_user: ec2-user
-  become: yes
-  roles:
-    - setup_instance
-    - prepare_deployment
-    - docker_compose_up
-    - test_postgres_backup
 
-# - name: Send slack notification
-#   hosts: localhost
-#   gather_facts: true
-#   roles:
-#     - send_slack_notification
-#   tags:
-#     - slack-notification
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ item.public_ip }}"
+        groupname: launched
+      with_items: "{{ ec2.instances }}"
 
-- name: Pause playbook
-  hosts: launched
-  remote_user: ec2-user
-  become: yes
-  roles:
-    - pause_playbook
 
-- name: Stopping docker-compose services
-  hosts: launched
-  remote_user: ec2-user
-  become: yes
-  roles:
-    - docker_compose_down
+    - name: Wait for ssh to come up
+      wait_for:
+        host: "{{ item.public_dns_name }}"
+        port: 22
+        delay: 0
+        timeout: 300
+      with_items: "{{ ec2.instances }}"
+
+
+    - name: Ping webapp over public internet
+      uri:
+        url: "http://{{ item.public_ip }}:{{ webapp_dev_port }}"
+        method: GET
+        validate_certs: no
+      with_items: "{{ ec2.instances }}"
+      register: _result
+      until: _result.status == 200
+      delay: 20
+      retries: 15
+      
+
+    - name: Send Slack notification for QA deployment
+      slack:
+        token: '{{ slack_token }}'
+        msg: "[QA] App is up for {{ playbook_sleep_time_mn }}mn! Visit http://{{ item.public_ip }}:{{ webapp_dev_port }} 💫🚀"
+      delegate_to: localhost
+      tags:
+        - slack-notification
+      with_items: "{{ ec2.instances }}"
+      ignore_errors: True
+
+
+    - name: Pause playbook
+      pause:
+        minutes: "{{ playbook_sleep_time_mn }}"
+
+
+    - name: Terminate instances
+      ec2:
+        region: "{{ region }}"
+        state: 'absent'
+        instance_ids: '{{ ec2.instance_ids }}'
